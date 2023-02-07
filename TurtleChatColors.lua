@@ -1,7 +1,6 @@
+-- vanilla 1.12
+-- TurtleChatColors 1.1
 TurtleChatColors_ChatFrame_OnEvent = ChatFrame_OnEvent
-
--- CHAT_MSG_GUILD	CHAT_MSG_SYSTEM		
-
 
 local CLORANGE = "|cFFEEDD55"
 local CLLRED = "|cFFFF9999"
@@ -50,35 +49,54 @@ local gspecial = false
 		local chatRED = {" hc ","hardcore","Hardcore "," Hardcore"," HC"," RIP","r.i.p"," F! ","WTF","PVP","PvP"," pvp","HardcoreDeath","/db unseen"};
 		local chatUP = {"lfm ","lfg ","lf1m ","lf2m ","lf3m ","wtb ","wts "};
 
-local hooks = {}
+if not hooks then hooks = {} end
+
+function gkiir(kirtxt) if kirtxt then DEFAULT_CHAT_FRAME:AddMessage(CSTART..CMYCOLOR..kirtxt..CEND); end end
 
 function CharChain(scc,scn)
 	local sctxt=""; if scc and scn then for i=1,scn do sctxt=sctxt..scc end end return sctxt
 end;
 
 
-local function AddMessage(self, message, a1, a2, a3)	-- ( ) . % + - * ? [ ^ $
+-- CHAT_MSG_GUILD	CHAT_MSG_SYSTEM	
+local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special characters (must escape with %):   ( ) . % + - * ? [ ^ $
 	if message then
+
 		local a,b,c,d = 0,0,0,0
 		local HCstars=1
 		local color, level,   hName,hNameLink, hLevel, hClass, hColor,   hKiller, hKillerLvl,  hZone;
+		
+		-- Check if its a normal Blizzard or pfUI Guild/Party/Raid chat
+		local isGPRchat = false
 
-		if strsub(message,1,7)=="[Guild]" or strsub(message,1,7)=="[Party]" or strsub(message,1,4)=="[G] " or strsub(message,1,4)=="[P] " then 
+		if strsub(message,1,1)=="[" or strsub(message,1,3)=="|r[" then
+			if strsub(message,1,7)=="[Guild]" or strsub(message,1,4)=="[G] "
+			or strsub(message,1,7)=="[Party]" or strsub(message,1,4)=="[P] " 
+			or strsub(message,1,6)=="[Raid]" or strsub(message,1,4)=="[R] "
+			or strsub(message,1,7)=="|r[G]|r" or strsub(message,1,7)=="|r[P]|r" or strsub(message,1,7)=="|r[R]|r" -- pfUI
+			then isGPRchat = true; end
+		end
+		
+		if isGPRchat then
+			--if string.find(message,"%[G%]") then gkiir(string.gsub(string.gsub(message,"G","g"),"|","!")) end	-- DEBUG
 			local _, _, _, name, _, type = string.find(message, "(|Hplayer:.-|h%[)(%a+)(%])(.*:%s)"); -- |Hplayer:XXX|hXXX|h
 			if name and not string.find(name, "%s") then
 				color,level = TurtleChatColors_ClassData(string.upper(name));
 				if level then 
-					--kiir(string.gsub(message,"|","!"))
 					local glevel = CGRAY..":|r"..CLGRAY..level.."|r" -- ":LvL"
 					a,b = string.find(message,"|Hplayer:"..name.."|h%[");
 					if a and b then
 						message = string.gsub(message,  "|Hplayer:"..name.."|h%["..name.."%]|h", 
 														"%["..color.."|Hplayer:"..name.."|h"..name.."|h|r"..glevel.."%]");
 					else
-						a,b = string.find(message,"|h"..name.."|h|r%]:");
+						kiir(name)
+						a,b = string.find(message,"|h%["..name.."%]|h|r:");
+						a,b = string.find(message,"%["..name.."%]");
 						if a and b then
-							message = string.gsub(message,  "|h"..name.."|h|r%]:", 
-															"|h"..name.."|h|r"..glevel.."%]:");
+							gkiir("!")
+							message = string.gsub(message,  "|h%["..name.."%]|h|r:", 
+															"|h%["..name..""..glevel.."%]|h|r:");
+--															"|h"..name.."|h|r"..glevel.."%]:");
 						else
 						a,b = string.find(message,"|h"..name.."|h|r>");
 							if a and b then
@@ -92,13 +110,13 @@ local function AddMessage(self, message, a1, a2, a3)	-- ( ) . % + - * ? [ ^ $
 			end
 			message = string.gsub(message,"%[Guild%] ","%[G%]");
 			message = string.gsub(message,"%[Party%] ","%[P%]");
+			message = string.gsub(message,"%[Raid%] ","%[R%]");
 			-- chat location/keyword highlights --
 			for mqff = 1,table.getn(chatUP) do message = string.gsub(message, chatUP[mqff], string.upper(chatUP[mqff])); end
 			for mqff = 1,table.getn(chatRED) do message = string.gsub(message, chatRED[mqff], CLLRED..chatRED[mqff].."|r"); end
 			for mqff = 1,table.getn(chatDUNG) do message = string.gsub(message, chatDUNG[mqff], CDUNG..chatDUNG[mqff].."|r"); end		
 			for mqff = 1,table.getn(chatGREEN) do message = string.gsub(message, chatGREEN[mqff], CROLE..chatGREEN[mqff].."|r"); end		
 			for mqff = 1,table.getn(chatBLUE) do message = string.gsub(message, chatBLUE[mqff], CWTS..chatBLUE[mqff].."|r"); end
-        elseif strsub(message,1,7)=="[Party]" then message = string.gsub(message,"%[Party%]","%[P%]")
         elseif strsub(message,1,9)=="A tragedy" then 
 			gReadRoster();
 			if not (string.find(message," natural") or string.find(message,"in PvP")) then -- MOB death
@@ -113,7 +131,7 @@ local function AddMessage(self, message, a1, a2, a3)	-- ( ) . % + - * ? [ ^ $
 				if a and b and c and d then
 					hKiller = strsub(message,a+1,b-1);
 					hKillerLvl = tonumber(strsub(message,c+1,d-1));
-					if not (hKiller and hKillerLvl) then kiir("ERROR!  hKiller / hKillerLvl = nil") end
+					if not (hKiller and hKillerLvl) then gkiir("ERROR!  hKiller / hKillerLvl = nil") end
 					_,a = string.find(message," at level ");
 					b,_ = string.find(message,". May this");
 					hLevel = tonumber(strsub(message,a+1,b-1));
@@ -123,9 +141,9 @@ local function AddMessage(self, message, a1, a2, a3)	-- ( ) . % + - * ? [ ^ $
 					if not hZone or hZone=="" then hZone="Azeroth"; end
 					hColor = TurtleChatColors_GetClassColor( string.upper(hClass) );					
 				else hZone=""; hColor=CLGRAY; hClass=""; end
-				if hKillerLvl==nil then kiir("ERROR! hKillerLvl nil"); hKillerLvl="?" end
-				if hLevel==nil then kiir("ERROR! hLevel nil"); hLevel="?"; HCstars=1; else HCstars = math.floor(hLevel/10) end
-				if hKillerLvl=="?" or hLevel=="?" or hLevel<10 then kiir(CYELLOW..message);
+				if hKillerLvl==nil then gkiir("ERROR! hKillerLvl nil"); hKillerLvl="?" end
+				if hLevel==nil then gkiir("ERROR! hLevel nil"); hLevel="?"; HCstars=1; else HCstars = math.floor(hLevel/10) end
+				if hKillerLvl=="?" or hLevel=="?" or hLevel<10 then gkiir(CYELLOW..message);
 				elseif level then -- a guildie
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death".."!"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..": "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLORANGE.."has fallen to:\n";
 					message = message.."   "..CharChain(" ",math.floor((HCstars+1)*1.3))..CLLRED..hKiller..CDGRAY.." ("..CLRED..hKillerLvl..CDGRAY..")"..CLORANGE.." @ ".."|cFFAA9999"..hZone.."... "..CLRED.."RIP"..CRED.." :("
@@ -150,15 +168,15 @@ local function AddMessage(self, message, a1, a2, a3)	-- ( ) . % + - * ? [ ^ $
 				if a and b and c and d then
 					hKiller = strsub(message,a+1,b-1);
 					hLevel = tonumber(strsub(message,c+1,d-1));
-					if not (hKiller and hLevel) then kiir("ERROR!  hKiller / hLevel = nil"); hLevel=1; end
+					if not (hKiller and hLevel) then gkiir("ERROR!  hKiller / hLevel = nil"); hLevel=1; end
 				else hKiller="??"; hLevel=1; end
 				level,hClass,hZone = GetGuildMemberInfo(hName)
 				if level then -- is in the guild, can get more info (class, location)
 					if not hZone or hZone=="" then hZone="Azeroth"; end
 					hColor = TurtleChatColors_GetClassColor( string.upper(hClass) );					
 				else hZone=""; hColor=CLGRAY; hClass=""; end
-				if hLevel==nil then kiir("ERROR! hLevel nil"); hLevel="?"; HCstars=1; else HCstars = math.floor(hLevel/10) end
-				if hLevel=="?" or hLevel<10 then kiir(CYELLOW..message);
+				if hLevel==nil then gkiir("ERROR! hLevel nil"); hLevel="?"; HCstars=1; else HCstars = math.floor(hLevel/10) end
+				if hLevel=="?" or hLevel<10 then gkiir(CYELLOW..message);
 				elseif level then -- a guildie
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death".."!"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..": "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLORANGE.."was killed in "..CLLRED.."PvP"..CLORANGE.." by:\n";
 					message = message.."   "..CharChain(" ",math.floor((HCstars+1)*1.3))..CLLRED..hKiller..CLORANGE.." @ ".."|cFFAA9999"..hZone.."... "..CLRED.."RIP"..CRED.." :("
@@ -178,27 +196,26 @@ local function AddMessage(self, message, a1, a2, a3)	-- ( ) . % + - * ? [ ^ $
 				d,_ = string.find(message,". May t");
 				if c and d then
 					hLevel = tonumber(strsub(message,c+1,d-1));
-					if not hLevel then kiir("ERROR!  hLevel = nil"); hLevel=1; end
+					if not hLevel then gkiir("ERROR!  hLevel = nil"); hLevel=1; end
 				else hLevel=1; end
 				level,hClass,hZone = GetGuildMemberInfo(hName)
 				if level then -- is in the guild, can get more info (class, location)
 					if not hZone or hZone=="" then hZone="Azeroth"; end
 					hColor = TurtleChatColors_GetClassColor( string.upper(hClass) );					
 				else hZone=""; hColor=CLGRAY; hClass=""; end
-				if hLevel==nil then kiir("ERROR! hLevel nil"); hLevel="?"; HCstars=1; else HCstars = math.floor(hLevel/10) end
-				if hLevel=="?" or hLevel<10 then kiir(CYELLOW..message);
+				if hLevel==nil then gkiir("ERROR! hLevel nil"); hLevel="?"; HCstars=1; else HCstars = math.floor(hLevel/10) end
+				if hLevel=="?" or hLevel<10 then gkiir(CYELLOW..message);
 				elseif level then -- a guildie
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death".."!"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..": "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLORANGE.."died of "..CLGREEN.."natural"..CLORANGE.." causes @ ".."|cFFAA9999"..hZone.."... "..CLRED.."RIP"..CRED.." :("
 					if special then SendChatMessage("F   ..."..hZone.." took a "..hClass..", RIP!","GUILD"); end
 				else -- not in guild
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..":  "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLORANGE.."died of "..CLGREEN.."natural"..CLORANGE.." causes... "..CLRED.."RIP"..CRED.." :("
-					message = message..CLLRED..hKiller.."... "..CLRED.."RIP"..CRED.." :("		
 					if gspecial then SendChatMessage("F   ...(was not in the guild)","GUILD"); end
 				end
 			else -- unknown death cause
 				message=message..""
-			end
-      elseif (strsub(message,-8)=="ll face.") and (string.find(message,"Hardcore m")>15) then 
+			end 
+		elseif (strsub(message,-8)=="ll face.") and (string.find(message,"Hardcore m")>15) then 
 			-- XXX has reached level YYY in Hardcore mode! Their ascendance towards immortality continues, however, so do the dangers they will face.
 			gReadRoster();
 			local e,_ = string.find(message," has reached level ")
@@ -206,22 +223,21 @@ local function AddMessage(self, message, a1, a2, a3)	-- ( ) . % + - * ? [ ^ $
 				hName = strsub(message,1,e-1)
 				hNameLink = "|Hplayer:"..hName.."|h"..string.upper(hName).."|h"
 				level,hClass,hZone = GetGuildMemberInfo(hName)
-				if level then hColor = TurtleChatColors_GetClassColor( string.upper(hClass) ) else hColor=CWHITE; hClass=""; hZone=""; end
+				if level then hColor = TurtleChatColors_GetClassColor( string.upper(hClass) ) else hColor=CLGRAY; hClass=""; hZone=""; end
 				_,a = string.find(message,"reached level ");
 				b,_ = string.find(message," in Hardcore");
 				if a and b then	
 					hLevel = tonumber(strsub(message,a+1,b-1)); 
-					if not hLevel then kiir("ERROR!  hLevel = nil"); hLevel=1; end
+					if not hLevel then gkiir("ERROR!  hLevel = nil"); hLevel=1; end
 				else hLevel=1; end
-				if level then hColor = TurtleChatColors_GetClassColor( string.upper(hClass) ); else hColor=CLGRAY; end
 				if hLevel then HCstars = math.floor(hLevel/10) else HCstars=1; end
-				if hLevel=="?" or hLevel<10 then kiir(CYELLOW..message);
+				if hLevel=="?" or hLevel<10 then gkiir(CYELLOW..message);
 				elseif level then -- a guildie
 					message = "   "..CDGREEN..CharChain("*",HCstars)..hColor..hNameLink..CDGREEN..CharChain("*",HCstars)..CYELLOW.." has reached level "..CDGREEN.."*"..CWHITE..hLevel..CDGREEN.."*"..CYELLOW.." in Hardcore"..CDGREEN.." @ |cFFAA9999"..hZone;
 					if gspecial and hLevel then 
-						if hLevel>49 then SendChatMessage("GRATS!   Almost there, keep living "..string.upper(hClass).."!","GUILD"); 
-						elseif hLevel>39 then SendChatMessage("GRATS!   Keep living "..hClass.."!","GUILD"); 
-						else SendChatMessage("Grats!   Keep living "..hClass.."!","GUILD"); end
+						if hLevel>49 then SendChatMessage("GRATS! Almost there, keep on living "..string.upper(hClass).."!","GUILD"); 
+						elseif hLevel>39 then SendChatMessage("GRATS! Keep on living "..hClass.."!","GUILD"); 
+						else SendChatMessage("Grats! Keep on living "..hClass.."!","GUILD"); end
 						--SendChatMessage("GZ, "..(60-hLevel).." more to go!","GUILD"); end
 					end
 				else -- not in guild
@@ -231,24 +247,39 @@ local function AddMessage(self, message, a1, a2, a3)	-- ( ) . % + - * ? [ ^ $
 			else -- unknown death cause
 				message=message..""
 			end	
-        elseif (strsub(message,-9)=="Immortal!") then 
+		elseif (strsub(message,-9)=="Immortal!") then 
 			-- XXX has transcended death and reached level 60 on Hardcore mode without dying once! XXX shall henceforth be known as the Immortal! --
 			gReadRoster();
-			message=message.."" 
-			if gspecial then SendChatMessage("CONGRATULATIONS!","GUILD"); end
+			a,_ = string.find(message," has transc");
+			_,b = string.find(message,"reached level ");
+			c,_ = string.find(message," on Hardcore");
+			if a and b and c then
+				hName = strsub(message,1,a-1)
+				hNameLink = "|Hplayer:"..hName.."|h"..string.upper(hName).."|h"
+				hLevel = tonumber(strsub(message,b+1,c-1));
+				if not hLevel then gkiir("ERROR!  hLevel = nil"); hLevel=60; end
+				level,hClass,hZone = GetGuildMemberInfo(hName)				
+				if level then hColor = TurtleChatColors_GetClassColor( string.upper(hClass) ) else hColor=CWHITE; hClass=""; hZone=""; end
+				if level then  -- a guildie
+					message = "   "..CDGREEN..CharChain("*",6)..hColor..hNameLink..CDGREEN..CharChain("*",6)..CYELLOW.." has transcended death and reached level "..CDGREEN.."*"..CWHITE..hLevel..CDGREEN.."*"..CYELLOW.." on Hardcore mode without dying once!\n";
+					message = message.."   "..CharChain(" ",math.floor((6)*1.3))..hColor..hName..CLORANGE.." shall henceforth be known as the "..CLGREEN.."Immortal"..CLORANGE.."!";
+					if gspecial then SendChatMessage("CONGRATULATIONS!","GUILD"); end
+				else
+				
+				end
+			end 
         elseif strsub(message,1,7)=="XP gain" then 
 			_,a = string.find(message," gain is");
 			if a then
 				if strsub(message,-3)=="OFF" then message = strsub(message,1,a)..": "..CLRED.."OFF" else message = strsub(message,1,a)..": "..CGREEN.."ON" end
 			end
 			showrested(1) -- %
-		end
+		end 
 	end
-    return hooks[self](self, message, a1, a2, a3)
+    return hooks[self](self, message, a1, a2, a3, a4, a5)
 end
 
 
-local function kiir(kirtxt) if kirtxt then DEFAULT_CHAT_FRAME:AddMessage(CSTART..CMYCOLOR..kirtxt..CEND); end end
 
 function showrested(sr)
 	p="player";
@@ -272,7 +303,7 @@ function DeleteTorches()
             for slot=GetContainerNumSlots(bag),1,-1 do
 				if (GetContainerItemLink(bag,slot)) then
 			        if (string.find(GetContainerItemLink(bag,slot), "Dim Torch")) then
-						--kiir(bag.." / "..slot)
+						--gkiir(bag.." / "..slot)
 						PickupContainerItem(bag,slot); DeleteCursorItem()
 					end
 			    end				
@@ -283,15 +314,49 @@ end
 
 function gspec() gspecial=true end -- shows auto F GZ and location in guildchat... only for myself! :)
 
-for index = 1, NUM_CHAT_WINDOWS do
-	if(index ~= 2) then
-		local frame = _G['ChatFrame'..index]
-		hooks[frame] = frame.AddMessage
-		frame.AddMessage = AddMessage
+
+
+-- Chat HOOKS
+function tccChatHooks()
+	local gframe
+	if not pfUI.version then -- no pfUI
+		for indexx = 1, NUM_CHAT_WINDOWS do
+			if _G then gframe = _G["ChatFrame"..indexx] elseif getglobal("ChatFrame"..indexx) then gframe = getglobal("ChatFrame"..indexx) else gframe=nil end
+			if gframe then
+				local combat = 0
+				for _, msg in pairs(gframe.messageTypeList) do
+					if strfind(msg, "SPELL", 1) or strfind(msg, "COMBAT", 1) then combat = combat + 1; end
+				end		
+				if combat < 6 then 
+					hooks[gframe] = gframe.AddMessage; 
+					gframe.AddMessage = gAddMessage; 
+				end
+			end
+		end
+	else -- pfUI
+		for indexx=1,NUM_CHAT_WINDOWS do
+			local combat = 0
+			if _G then gframe = _G["ChatFrame"..indexx] elseif getglobal("ChatFrame"..indexx) then gframe = getglobal("ChatFrame"..indexx) else gframe=nil end
+			if gframe then
+				local combat = 0
+				for _, msg in pairs(gframe.messageTypeList) do
+					if strfind(msg, "SPELL", 1) or strfind(msg, "COMBAT", 1) then combat = combat + 1; end
+				end		
+				if combat < 6 then 
+					if not gframe.HookAddMessage then
+						--gframe.HookAddMessage = gframe.AddMessage
+						--gframe.AddMessage = gframe.HookAddMessage
+						gframe.HookAddMessage = gframe.AddMessage; 
+						gframe.AddMessage = gAddMessage; 
+					else
+						hooks[gframe] = gframe.AddMessage; 
+						gframe.AddMessage = gAddMessage; 					
+					end
+				end
+			end
+		end
 	end
 end
-	
-
 
 TurtleChatColors_Names = {};
 TurtleChatColors_Level = {};
@@ -324,7 +389,10 @@ function GetGuildMemberInfo(gname)
 end
 
 function TurtleChatColors_OnEvent(event)
-	if (event == "VARIABLES_LOADED") then GuildRoster(); end	
+	if (event == "VARIABLES_LOADED") then 
+		tccChatHooks();
+		GuildRoster(); 
+	end	
 	if (event == "GUILD_ROSTER_UPDATE") then gReadRoster(); end
 end
 
@@ -337,7 +405,10 @@ function TurtleChatColors_ClassData(arg2, class, level )
 
 	if not class then  -- only name --> return with classcolor, level
 		for name, color in TurtleChatColors_Names do
-			if name == arg2 then return color, TurtleChatColors_Level[arg2]; end
+			if name == arg2 then 
+				if pfUI.version then if pfUI.chat.classcolor then if pfUI.chat.classcolor~=1 then color=CGUILD; end end end
+				return color, TurtleChatColors_Level[arg2]; 
+			end
 		end
 	end
     --have to check if I already have the name there...
@@ -352,7 +423,7 @@ function TurtleChatColors_ClassData(arg2, class, level )
 	--only get here if I don't find the name in my dbase.
 	if not found then
 		local color = TurtleChatColors_GetClassColor( class );
-		--if class then kiir(arg2.." = "..class) else kiir(arg2.." = ???") end
+		--if class then gkiir(arg2.." = "..class) else gkiir(arg2.." = ???") end
 		TurtleChatColors_Names[arg2] = color;
 		if level then
 			TurtleChatColors_Level[arg2] = level
