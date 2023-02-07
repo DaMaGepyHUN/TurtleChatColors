@@ -234,9 +234,9 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 				elseif level then -- a guildie
 					message = "   "..CDGREEN..CharChain("*",HCstars)..hColor..hNameLink..CDGREEN..CharChain("*",HCstars)..CYELLOW.." has reached level "..CDGREEN.."*"..CWHITE..hLevel..CDGREEN.."*"..CYELLOW.." in Hardcore"..CDGREEN.." @ |cFFAA9999"..hZone;
 					if gspecial and hLevel then 
-						if hLevel>49 then SendChatMessage("GRATS! Almost there, keep on living "..string.upper(hClass).."!","GUILD"); 
-						elseif hLevel>39 then SendChatMessage("GRATS! Keep on living "..hClass.."!","GUILD"); 
-						else SendChatMessage("Grats!","GUILD"); end
+						if hLevel>49 then SendChatMessage("GRATS! Almost there, keep on living and leveling "..string.upper(hClass).."!","GUILD"); 
+						elseif hLevel>39 then SendChatMessage("GRATS! Keep on living and leveling "..hClass.."!","GUILD"); end 
+						--else SendChatMessage("Grats!","GUILD"); end
 						--SendChatMessage("GZ, "..(60-hLevel).." more to go!","GUILD"); end
 					end
 				else -- not in guild
@@ -258,14 +258,12 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 				hLevel = tonumber(strsub(message,b+1,c-1));
 				if not hLevel then gkiir("ERROR!  hLevel = nil"); hLevel=60; end
 				level,hClass,hZone = GetGuildMemberInfo(hName)				
-				if level then hColor = TurtleChatColors_GetClassColor( string.upper(hClass) ) else hColor=CWHITE; hClass=""; hZone=""; end
-				if level then  -- a guildie
-					message = "   "..CDGREEN..CharChain("*",6)..hColor..hNameLink..CDGREEN..CharChain("*",6)..CYELLOW.." has transcended death and reached level "..CDGREEN.."*"..CWHITE..hLevel..CDGREEN.."*"..CYELLOW.." on Hardcore mode without dying once!\n";
-					message = message.."   "..CharChain(" ",math.floor((6)*1.3))..hColor..hName..CLORANGE.." shall henceforth be known as the "..CLGREEN.."Immortal"..CLORANGE.."!";
-					if gspecial then SendChatMessage("CONGRATULATIONS!","GUILD"); end
-				else
-				
-				end
+				if level then hColor = TurtleChatColors_GetClassColor( string.upper(hClass) ) else hColor=CLGRAY; hClass=""; hZone=""; end
+				--if level then  -- a guildie
+					message = "   "..CDGREEN..CharChain("*",6)..hColor..hNameLink..CDGREEN..CharChain("*",6)..CYELLOW.." has transcended death and reached level "..CDGREEN.."*"..CWHITE..hLevel..CDGREEN.."*"..CYELLOW.." on Hardcore mode without dying once! ";
+					message = message..hColor..hName..CLORANGE.." shall henceforth be known as the "..CLGREEN.."Immortal"..CLORANGE.." !";
+					if gspecial and level then SendChatMessage("CONGRATULATIONS!","GUILD"); end
+				--else end
 			end 
         elseif strsub(message,1,7)=="XP gain" then 
 			_,a = string.find(message," gain is");
