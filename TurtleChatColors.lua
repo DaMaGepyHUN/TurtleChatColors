@@ -45,7 +45,7 @@ local gspecial = false
 						"FULL RUN","Q run","XP FARM","XP runs","XP run"," quests","Elite Quests","Quests","RUNS","aoe runs","full run","farming","Farming"," full"," Full","AoE","AOE","aoe run",
 						"FARM","QUEST"," Quest ","QuestRun"," quest "," Aoe","exp run"," RUN","Questrun"," aoe"," runs"," Lava"," lava","last spot","Last Spot","LAST SPOT","Emp Run"," tents ",
 						"Middleman","middleman","emp run","exp farm"," exp "," q run","7d+emp","7d/emp","Last spot"," xp ","jailbreak","reputation"," GM's"," GM ","__"};
-		local chatBLUE = {"WTS","wts","wtb","WTB","LFG","LFM","LF1M","LF2M","LF3M","LF4M","LF ","lfg ","lfm ","lf1m","__","__","__"};
+		local chatBLUE = {"WTS","wts","wtb","WTB","LFG","LFM","LF1M","LF2M","LF3M","LF4M","LF ","lfg ","lfm ","LFW","lf1m","__","__","__"};
 		local chatRED = {" hc ","hardcore","Hardcore "," Hardcore"," HC"," RIP","r.i.p"," F! ","WTF","PVP","PvP"," pvp","HardcoreDeath","/db unseen"};
 		local chatUP = {"lfm ","lfg ","lf1m ","lf2m ","lf3m ","wtb ","wts "};
 
@@ -96,7 +96,6 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 							gkiir("!")
 							message = string.gsub(message,  "|h%["..name.."%]|h|r:", 
 															"|h%["..name..""..glevel.."%]|h|r:");
---															"|h"..name.."|h|r"..glevel.."%]:");
 						else
 						a,b = string.find(message,"|h"..name.."|h|r>");
 							if a and b then
@@ -148,8 +147,8 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death".."!"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..": "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLORANGE.."has fallen to:\n";
 					message = message.."   "..CharChain(" ",math.floor((HCstars+1)*1.3))..CLLRED..hKiller..CDGRAY.." ("..CLRED..hKillerLvl..CDGRAY..")"..CLORANGE.." @ ".."|cFFAA9999"..hZone.."... "..CLRED.."RIP"..CRED.." :("
 					if gspecial then 
-						if hKiller=="Unseen" then SendChatMessage("F   ..."..hZone.." took a "..hClass..", RIP! Next time use: /db unseen","GUILD"); 
-						else SendChatMessage("F   ..."..hZone.." took a "..hClass..", RIP!","GUILD"); end
+						if hKiller=="Unseen" then SendChatMessage("F   ..."..hZone.." killed another "..hClass..", RIP! Next time use: /db unseen","GUILD"); 
+						else SendChatMessage("F   ..."..hZone.." killed another "..hClass..", RIP!","GUILD"); end
 					end
 				else -- not in guild
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..":  "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLORANGE.."@ ";
@@ -237,7 +236,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 					if gspecial and hLevel then 
 						if hLevel>49 then SendChatMessage("GRATS! Almost there, keep on living "..string.upper(hClass).."!","GUILD"); 
 						elseif hLevel>39 then SendChatMessage("GRATS! Keep on living "..hClass.."!","GUILD"); 
-						else SendChatMessage("Grats! Keep on living "..hClass.."!","GUILD"); end
+						else SendChatMessage("Grats!","GUILD"); end
 						--SendChatMessage("GZ, "..(60-hLevel).." more to go!","GUILD"); end
 					end
 				else -- not in guild
@@ -294,7 +293,7 @@ end
 
 
 --MACRO: /run for b=0,4 do if GetBagName(b) then for s=GetContainerNumSlots(b),1,-1 do if GetContainerItemLink(b,s) then if string.find(GetContainerItemLink(b,s),"Dim Torch") then PickupContainerItem(b,s); DeleteCursorItem() end end end end end
-function DeleteTorches()
+function DeleteTorches() -- Deletes all Torch from the inventory when lvling survival from 1..50
 	local gshardbag = -1;
     local gshardslot= 0;
 	if endbag==nil then endbag=0 end
@@ -344,8 +343,6 @@ function tccChatHooks()
 				end		
 				if combat < 6 then 
 					if not gframe.HookAddMessage then
-						--gframe.HookAddMessage = gframe.AddMessage
-						--gframe.AddMessage = gframe.HookAddMessage
 						gframe.HookAddMessage = gframe.AddMessage; 
 						gframe.AddMessage = gAddMessage; 
 					else
