@@ -55,16 +55,17 @@ level 10 or without a pet it does things differently, uses concshot first
 then serpent (if learned), arcane, etc. There is also a feedpet macro which
 shows the available number of food in a certain bagslot in the macro-text
 and feeds the pet, or calls the pet if not out or resurrects if dead.
-For locks s apammable macro for void sacrifice (if void is out) auto-eating 
-a healthstone and on thirst press using a healingpot, or for example a
+For locks a apammable macro for void sacrifice (if void is out) auto-eating 
+a healthstone and on third press using a healingpot, or for example a
 curseofexhaustion macro which uses amplifymagic if available. I also made a
-mouseover healing macro, to heal mouseover then target then self (if no 
-target or target is enemy) and uses the max rang automatically so no need
+mouseover healing macro, to heal mouseover, then target, then self (if no 
+target or target is enemy) and uses the max rank automatically so no need
 to swap newly purchased spells. The same goes for attacking spells with 
 autotargeting. I wrote all of this because I wrote that private addon in 2005
 for myself and using it myself since and adding more and more function for
-servers where 1.12 and CastSpellByName is active. Found/joined Turtle HC
+servers where 1.12 and CastSpellByName is allowed. Found/joined Turtle HC
 in mid January 2023, so I though some others may like my spec macros as well.
-Let me know, I appreciate feedbacks :)
+Let me know if you do, so I may make that available as well.
+And I appreciate all feedback :)
   
 Cya: DaMaGepy		(damagepyhun@gmail.com / discord:DaMaGepyHUN#2928)
