@@ -83,7 +83,9 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 			--if string.find(message,"%[G%]") then gkiir(string.gsub(string.gsub(message,"G","g"),"|","!")) end	-- DEBUG
 			if strsub(message,1,2)=="[G" then -- F / rip
 				if string.upper(strsub(message,-2))==" F" then message=strsub(message,1,-2)..CLRED.."F"; 
-				elseif string.upper(strsub(message,-4))==" RIP" then message=strsub(message,1,-4)..CLRED..strsub(message,-3); end
+				elseif string.upper(strsub(message,-4))==" RIP" then message=strsub(message,1,-4)..CLRED..strsub(message,-3);
+				elseif string.upper(strsub(message,-5))==" F :(" then message=strsub(message,1,-5)..CLRED.."F :(";
+				end
 			end
 			local _, _, _, name, _, type = string.find(message, "(|Hplayer:.-|h%[)(%a+)(%])(.*:%s)"); -- |Hplayer:XXX|hXXX|h
 			if name and not string.find(name, "%s") then
