@@ -2,9 +2,8 @@
 -- TurtleChatColors 1.1
 TurtleChatColors_ChatFrame_OnEvent = ChatFrame_OnEvent
 
---- Guild enclosing brackets in chat: [G][Name:#]: xxxxx        (or)        [G]<Name:#> xxxxx
-local tcgleft,tcgright = "[" , "]:"
---local tcgleft,tcgright = "<" , ">"
+--- Guild enclosing brackets in chat: 1 = [G][Name:#]: xxxxx        (or)       2 = [G]<Name:#> xxxxx
+local tccGuildBrackets = 1
 
 local CLORANGE = "|cFFEEDD55"
 local CLLRED = "|cFFFF9999"
@@ -13,7 +12,6 @@ local CDUNG = "|cFFEEFFBB"
 local CWTS = "|cFF66DDFF"
 local CROLE = "|cFFCCEE00"
 local CGUILD = "|cFF3CE13F"
-
 local CRED = "|cFFFF0000"
 local CYELLOW = "|cFFFFFF00"
 local CGREEN = "|cFF00FF00"
@@ -116,6 +114,14 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 			message = string.gsub(message,"%[Guild%] ","%[G%]");
 			message = string.gsub(message,"%[Party%] ","%[P%]");
 			message = string.gsub(message,"%[Raid%] ","%[R%]");
+			if not tccGuildBrackets==1 then -- < .. >
+				message = string.gsub(message,"G%]%[","G%]<");
+				message = string.gsub(message,"G%] %[","G%]<");
+				message = string.gsub(message,"|r%]: ","|r> ");
+				message = string.gsub(message,"|r%] ","|r> ");
+			end
+			message = string.gsub(message,"|r%]: ","|r%]:  "); -- adds an extra space before the chatmessage
+
 			-- chat location/keyword highlights --
 			for mqff = 1,table.getn(chatUP) do message = string.gsub(message, chatUP[mqff], string.upper(chatUP[mqff])); end
 			for mqff = 1,table.getn(chatRED) do message = string.gsub(message, chatRED[mqff], CLLRED..chatRED[mqff].."|r"); end
@@ -291,7 +297,7 @@ function showrested(sr)
 	r=GetXPExhaustion();
 	if -1==(r or -1) then t=CLRED.."Not rested." 
 	else t="|cFF9999FFRested: "..CWHITE..(math.floor((r*1000)/(m*1.5))/10)..CGRAY.."%";end;
-	if sr then t=t.."            "..CDGRAY.."macro: "..CLGRAY.."/run showrested()" end
+	if sr then t=t.."            "..CDGRAY.."macro:  "..CLGRAY.."/run showrested()" end
 	DEFAULT_CHAT_FRAME:AddMessage(CSTART..t..CEND);
 end
 
