@@ -284,14 +284,14 @@ function showrested(sr)
 	m=UnitXPMax(p);
 	r=GetXPExhaustion();
 	if -1==(r or -1) then t=CLRED.."Not rested." 
-	else t="|cFFAAAAFFRested: "..CWHITE..(math.floor((r*1000)/(m*1.5))/10)..CGRAY.."%";end;
+	else t="|cFF9999FFRested: "..CWHITE..(math.floor((r*1000)/(m*1.5))/10)..CGRAY.."%";end;
 	if sr then t=t.."            "..CDGRAY.."macro: "..CLGRAY.."/run showrested()" end
 	DEFAULT_CHAT_FRAME:AddMessage(CSTART..t..CEND);
 end
 
 
 --MACRO: /run for b=0,4 do if GetBagName(b) then for s=GetContainerNumSlots(b),1,-1 do if GetContainerItemLink(b,s) then if string.find(GetContainerItemLink(b,s),"Dim Torch") then PickupContainerItem(b,s); DeleteCursorItem() end end end end end
-function DeleteTorches() -- Deletes all Torch from the inventory when lvling survival from 1..50
+function deletetorches() -- Deletes all Torch from the inventory when lvling survival from 1..50
 	local gshardbag = -1;
     local gshardslot= 0;
 	if endbag==nil then endbag=0 end
