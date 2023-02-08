@@ -2,6 +2,10 @@
 -- TurtleChatColors 1.1
 TurtleChatColors_ChatFrame_OnEvent = ChatFrame_OnEvent
 
+--- Guild enclosing brackets in chat: [G][Name:#]: xxxxx        (or)        [G]<Name:#> xxxxx
+local tcgleft,tcgright = "[" , "]:"
+--local tcgleft,tcgright = "<" , ">"
+
 local CLORANGE = "|cFFEEDD55"
 local CLLRED = "|cFFFF9999"
 local CDYELLOW = "|cFFC9CC00"
@@ -79,6 +83,10 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 		
 		if isGPRchat then
 			--if string.find(message,"%[G%]") then gkiir(string.gsub(string.gsub(message,"G","g"),"|","!")) end	-- DEBUG
+			if strsub(message,1,2)=="[G" then -- F / rip
+				if string.upper(strsub(message,-2))==" F" then message=strsub(message,1,-2)..CLRED..strsub(message,-1); 
+				elseif string.upper(strsub(message,-4))==" RIP" then message=strsub(message,1,-4)..CLRED..strsub(message,-3); end
+			end
 			local _, _, _, name, _, type = string.find(message, "(|Hplayer:.-|h%[)(%a+)(%])(.*:%s)"); -- |Hplayer:XXX|hXXX|h
 			if name and not string.find(name, "%s") then
 				color,level = TurtleChatColors_ClassData(string.upper(name));
@@ -89,11 +97,9 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 						message = string.gsub(message,  "|Hplayer:"..name.."|h%["..name.."%]|h", 
 														"%["..color.."|Hplayer:"..name.."|h"..name.."|h|r"..glevel.."%]");
 					else
-						kiir(name)
 						a,b = string.find(message,"|h%["..name.."%]|h|r:");
 						a,b = string.find(message,"%["..name.."%]");
 						if a and b then
-							gkiir("!")
 							message = string.gsub(message,  "|h%["..name.."%]|h|r:", 
 															"|h%["..name..""..glevel.."%]|h|r:");
 						else
