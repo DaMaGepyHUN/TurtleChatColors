@@ -258,7 +258,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 					end
 				else -- not in guild
 					message = "   "..CDGREEN..CharChain("*",HCstars)..hColor..hNameLink..CDGREEN..CharChain("*",HCstars)..CYELLOW.." has reached level "..CDGREEN.."*"..CWHITE..hLevel..CDGREEN.."*"..CYELLOW.." in Hardcore!"
-					SendChatMessage("(^ not in the guild ^)","GUILD"); 
+					if gspecial then SendChatMessage("(^ not in the guild ^)","GUILD"); end
 				end
 			else -- unknown death cause
 				message=message..""
