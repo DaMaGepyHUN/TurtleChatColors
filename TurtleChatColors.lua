@@ -43,12 +43,12 @@ local gspecial = false
 						" BFD"," RFD"," RFK"," RFC"," rfc"," WC"," bfd","Zul Farak","Zul'Farak","Armory"," ulda"," sm "," Cath"," RR "," .hc","loch modan","westfall",
 						"armory","Zul'Farrak"," cath","GRAVEYARD","Graveyard"," ARM"," Gnomer ","SFK","Arm/Cath","SM ","lib/arm"," Mara "," Princess",
 						"razorfen","Blackfathom"," zf ","cath "," Zf","ULDAMAN","shadowfang","Stockades","ZF ","BLACKFATHOM"," GS","Mulgore"};
-		local chatGREEN = {" DMF"," dmf"," hogger","Hogger"," DPS "," DPS"," dps"," Dps"," escort ","Tank "," tank "," HEALER "," HEAL "," heal ","Heal "," Heal ","/heals","/heal","/dps"," heals","healer ","heal "," healer","Healer",
+		local chatGREEN = {" DMF"," dmf"," hogger"," Hogger"," DPS "," DPS"," dps"," Dps"," escort ","Tank "," tank "," HEALER "," HEAL "," heal ","Heal "," Heal ","/heals","/heal","/dps"," heals","healer ","heal "," healer","Healer",
 						"FULL RUN","Q run","XP FARM","XP runs","XP run"," quests","Elite Quests","Quests","RUNS","aoe runs","full run","farming","Farming"," full"," Full","AoE","AOE","aoe run",
 						"FARM","QUEST"," Quest ","QuestRun"," quest "," Aoe","exp run"," RUN","Questrun"," aoe"," runs"," Lava"," lava","last spot","Last Spot","LAST SPOT","Emp Run"," tents ",
-						"Middleman","middleman","emp run","exp farm"," exp "," q run","7d+emp","7d/emp","Last spot"," xp ","jailbreak","reputation"," GM's"," GM ","__"};
+						"Middleman","middleman","emp run","exp farm"," exp "," q run","7d/emp","Last spot"," xp ","jailbreak","reputation"," GM's"," GM ","Gratz","__"};
 		local chatBLUE = {"WTS","wts","wtb","WTB","LFG","LFM","LF1M","LF2M","LF3M","LF4M","LF ","lfg ","lfm ","LFW","lf1m","__","__","__"};
-		local chatRED = {" hc ","hardcore","Hardcore "," Hardcore"," HC"," RIP","r.i.p"," F! ","WTF","PVP","PvP"," pvp","HardcoreDeath","/db unseen"};
+		local chatRED = {" hc ","hardcore","Hardcore "," Hardcore"," HC"," RIP"," F! "," F ","WTF","PVP","PvP"," pvp","HardcoreDeath","/db unseen"};
 		local chatUP = {"lfm ","lfg ","lf1m ","lf2m ","lf3m ","wtb ","wts "};
 
 if not hooks then hooks = {} end
@@ -161,8 +161,11 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death".."!"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..": "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLORANGE.."has fallen to:\n";
 					message = message.."   "..CharChain(" ",math.floor((HCstars+1)*1.3))..CLLRED..hKiller..CDGRAY.." ("..CLRED..hKillerLvl..CDGRAY..")"..CLORANGE.." @ ".."|cFFAA9999"..hZone.."... "..CLRED.."RIP"..CRED.." :("
 					if gspecial then 
-						if hKiller=="Unseen" then SendChatMessage("F   ..."..hZone.." killed another "..hClass..", RIP! Next time use: /db unseen","GUILD"); 
-						else SendChatMessage("F   ..."..hZone.." killed another "..hClass..", RIP!","GUILD"); end
+						if hKiller=="Unseen" then SendChatMessage("..."..hZone.."'s "..hKiller.." spotted another "..hClass..", RIP! Next time use: /db unseen","GUILD");
+						elseif hKiller=="Stitches" then SendChatMessage("..."..hZone.."'s "..hKiller.." ate another "..hClass..", RIP!","GUILD"); 
+						elseif hKiller=="Son of Arugal" then SendChatMessage("..."..hZone.."'s Worgen ganked another "..hClass..", RIP!","GUILD"); 
+						elseif hKiller=="Gradok" or hKiller=="Haren Swifthoof" or hKiller=="Thragomm" then SendChatMessage("..."..hZone.."'s patrol ganked another "..hClass..", RIP!","GUILD"); 
+						else SendChatMessage("..."..hZone.." killed another "..hClass..", RIP!","GUILD"); end
 					end
 				else -- not in guild
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..":  "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLORANGE.."@ ";
