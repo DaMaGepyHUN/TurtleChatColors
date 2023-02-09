@@ -1,6 +1,6 @@
 Just some quick note about the addon:
 (https://github.com/DaMaGepyHUN/TurtleChatColors)
-To install to the Interface/AddOns, rename folder to: TurtleChatColors
+To install to the Interface/AddOns, RENAME folder to: TurtleChatColors
 
 What it does:
 - Makes guildchat shorter replacing [Guild] with [G], [Party] with [P] etc...
