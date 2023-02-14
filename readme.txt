@@ -1,6 +1,6 @@
 Just some quick note about the addon:
 (https://github.com/DaMaGepyHUN/TurtleChatColors)
-To install to the Interface/AddOns, RENAME folder to: TurtleChatColors
+(!) To install to the Interface/AddOns, RENAME folder to: TurtleChatColors
 
 What it does:
 - Makes guildchat shorter replacing [Guild] with [G], [Party] with [P] etc...
@@ -13,7 +13,7 @@ What it does:
   Stockades, Dire Maul, Deadmines, GS, or words like Healer, Quest run, etc.
 - Repaces/reformats the Turtle system messages, coloring them, making names 
   clickable + class-colored, showing more info about location (if in guild)
-- My auto-response in guildchat is a secret switch, so the addon wont spam it
+- My auto-response in guildchat is a secret switch so the addon won't spam it
   automatcally for others. I made it so people without the addon can still
   see the death location and class (which I always wanted to know)
 - no GUI, just "install" and it works. Should work with pfUI too, adding the 
