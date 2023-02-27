@@ -1,6 +1,10 @@
 Just some quick note about the addon:
 (https://github.com/DaMaGepyHUN/TurtleChatColors)
-(!) To install to the Interface/AddOns, RENAME folder to: TurtleChatColors
+(!) To install to the Interface/AddOns, RENAME folder to:  TurtleChatColors
+
+http://damagepy.byethost3.com/TurtleChatColors1.png
+http://damagepy.byethost3.com/TurtleChatColors2.png
+http://damagepy.byethost3.com/TurtleChatColors3.png
 
 What it does:
 - Makes guildchat shorter replacing [Guild] with [G], [Party] with [P] etc...
