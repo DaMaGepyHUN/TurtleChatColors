@@ -48,7 +48,7 @@ local gspecial = false
 						"FARM","QUEST"," Quest ","QuestRun"," quest "," Aoe","exp run"," RUN","Questrun"," aoe"," runs"," Lava"," lava","last spot","Last Spot","LAST SPOT","Emp Run"," tents ",
 						"Middleman","middleman","emp run","exp farm"," exp "," q run","7d/emp","Last spot"," xp ","jailbreak","reputation"," GM's"," GM ","Gratz","__"};
 		local chatBLUE = {"WTS","wts","wtb","WTB","LFG","LFM","LF1M","LF2M","LF3M","LF4M","LF ","lfg ","lfm ","LFW","lf1m","__","__","__"};
-		local chatRED = {" hc ","hardcore","Hardcore "," Hardcore"," HC"," RIP"," F! "," F ","WTF","PVP","PvP"," pvp","HardcoreDeath","/db unseen"};
+		local chatRED = {" hc "," hardcore","Hardcore "," Hardcore"," HC"," RIP"," F! "," F ","WTF","PVP","PvP"," pvp","HardcoreDeath","/db unseen"};
 		local chatUP = {"lfm ","lfg ","lf1m ","lf2m ","lf3m ","wtb ","wts "};
 
 if not hooks then hooks = {} end
@@ -161,12 +161,13 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death".."!"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..": "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLORANGE.."has fallen to:\n";
 					message = message.."   "..CharChain(" ",math.floor((HCstars+1)*1.3))..CLLRED..hKiller..CDGRAY.." ("..CLRED..hKillerLvl..CDGRAY..")"..CLORANGE.." @ ".."|cFFAA9999"..hZone.."... "..CLRED.."RIP"..CRED.." :("
 					if gspecial and hName~=UnitName("player") then 
-						if hKiller=="Unseen" then SendChatMessage("..."..hZone.."'s "..hKiller.." spotted another "..hClass..", RIP! Next time use: /db unseen","GUILD");
-						elseif hKiller=="Stitches" then SendChatMessage("..."..hZone.."'s "..hKiller.." ate another "..hClass..", RIP!","GUILD"); 
-						elseif hKiller=="Mor'Ladim" then SendChatMessage("..."..hZone.."'s "..hKiller.." ganked another "..hClass..", RIP!","GUILD"); 
-						elseif hKiller=="Son of Arugal" then SendChatMessage("..."..hZone.."'s Worgen ganked another "..hClass..", RIP!","GUILD"); 
-						elseif hKiller=="Gradok" or hKiller=="Haren Swifthoof" or hKiller=="Thragomm" then SendChatMessage("..."..hZone.."'s patrol ganked another "..hClass..", RIP!","GUILD"); 
-						else SendChatMessage("..."..hZone.." killed another "..hClass..", RIP!","GUILD"); end
+						if hKiller=="Unseen" then SendChatMessage("..."..hZone.."'s "..hKiller.." spotted a "..hClass..", RIP! Next time use: /db unseen","GUILD");
+						elseif hKiller=="Stitches" then SendChatMessage("..."..hZone.."'s "..hKiller.." ate a "..hClass..", RIP!","GUILD"); 
+						elseif hKiller=="Mor'Ladim" or hKiller=="Somnus" or hKiller=="Teremus the Devourer" then SendChatMessage("..."..hZone.."'s "..hKiller.." ganked a "..hClass..", RIP!","GUILD"); 
+						elseif hKiller=="Son of Arugal" then SendChatMessage("..."..hZone.."'s Worgen ganked a "..hClass..", RIP!","GUILD"); 
+						elseif hKiller=="Gradok" or hKiller=="Haren Swifthoof" or hKiller=="Thragomm" then SendChatMessage("..."..hZone.."'s patrol ganked a "..hClass..", RIP!","GUILD"); 
+						elseif string.find(hKiller,"Tunnel Rat") then SendChatMessage("..."..hZone.." ratted a "..hClass..", Tunnel rats rule!","GUILD"); 
+						else SendChatMessage("..."..hZone.." killed a "..hClass..", RIP!","GUILD"); end
 					end
 				else -- not in guild
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..":  "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLORANGE.."@ ";
@@ -250,7 +251,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 				if hLevel then HCstars = math.floor(hLevel/10) else HCstars=1; end
 				if hLevel=="?" or hLevel<10 then gkiir(CYELLOW..message);
 				elseif level then -- a guildie
-					message = "   "..CDGREEN..CharChain("*",HCstars)..hColor..hNameLink..CDGREEN..CharChain("*",HCstars)..CYELLOW.." has reached level "..CDGREEN.."*"..CWHITE..hLevel..CDGREEN.."*"..CYELLOW.." in Hardcore"..CDGREEN.." @ |cFFAA9999"..hZone;
+					message = "   "..CDGREEN..CharChain("*",HCstars)..hColor..hNameLink..CDGREEN..CharChain("*",HCstars)..CYELLOW.." has reached level "..CDGREEN.."*"..CWHITE..hLevel..CDGREEN.."*"..CYELLOW.." in Hardcore"..CDGREEN.." @ |cFFAA9999"..hZone..CYELLOW.." !";
 					if gspecial and hLevel and hName~=UnitName("player") then 
 						if hLevel>49 then SendChatMessage("GRATS! Almost there, keep on living "..string.upper(hClass).."!","GUILD"); 
 						elseif hLevel>39 then SendChatMessage("Grats! Keep on living "..hClass.."!","GUILD"); end 
@@ -259,7 +260,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 					end
 				else -- not in guild
 					message = "   "..CDGREEN..CharChain("*",HCstars)..hColor..hNameLink..CDGREEN..CharChain("*",HCstars)..CYELLOW.." has reached level "..CDGREEN.."*"..CWHITE..hLevel..CDGREEN.."*"..CYELLOW.." in Hardcore!"
-					if gspecial and hName~=UnitName("player") then SendChatMessage("(^ not in the guild ^)","GUILD"); end
+					if gspecial and hName~=UnitName("player") and hLevel>19 then SendChatMessage("(^ not in the guild ^)","GUILD"); end
 				end
 			else -- unknown death cause
 				message=message..""
@@ -278,7 +279,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 				level,hClass,hZone = GetGuildMemberInfo(hName)				
 				if level then hColor = TurtleChatColors_GetClassColor( string.upper(hClass) ) else hColor=CLGRAY; hClass=""; hZone=""; end
 				message = "   "..CDGREEN..CharChain("*",6)..hColor..hNameLink..CDGREEN..CharChain("*",6)..CYELLOW.." has transcended death and reached level "..CDGREEN.."*"..CWHITE..hLevel..CDGREEN.."*"..CYELLOW.." on Hardcore mode without dying once! ";
-				message = message..hColor..hName..CLORANGE.." shall henceforth be known as the "..CLGREEN.."Immortal"..CLORANGE.." !";
+				message = message..hColor..hName..CLORANGE.." shall henceforth be known as the "..CLGREEN.."IMMORTAL"..CLORANGE.." !";
 				if gspecial then
 					if level and hName~=UnitName("player") then SendChatMessage("CONGRATULATIONS!","GUILD"); else SendChatMessage("(^ not in the guild ^)","GUILD"); end 
 				end
