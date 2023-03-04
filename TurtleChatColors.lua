@@ -47,8 +47,8 @@ local gspecial = false
 						"FULL RUN","Q run","XP FARM","XP runs","XP run"," quests","Elite Quests","Quests","RUNS","aoe runs","full run","farming","Farming"," full"," Full","AoE","AOE","aoe run",
 						"FARM","QUEST"," Quest ","QuestRun"," quest "," Aoe","exp run"," RUN","Questrun"," aoe"," runs"," Lava"," lava","last spot","Last Spot","LAST SPOT","Emp Run"," tents ",
 						"Middleman","middleman","emp run","exp farm"," exp "," q run","7d/emp","Last spot"," xp ","jailbreak","reputation"," GM's"," GM ","Gratz","__"};
-		local chatBLUE = {"WTS","wts","wtb","WTB","LFG","LFM","LF1M","LF2M","LF3M","LF4M","LF ","lfg ","lfm ","LFW","lf1m","__","__","__"};
-		local chatRED = {" hc "," hardcore","Hardcore "," Hardcore"," HC"," RIP"," F! "," F ","WTF","PVP","PvP"," pvp","HardcoreDeath","/db unseen"};
+		local chatBLUE = {"WTS","wts","wtb","WTB","WTT","LFG","LFM","LF1M","LF2M","LF3M","LF4M","LF ","lfg ","lfm ","LFW","lf1m","__","__","__"};
+		local chatRED = {" hc "," hardcore","Hardcore "," Hardcore"," HC"," RIP"," F! "," F ","WTF","PVP","PvP"," pvp","HardcoreDeath","/db unseen","showtooltip"};
 		local chatUP = {"lfm ","lfg ","lf1m ","lf2m ","lf3m ","wtb ","wts "};
 
 if not hooks then hooks = {} end
@@ -161,12 +161,15 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death".."!"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..": "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLORANGE.."has fallen to:\n";
 					message = message.."   "..CharChain(" ",math.floor((HCstars+1)*1.3))..CLLRED..hKiller..CDGRAY.." ("..CLRED..hKillerLvl..CDGRAY..")"..CLORANGE.." @ ".."|cFFAA9999"..hZone.."... "..CLRED.."RIP"..CRED.." :("
 					if gspecial and hName~=UnitName("player") then 
-						if hKiller=="Unseen" then SendChatMessage("..."..hZone.."'s "..hKiller.." spotted a "..hClass..", RIP! Next time use: /db unseen","GUILD");
+						if hKiller=="Unseen" then SendChatMessage("..."..hZone.."'s "..hKiller.." spotted a "..hClass.."! Next time use: /db unseen","GUILD");
 						elseif hKiller=="Stitches" then SendChatMessage("..."..hZone.."'s "..hKiller.." ate a "..hClass..", RIP!","GUILD"); 
 						elseif hKiller=="Mor'Ladim" or hKiller=="Somnus" or hKiller=="Teremus the Devourer" then SendChatMessage("..."..hZone.."'s "..hKiller.." ganked a "..hClass..", RIP!","GUILD"); 
 						elseif hKiller=="Son of Arugal" then SendChatMessage("..."..hZone.."'s Worgen ganked a "..hClass..", RIP!","GUILD"); 
 						elseif hKiller=="Gradok" or hKiller=="Haren Swifthoof" or hKiller=="Thragomm" then SendChatMessage("..."..hZone.."'s patrol ganked a "..hClass..", RIP!","GUILD"); 
+						elseif hKiller=="Carnivous the Breaker" then SendChatMessage("..."..hZone.." broke a "..hClass..", RIP!","GUILD"); 
+						elseif hKiller=="Carver Molsen" then SendChatMessage("...a "..hClass.." got carved in "..hZone..", RIP!","GUILD"); 
 						elseif string.find(hKiller,"Tunnel Rat") then SendChatMessage("..."..hZone.." ratted a "..hClass..", Tunnel rats rule!","GUILD"); 
+						elseif string.find(hKiller,"Assassin") then SendChatMessage("...a "..hClass.." got assassinated in "..hZone..", RIP!","GUILD"); 
 						else SendChatMessage("..."..hZone.." killed a "..hClass..", RIP!","GUILD"); end
 					end
 				else -- not in guild
