@@ -2,6 +2,7 @@
 -- TurtleChatColors 1.1
 TurtleChatColors_ChatFrame_OnEvent = ChatFrame_OnEvent
 
+--- .hcmessages 60 		turns off all death message below 60
 --- Guild enclosing brackets in chat: 1 = [G][Name:#]: xxxxx        (or)       2 = [G]<Name:#> xxxxx
 local tccGuildBrackets = 1
 
@@ -205,7 +206,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 				else -- not in guild
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..":  "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLORANGE.."in "..CLLRED.."PvP"..CLORANGE.." by ";
 					message = message..CLLRED..hKiller.."... "..CLRED.."RIP"..CRED.." :("		
-					if gspecial and hName~=UnitName("player") then SendChatMessage("F   ...(was not in the guild)","GUILD"); end
+					if gspecial and hName~=UnitName("player") and hLevel>=20 then SendChatMessage("F   ...(was not in the guild)","GUILD"); end
 				end
 			elseif string.find(message,"natural ca") then
 			-- A tragedy has occurred. Hardcore character Therilas died of natural causes at level 27. May this sacrifice not be forgotten. --
@@ -231,7 +232,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 					if special and hName~=UnitName("player") then SendChatMessage("F   ..."..hZone.." took a "..hClass..", RIP!","GUILD"); end
 				else -- not in guild
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..":  "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLORANGE.."died of "..CLGREEN.."natural"..CLORANGE.." causes... "..CLRED.."RIP"..CRED.." :("
-					if gspecial and hName~=UnitName("player") then SendChatMessage("F   ...(was not in the guild)","GUILD"); end
+					if gspecial and hName~=UnitName("player") and hLevel>=20 then SendChatMessage("F   ...(was not in the guild)","GUILD"); end
 				end
 			else -- unknown death cause
 				message=message..""
@@ -263,7 +264,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 					end
 				else -- not in guild
 					message = "   "..CDGREEN..CharChain("*",HCstars)..hColor..hNameLink..CDGREEN..CharChain("*",HCstars)..CYELLOW.." has reached level "..CDGREEN.."*"..CWHITE..hLevel..CDGREEN.."*"..CYELLOW.." in Hardcore!"
-					if gspecial and hName~=UnitName("player") and hLevel>19 then SendChatMessage("(^ not in the guild ^)","GUILD"); end
+					if gspecial and hName~=UnitName("player") and hLevel>=20 then SendChatMessage("(^ not in the guild ^)","GUILD"); end
 				end
 			else -- unknown death cause
 				message=message..""
@@ -309,6 +310,9 @@ function showrested(sr)
 	else t="|cFF9999FFRested: "..CWHITE..(math.floor((r*1000)/(m*1.5))/10)..CGRAY.."%";end;
 	if sr then t=t.."            "..CDGRAY.."macro:  "..CLGRAY.."/run showrested()" end
 	DEFAULT_CHAT_FRAME:AddMessage(CSTART..t..CEND);
+	if sr then
+		if UnitLevel("player")<5 then DEFAULT_CHAT_FRAME:AddMessage(CLRED.."You can't chat until level "..CYELLOW.."5"..CLRED.." !"..CEND); end
+	end
 end
 
 
