@@ -335,7 +335,11 @@ function deletetorches() -- Deletes all Torch from the inventory when lvling sur
     end
 end
 
-function gspec() gspecial=true end -- shows auto F GZ and location in guildchat... only for myself! :)
+function gspec(gsp) -- shows auto F / GZ message with class/location info in guildchat... only for myself! :)
+	if gsp==nil or gsp then gspecial=true else gspecial=false end
+	local gsptxt=CLRED.."OFF"; if gspecial then gsptxt=CGREEN.."ON" end
+	DEFAULT_CHAT_FRAME:AddMessage(CYELLOW.."TurtleChatColors guild announcements are: "..gsptxt..CEND);
+end 
 
 
 
