@@ -43,7 +43,7 @@ local gspecial = false
 						"Maraudon","maraudon","ARENA"," arena","Dire Maul","Gnomeregan","ARMORY","Deadmines","deadmines"," STV"," BB ","LF tank","LF Tank",
 						" BFD"," RFD"," RFK"," RFC"," rfc"," WC"," bfd","Zul Farak","Zul'Farak","Armory"," ulda"," sm "," Cath"," RR "," .hc","loch modan","westfall",
 						"armory","Zul'Farrak"," cath","GRAVEYARD","Graveyard"," ARM"," Gnomer ","SFK","Arm/Cath","SM ","lib/arm"," Mara "," Princess",
-						"razorfen","Blackfathom"," zf ","cath "," Zf","ULDAMAN","shadowfang","Stockades","ZF ","BLACKFATHOM"," GS","Mulgore"};
+						"razorfen","Blackfathom"," zf ","cath "," Zf","ULDAMAN","shadowfang","Stockades","ZF ","BLACKFATHOM"," GS"," Mulgore","Mulgore "};
 		local chatGREEN = {" DMF"," dmf"," hogger"," Hogger"," DPS "," DPS"," dps"," Dps"," escort ","Tank "," tank "," HEALER "," HEAL "," heal ","Heal "," Heal ","/heals","/heal","/dps"," heals","healer ","heal "," healer","Healer",
 						"FULL RUN","Q run","XP FARM","XP runs","XP run"," quests","Elite Quests","Quests","RUNS","aoe runs","full run","farming","Farming"," full"," Full","AoE","AOE","aoe run",
 						"FARM","QUEST"," Quest ","QuestRun"," quest "," Aoe","exp run"," RUN","Questrun"," aoe"," runs"," Lava"," lava","last spot","Last Spot","LAST SPOT","Emp Run"," tents ",
@@ -91,7 +91,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 			local _, _, _, name, _, type = string.find(message, "(|Hplayer:.-|h%[)(%a+)(%])(.*:%s)"); -- |Hplayer:XXX|hXXX|h
 			if name and not string.find(name, "%s") then
 				color,level = TurtleChatColors_ClassData(string.upper(name));
-				if level then 
+				if level then if level>0 then
 					local glevel = CGRAY..":|r"..CLGRAY..level.."|r" -- ":LvL"
 					a,b = string.find(message,"|Hplayer:"..name.."|h%[");
 					if a and b then
@@ -112,7 +112,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 						end
 					end
 					--message = string.gsub(message, "(|Hplayer:.-|h%[)([%w]+)(%])", "%1" .. color .. "%2|r"..glevel.."%3");
-				end
+				end end
 			end
 			message = string.gsub(message,"%[Guild%] ","%[G%]");
 			message = string.gsub(message,"%[Party%] ","%[P%]");
@@ -151,6 +151,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 					hLevel = tonumber(strsub(message,a+1,b-1));
 				else hKiller="??"; hKillerLvl="?"; hLevel=1; end
 				level,hClass,hZone = GetGuildMemberInfo(hName)
+				if not level then _,level = TurtleChatColors_ClassData(string.upper(hName));	if level then gReadRoster(); level,hClass,hZone = GetGuildMemberInfo(hName); end end -- retry if not in guild
 				if level then -- is in the guild, can get more info (class, location)
 					if not hZone or hZone=="" then hZone="Azeroth"; end
 					hColor = TurtleChatColors_GetClassColor( string.upper(hClass) );					
@@ -176,7 +177,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 				else -- not in guild
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..":  "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLORANGE.."@ ";
 					message = message..CLLRED..hKiller..CDGRAY.." ("..CLRED..hKillerLvl..CDGRAY..")... "..CLRED.."RIP"..CRED.." :("		
-					if gspecial then SendChatMessage("F   ...(was not in the guild)","GUILD"); end
+					--if gspecial then SendChatMessage("F   ...(was not in the guild)","GUILD"); end
 				end
 			elseif string.find(message,"in PvP") then
 			-- A tragedy has occurred. Hardcore character Alebla has fallen in PvP to Lertia at level 15. May this sacrifice not be forgotten. --
@@ -193,6 +194,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 					if not (hKiller and hLevel) then gkiir("ERROR!  hKiller / hLevel = nil"); hLevel=1; end
 				else hKiller="??"; hLevel=1; end
 				level,hClass,hZone = GetGuildMemberInfo(hName)
+				if not level then _,level = TurtleChatColors_ClassData(string.upper(hName));	if level then gReadRoster(); level,hClass,hZone = GetGuildMemberInfo(hName); end end -- retry if not in guild
 				if level then -- is in the guild, can get more info (class, location)
 					if not hZone or hZone=="" then hZone="Azeroth"; end
 					hColor = TurtleChatColors_GetClassColor( string.upper(hClass) );					
@@ -206,7 +208,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 				else -- not in guild
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..":  "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLORANGE.."in "..CLLRED.."PvP"..CLORANGE.." by ";
 					message = message..CLLRED..hKiller.."... "..CLRED.."RIP"..CRED.." :("		
-					if gspecial and hName~=UnitName("player") and hLevel>=20 then SendChatMessage("F   ...(was not in the guild)","GUILD"); end
+					--if gspecial and hName~=UnitName("player") and hLevel>=20 then SendChatMessage("F   ...(was not in the guild)","GUILD"); end
 				end
 			elseif string.find(message,"natural ca") then
 			-- A tragedy has occurred. Hardcore character Therilas died of natural causes at level 27. May this sacrifice not be forgotten. --
@@ -221,6 +223,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 					if not hLevel then gkiir("ERROR!  hLevel = nil"); hLevel=1; end
 				else hLevel=1; end
 				level,hClass,hZone = GetGuildMemberInfo(hName)
+				if not level then _,level = TurtleChatColors_ClassData(string.upper(hName));	if level then gReadRoster(); level,hClass,hZone = GetGuildMemberInfo(hName); end end -- retry if not in guild
 				if level then -- is in the guild, can get more info (class, location)
 					if not hZone or hZone=="" then hZone="Azeroth"; end
 					hColor = TurtleChatColors_GetClassColor( string.upper(hClass) );					
@@ -232,7 +235,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 					if special and hName~=UnitName("player") then SendChatMessage("F   ..."..hZone.." took a "..hClass..", RIP!","GUILD"); end
 				else -- not in guild
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..":  "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLORANGE.."died of "..CLGREEN.."natural"..CLORANGE.." causes... "..CLRED.."RIP"..CRED.." :("
-					if gspecial and hName~=UnitName("player") and hLevel>=20 then SendChatMessage("F   ...(was not in the guild)","GUILD"); end
+					--if gspecial and hName~=UnitName("player") and hLevel>=20 then SendChatMessage("F   ...(was not in the guild)","GUILD"); end
 				end
 			else -- unknown death cause
 				message=message..""
@@ -245,6 +248,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 				hName = strsub(message,1,e-1)
 				hNameLink = "|Hplayer:"..hName.."|h"..string.upper(hName).."|h"
 				level,hClass,hZone = GetGuildMemberInfo(hName)
+				if not level then _,level = TurtleChatColors_ClassData(string.upper(hName));	if level then gReadRoster(); level,hClass,hZone = GetGuildMemberInfo(hName); end end -- retry if not in guild
 				if level then hColor = TurtleChatColors_GetClassColor( string.upper(hClass) ) else hColor=CLGRAY; hClass=""; hZone=""; end
 				_,a = string.find(message,"reached level ");
 				b,_ = string.find(message," in Hardcore");
@@ -264,7 +268,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 					end
 				else -- not in guild
 					message = "   "..CDGREEN..CharChain("*",HCstars)..hColor..hNameLink..CDGREEN..CharChain("*",HCstars)..CYELLOW.." has reached level "..CDGREEN.."*"..CWHITE..hLevel..CDGREEN.."*"..CYELLOW.." in Hardcore!"
-					if gspecial and hName~=UnitName("player") and hLevel>=20 then SendChatMessage("(^ not in the guild ^)","GUILD"); end
+					--if gspecial and hName~=UnitName("player") and hLevel>=20 then SendChatMessage("(^ not in the guild ^)","GUILD"); end
 				end
 			else -- unknown death cause
 				message=message..""
@@ -281,6 +285,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 				hLevel = tonumber(strsub(message,b+1,c-1));
 				if not hLevel then gkiir("ERROR!  hLevel = nil"); hLevel=60; end
 				level,hClass,hZone = GetGuildMemberInfo(hName)				
+				if not level then _,level = TurtleChatColors_ClassData(string.upper(hName));	if level then gReadRoster(); level,hClass,hZone = GetGuildMemberInfo(hName); end end -- retry if not in guild
 				if level then hColor = TurtleChatColors_GetClassColor( string.upper(hClass) ) else hColor=CLGRAY; hClass=""; hZone=""; end
 				message = "   "..CDGREEN..CharChain("*",6)..hColor..hNameLink..CDGREEN..CharChain("*",6)..CYELLOW.." has transcended death and reached level "..CDGREEN.."*"..CWHITE..hLevel..CDGREEN.."*"..CYELLOW.." on Hardcore mode without dying once! ";
 				message = message..hColor..hName..CLORANGE.." shall henceforth be known as the "..CLGREEN.."IMMORTAL"..CLORANGE.." !";
@@ -336,9 +341,10 @@ function deletetorches() -- Deletes all Torch from the inventory when lvling sur
 end
 
 function gspec(gsp) -- shows auto F / GZ message with class/location info in guildchat... only for myself! :)
+	local gspold=gspecial
 	if gsp==nil or gsp then gspecial=true else gspecial=false end
 	local gsptxt=CLRED.."OFF"; if gspecial then gsptxt=CGREEN.."ON" end
-	DEFAULT_CHAT_FRAME:AddMessage(CYELLOW.."TurtleChatColors guild announcements are: "..gsptxt..CEND);
+	if gspold~=gspecial then DEFAULT_CHAT_FRAME:AddMessage(CYELLOW.."TurtleChatColors guild announcements are: "..gsptxt..CEND); end
 end 
 
 
