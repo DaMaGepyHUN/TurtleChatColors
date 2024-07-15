@@ -5,11 +5,9 @@ https://github.com/DaMaGepyHUN/TurtleChatColors
 http://damagepy.byethost3.com/TurtleChatColors1.png
 http://damagepy.byethost3.com/TurtleChatColors2.png
 http://damagepy.byethost3.com/TurtleChatColors3.png
-Updated (shorter) deathmessage:
-http://damagepy.byethost3.com/TurtleChatColors4.png
-
 (Old pics, from when the Still Alive guild existed)
-Fixed for the new system messages (drown burn etc)
+Update: Fixed for the new system messages (drown burn etc) and shorter:
+http://damagepy.byethost3.com/TurtleChatColors4.png
 
 What it does:
 - Makes guildchat shorter replacing [Guild] with [G], [Party] with [P] etc...
