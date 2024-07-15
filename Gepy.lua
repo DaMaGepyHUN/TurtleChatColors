@@ -31,9 +31,10 @@ local CatFormNum = 3 -- the form number on the shapeshiftbar, after getting aqua
 local Gspellcheck = 0
 local GHunterFoodBag,GHunterFoodSlot = 3,99
 local StingAllowed = true;
-local gPetCanAttack = true;
+local gPetCanAttack; if gPetCanAttack==nil then gPetCanAttack=true; end
 local SpellsChecked = false;
 local doMark = true;
+local WasNStree = false;
 
 -- class checks
 	if (UnitClass("player")=="Warlock") then isWarlock = true; end
@@ -44,8 +45,8 @@ local doMark = true;
 	if (UnitClass("player")=="Paladin") then isPaladin = true; end
 
 -- Hunter Non-Stingable targets
-local NoSting = {"War Reaver","Blighted Horror","Barbed Lasher","Constrictor Vine","Magma Elemental","Onyxia","Gusting Vortex","Onyxian Warder","Azuregos","Thundering Exile",
-				"Lord Kazzak","","","","","","","","","","","","",""}
+local NoSting = {"War Reaver","Blighted Horror","Venomhide Ravasaur","Bloodpetal Thresher","Barbed Lasher","Constrictor Vine","Magma Elemental","Onyxia","Gusting Vortex","Onyxian Warder","Azuregos","Thundering Exile",
+				"Lord Kazzak","Heavy War Golem","","","","","","","","","","","",""}
 local NoStingNum = table.getn(NoSting)
 -- Minimum SpellLvlRequirements
 local FortiMin = {1,2,14,26,38,50} --  ?{1,12,24,36,48,60}, "Prayer of Fortitude" {48,60} "Holy Candle","Sacred Candle"
@@ -71,7 +72,7 @@ local BoMMin = {4,12,22,32,42,52,60} -- "Greater Blessing of Might", {52,60}, {"
 -- priest helpers
 	local GPR,GPRsh,MBcombat,GHunt = 0,0,0,0
 -- spellbook checks
-	local GIsRejuvenation, GIsRegrowth, GIsCatForm, GIsBearForm, GIsMoonfire, GIsPWFortitude, GIsMarkoftheWild, GIsMindBlast, GIsMindFlay = 0,0,0,0,0,0,0,0,0
+	local GIsRejuvenation, GIsRegrowth, GIsCatForm, GIsBearForm, GIsMoonfire, GIsPWFortitude, GIsMarkoftheWild, GIsMindBlast, GIsMindFlay, GIsFaerieFire = 0,0,0,0,0,0,0,0,0,0
 	local GIsMaul, GIsEnrage, GIsSmite, GIsClaw, GIsMangle, GFerocity, GIsShred, GIsRake = 0,0,0,0,0,0,0,0
 	local GIsSerpent, GIsArcane, GIsMark, GIsMonkey, GIsHawk, GIsConcshot, GHunterRangedSlot = 0,0,0,0,0,0,0
 	local GIsRavage, GIsFeroBite = 0,0
@@ -118,7 +119,7 @@ end
 function GCheckSpells()
 	if (UnitClass("player")=="Priest") then
 		GIsPWFortitude = GIsSpellLearned("Power Word: Fortitude");	
-		GIsMindBlast = GIsSpellLearned("Mind Blast");	
+		GIsMindBlast = GIsSpellLearned("Mind Blast");
 		GIsMindFlay = GIsSpellLearned("Mind Flay");		
 		GIsSmite = GIsSpellLearned("Smite");	
 	elseif (UnitClass("player")=="Druid") then
@@ -142,6 +143,7 @@ function GCheckSpells()
 		GIsRip = GIsSpellLearned("Rip");
 		GIsRavage = GIsSpellLearned("Ravage");
 		GIsFeroBite = GIsSpellLearned("Ferocious Bite");
+		GIsFaerieFire = GIsSpellLearned("Faerie Fire (Feral)");
 	elseif (UnitClass("player")=="Mage") then
 		GIsAIntellect = GIsSpellLearned("Arcane Intellect");	
 	elseif (UnitClass("player")=="Paladin") then
@@ -342,11 +344,9 @@ function gremoveitemlink(gremitem)
 end
 
 
-
-
 function GMoveItem(glast,gitemname)
 	local gshardslot=0;
-	if glast==nil then glast=2 end; -- 1,2,3,4,5
+	if glast==nil then glast=2 end; -- 1,2,3,4,5		(4,3,2,1,0)
 	if gitemname==nil then gitemname="Soul Shard"; end
 	local gemptybag = -1;
     local gemptyslot= 0;
@@ -644,6 +644,15 @@ function AutoTarget()
 	if UnitIsFriend("player","target") then AssistUnit("target"); end
 end
 
+
+function CanSting(gns)
+	for stf=1,NoStingNum do 
+		if (gns==NoSting[stf]) then return false; end;
+	end
+	return true;
+end
+
+
 --==============================
 --==    ATTACK rotations    ====
 --==============================
@@ -674,16 +683,15 @@ function GepyAttack()
 	if (GetUnitName("target")~=nil) --[[and UnitIsEnemy("player","target")]] then
 	
 		if (isWarlock) then  
-			if UnitExists("pet") and (gPetCanAttack) then --[[kiir("PET attack");]] PetAttack(); end
+			if (gPetCanAttack) and UnitExists("pet") and 
+			( GPlayerHasBuff("Spell_Shadow_Twilight")==false or ( GPlayerHasBuff("Spell_Shadow_Twilight") and UnitAffectingCombat("player")==false ) )  then --[[kiir("PET attack");]] PetAttack(); end
 			if (GPlayerHasBuff("Spell_Shadow_Twilight")) then CastSpellByName("Shadow Bolt") -- nightfall
 			elseif (GTargetHasDebuff("Spell_Shadow_Requiem")==false) and (GIsSpellLearned("Siphon Life")>0) and (UnitCreatureType("target")~="Mechanical") then CastSpellByName("Siphon Life")
 			elseif (GTargetHasDebuff("Spell_Shadow_AbominationExplosion")==false) and (GIsSpellLearned("Corruption")>0) then CastSpellByName("Corruption")
 			elseif ((GTargetHasDebuff("Spell_Shadow_UnholyStrength")==false) and (GTargetHasDebuff("Spell_Shadow_GrimWard")==false) and (GTargetHasDebuff("Spell_Shadow_CurseOfSargeras")==false)) and (GIsSpellLearned("Curse of Agony")>0) then CastSpellByName("Curse of Agony")
 			elseif (GTargetHasDebuff("Spell_Fire_Immolation")==false) and (GIsSpellLearned("Immolate")>0) and (gPlayerLevel<12) then CastSpellByName("Immolate")
 			else 
-				--[[if (GIsSpellLearned("Drain Life")>0) then
-				if (GTargetHasDebuff("Spell_Shadow_LifeDrain02")==false) then GepyChannel("Drain Life") end
-				else CastSpellByName("Shadow Bolt") end]]
+				--[[if (GIsSpellLearned("Drain Life")>0) then if (GTargetHasDebuff("Spell_Shadow_LifeDrain02")==false) then GepyChannel("Drain Life") end else CastSpellByName("Shadow Bolt") end]]
 				CastSpellByName("Shadow Bolt")
 			end
 			
@@ -693,10 +701,9 @@ function GepyAttack()
 			-- hammer of justice
 			-- exorcism if undead or demon? isdemon?
 
-
 		elseif (isHunter) then -- in MC no mark or stings allowed!  /gepy sting   to turn on/off
 			local sstart, sduration, senable, astart, aduration, aenable = 0,0,0,0,0,0
-			if (gPlayerLevel<12) and (GIsConcshot>0) then sstart, sduration, senable = GetSpellCooldown(GIsConcshot,BOOKTYPE_SPELL); else sduration=1 end
+			if (gPlayerLevel<12) and (GIsConcshot>0) then cstart, cduration, cenable = GetSpellCooldown(GIsConcshot,BOOKTYPE_SPELL); else cduration=99 end
 			--kiir("0gPlayerLevel="..gPlayerLevel)
 			--if not UnitAffectingCombat("player") then kiir("NOT In Combat") else kiir("In Combat") end
 			--[[if (GIsMark>0) then kiir("2GIsMark>0") end
@@ -706,33 +713,24 @@ function GepyAttack()
 			if GTargetHasDebuff("Spell_Frost_Stun")==false then kiir("6GTargetHasDebuff(Spell_Frost_Stun)==false") end ]]
 			if UnitExists("pet") and (GetZoneText()~="The Molten Core") and (gPetCanAttack) then PetAttack("target"); end
 			--kiir("sduration: "..sduration) 
-			if (GIsArcane>0) then 
-				astart, aduration, aenable = GetSpellCooldown(GIsArcane,BOOKTYPE_SPELL);
-			else aduration=-1; end
+			if (GIsArcane>0)  then astart, aduration, aenable = GetSpellCooldown(GIsArcane,BOOKTYPE_SPELL);  else aduration=99; end
+			if (GIsSerpent>0) then sstart, sduration, senable = GetSpellCooldown(GIsSerpent,BOOKTYPE_SPELL); else sduration=99; end
 			
 			if (not UnitAffectingCombat("player")) then GHunt=0; end
 			if (not UnitAffectingCombat("player")) and (GIsMark>0) and (doMark) and (GTargetHasDebuff("Ability_Hunter_SniperShot")==false) and (StingAllowed) and (GetZoneText()~="The Molten Core") then 
 				CastSpellByName("Hunter's Mark"); 
 			--Concussive Shot if no pet and below lvl 12
-			elseif (not UnitAffectingCombat("player")) and (gPlayerLevel<12) and (UnitExists("pet")==nil) and (GIsConcshot>0) and (GTargetHasDebuff("Spell_Frost_Stun")==false) and (sduration==0) then
+			elseif (not UnitAffectingCombat("player")) and (gPlayerLevel<12) and (UnitExists("pet")==nil) and (GIsConcshot>0) and (GTargetHasDebuff("Spell_Frost_Stun")==false) and (cduration==0) then
 				CastSpellByName("Concussive Shot");
 			elseif UnitAffectingCombat("player") and CheckInteractDistance("target",3) then 
 				CastSpellByName("Raptor Strike"); 
-				CastSpellByName("Mongoose Bite"); 
-			elseif (StingAllowed) and (GIsSerpent>0) and (GTargetHasDebuff("Ability_Hunter_Quickshot")==false) --and GHunt==0 
-				then 
-				sstart, sduration, senable = GetSpellCooldown(GIsSerpent,BOOKTYPE_SPELL);
-				if (sduration==0) then 					
-					GHunt=0; local UNam=UnitName("target"); for stf=1,NoStingNum do if (UNam==NoSting[stf]) then GHunt=1; end; end;
-					--[[if (UnitCreatureType("target")=="Elemental") or (GetZoneText()=="The Molten Core") then GHunt=2; else
-						 
-					end ]]
-					if GHunt==0 then CastSpellByName("Serpent Sting"); else CastSpellByName("Arcane Shot") end
-				end; 
-				GStartAutoattack(); --CastSpellByName("Auto Shot")			
+				CastSpellByName("Mongoose Bite");
+			elseif (StingAllowed) and (GIsSerpent>0) and (GetNumPartyMembers()==0) and (GetNumRaidMembers()==0) and (GTargetHasDebuff("Ability_Hunter_Quickshot")==false) and (UnitCreatureType("target")~="Elemental") and (sduration==0) and CanSting(UnitName("target")) then --and GHunt==0 				
+				CastSpellByName("Serpent Sting"); 
+				--GStartAutoattack(); --CastSpellByName("Auto Shot")			
 			elseif (GIsArcane>0) and (aduration==0) and (gPlayerLevel<36) and (UnitName("target")~="Azuregos") then CastSpellByName("Arcane Shot")-- check arcane shot cooldown				
 			elseif (GIsSpellLearned("Auto Shot")>0) and (not UnitAffectingCombat("player")) then CastSpellByName("Auto Shot")
-			elseif (GIsSpellLearned("Trueshot")>0) then CastSpellByName("Trueshot")
+			elseif (GIsSpellLearned("Trueshot")>0) then CastSpellByName("Trueshot") -- lvl 36
 			end
 			
 		elseif (isDruid) then  
@@ -865,6 +863,7 @@ function GepyAttack()
 				if (not UnitAffectingCombat("player")) then GPR=0; end	
 			end
 		   end --unitaffectingcombat
+		  else CastSpellByName("Smite");
 		  end -- Gismindblast
 		end	-- Priest end
 		
@@ -1101,6 +1100,12 @@ function GepyBuffs() -- MAGE 	FireWard:Spell_Fire_FireArmor  Spell_Frost_FrostWa
   UIErrorsFrame:Clear(); UIErrorsFrame:Show();
 end
 
+function SelfInner()
+	TargetUnit("player"); 
+	CastSpellByName("Innervate",1);
+	TargetLastTarget();
+end
+
 
 local GFromShift = true -- next time start with regrowth
 function GRegrowthRejuForm() -- shift out (if no reju, remember form), Regrowth, Reju, back to last Form, (if reju going) autotarget, autoattack, claw
@@ -1184,11 +1189,19 @@ function GFFaerieFire() -- Feral
 		elseif GGetCurrentFormName()=="Cat Form" then
 			AutoTarget()
 			GStartAutoattack()
-			if GIsSpellLearned("Faerie Fire (Feral)") and (not GTargetHasDebuff("Spell_Nature_FaerieFire")) then --GListDebuffs("target")				
+			local mstart, mduration, menable, sstart, sduration, senable = GetSpellCooldown(GIsFaerieFire,BOOKTYPE_SPELL);
+			if GIsSpellLearned("Faerie Fire (Feral)") and (mduration==0) and (mstart==0) and (not GTargetHasDebuff("Spell_Nature_FaerieFire")) then --GListDebuffs("target")				
 				CastSpellByName("Faerie Fire (Feral)()")
-			elseif GIsSpellLearned("Tiger's Fury") and UnitMana("player")>=60 and (not GTargetHasDebuff("Ability_Mount_JungleTiger")) then
+			elseif GIsSpellLearned("Tiger's Fury") and UnitMana("player")>=30 and (not GPlayerHasBuff("Ability_Mount_JungleTiger")) then
 				CastSpellByName("Tiger's Fury")
 			elseif UnitMana("player")>=40 then CastSpellByName("Claw") end
+		elseif GGetCurrentFormName()=="Bear Form" then
+			AutoTarget()
+			GStartAutoattack()
+			local mstart, mduration, menable, sstart, sduration, senable = GetSpellCooldown(GIsFaerieFire,BOOKTYPE_SPELL);
+			if GIsSpellLearned("Faerie Fire (Feral)") and (mduration==0) and (mstart==0) and (not GTargetHasDebuff("Spell_Nature_FaerieFire")) then --GListDebuffs("target")				
+				CastSpellByName("Faerie Fire (Feral)()")
+			end		
 		end
 	end
 end
@@ -1493,9 +1506,37 @@ function GGetContainerItemByName(item) -- true/false    + gitemBagNum,gitemSlotN
 	return false;
 end
 
+
+function GetBagName(gbn)  -- 1..4 (5)		original:  4..1 (0)
+	--gbn=5-gbn; 
+	if gbn<1 then gbn=1; end; if gbn>4 then gbn=4; end
+	local link = GetInventoryItemLink("player", ContainerIDToInventoryID(5-gbn))
+	if link ~= nil then
+		local _,_,_,_,_,subtype = GetItemInfo(tonumber(string.gsub(link, "|cff%x%x%x%x%x%x|Hitem:(%d+):%d+:%d+:%d+|h.*", "%1") or 0))
+		if subtype then return subtype; end
+	end
+	return nil;
+end
+
+--else reif subtype == L["Soul Bag"] or subtype == L["Ammo Pouch"] or subtype == L["Quiver"] then
+
+
+function GIsAmmoBag(iab)  -- 1..4 (5)		original:  4..1 (0)
+	local iabs = GetBagName(iab);
+	if iabs then
+		--kiir(iab.." = "..iabs);
+		if iabs == "Soul Bag" or iabs == "Ammo Pouch" or iabs == "Quiver" then return true; end;
+	end
+	return false
+end
+
+
 function GFeedPet()
 	if UnitExists("Pet") and (not PlayerFrame.inCombat) and (not UnitAffectingCombat("player")) then 
-		local GHunterFoodSlotRl = GHunterFoodSlot; if GHunterFoodSlot>GetContainerNumSlots(GHunterFoodBag) then GHunterFoodSlotRl=GetContainerNumSlots(GHunterFoodBag) end
+		local GHunterFoodSlotRl = GHunterFoodSlot; 
+		if GHunterFoodBag==3 and GIsAmmoBag(1)==false then GHunterFoodBag=4; end -- if first bag is not ammo bag
+		if GHunterFoodBag==4 and GIsAmmoBag(1)==true then GHunterFoodBag=3; end  -- if first bag is an ammo bag
+		if GHunterFoodSlot>GetContainerNumSlots(GHunterFoodBag) then GHunterFoodSlotRl=GetContainerNumSlots(GHunterFoodBag) end
 		local GFlink = GetContainerItemLink(GHunterFoodBag,GHunterFoodSlotRl)
 		if GFlink~=nil then
 			local texture, itemCount, locked, quality, readable, lootable, itemLink = GetContainerItemInfo(GHunterFoodBag,GHunterFoodSlotRl);
@@ -1538,6 +1579,10 @@ function GUpdateFeedMacro(diff)
 	if not PlayerFrame.inCombat then
 		local GMFind = GFindMacroByName("Fed:")				
 		if (GMFind>0) then -- GHunterFoodBag,GHunterFoodSlot
+			--kiir("1 bag = "..GetBagName(1)); if GIsAmmoBag(1) then kiir("1 ammobag"); end
+			--kiir("2 bag = "..GetBagName(2)); if GIsAmmoBag(2) then kiir("2 ammobag"); end
+			if GHunterFoodBag==3 and GIsAmmoBag(1)==false then GHunterFoodBag=4; end -- if first bag is not ammo bag
+			if GHunterFoodBag==4 and GIsAmmoBag(1)==true then GHunterFoodBag=3; end  -- if first bag is an ammo bag
 			local GHunterFoodSlotReal = GHunterFoodSlot; if GHunterFoodSlot>GetContainerNumSlots(GHunterFoodBag) then GHunterFoodSlotReal=GetContainerNumSlots(GHunterFoodBag) end
 			local GMLink = GetContainerItemLink(GHunterFoodBag,GHunterFoodSlotReal)
 			local GICount = 0
@@ -1870,8 +1915,8 @@ function GGetCurrentFormName() -- (Dire) Bear Form, Aquatic Form, Cat Form, Trav
 	for i=1,GetNumShapeshiftForms() do
 		local _, name, active = GetShapeshiftFormInfo(i) -- icon, name, active, castable
 		if active then 
-			--if name=="Dire Bear Form" then name="Bear Form" end
 			glastform=name; 
+			if name=="Dire Bear Form" then name="Bear Form" end
 			return name; 
 		end
 	end
@@ -1879,9 +1924,28 @@ function GGetCurrentFormName() -- (Dire) Bear Form, Aquatic Form, Cat Form, Trav
 end
 
 
--- CastShapeshiftForm(index)    1 = Bear/Dire Bear Form    2 = Aquatic Form    3 = Cat Form    4 = Travel Form    5 = Moonkin Form 
--- NS+HT			local s,d,e=GetSpellCooldown(122,"spell") if(d==0) then cast("Nature's Swiftness"); else cast("Healing Touch"); end;
+-- CastShapeshiftForm(index)    1 = Bear/Dire Bear Form    2 = Aquatic Form    3 = Cat Form    4 = Travel Form    5 = Moonkin Form / Tree
 -- Reju+Swiftmend	a=GetSpellCooldown; s,d,e=a(146,"spell"); if(d==0) then if(not buffed('Rejuvenation', 'target')) then cast('Rejuvenation'); else s,d,e=a(148,"spell"); if(d==0) then cast('Swiftmend'); end; end; end;
+
+function GNSHT() -- cast, back to form
+	local GNat = GIsSpellLearned("Nature's Swiftness")
+	if isDruid and GNat then
+		local mstart, mduration, menable = GetSpellCooldown(GNat,BOOKTYPE_SPELL);
+		if (mstart==0) and (mduration==0) and (menable==1) and (not GPlayerHasBuffName("Nature's Swiftness")) then -- not on cd
+			WasNStree=false;
+			if GIsShapeshifted() then 
+				if GPlayerHasBuffName("Tree of Life Form") then WasNStree=true; end
+				GCancelForm(); 
+			end
+			CastSpellByName("Nature's Swiftness",1); 
+		else --  NS on cooldown
+			if GPlayerHasBuffName("Nature's Swiftness") then GepyMouseHeal("Healing Touch"); 
+			elseif WasNStree then
+				if (GPlayerHasBuffName("Tree of Life Form")==false) then CastSpellByName("Tree of Life Form",1); else WasNStree=false; end
+			end
+		end
+	end
+end
 
 function GCancelForm()	--> glastform
 	for i=1, GetNumShapeshiftForms() do 
@@ -1891,6 +1955,7 @@ function GCancelForm()	--> glastform
 			glastform = name; glastformnum = i;
 			break
 		end 
+		if GPlayerHasBuffName("Tree of Life Form") then CastSpellByName("Tree of Life Form",1) end
 	end
 end
 
@@ -2100,7 +2165,12 @@ function GepyChannel(GCSpell)
 		--kiir(GCSpell.." = "..strsub(GCSpell,1,10))
 		if (isWarlock) then
 			if (GCoreSpell=="Drain Life") and (UnitCreatureType("target")~="Mechanical") then
-				if (GTargetHasDebuff("Spell_Shadow_LifeDrain02")==false) then CastSpellByName(GCSpell) end
+				--if (GTargetHasDebuff("Spell_Shadow_LifeDrain02")==false) then CastSpellByName(GCSpell) end
+				local GDLife = GIsSpellLearned("Drain Life")
+				if GDLife then
+					local mstart, mduration, menable = GetSpellCooldown(GDLife,BOOKTYPE_SPELL);
+					if (mstart==0) and (mduration==0) and (menable==1) then CastSpellByName(GCSpell); end
+				end
 			elseif (GCoreSpell=="Drain Soul") then 
 				--if GSF then	GDeleteLastShard() else GMoveShardsFromLastBag(2) end-- if ANY (Rank X)  -->  KILL Shard from soulbag's last slot or last (4th) bag!
 																				 -- 2 = 4,3,2 = shardbags  (move from 1,0)
@@ -2370,6 +2440,12 @@ function removeitemlink(gremitem) -- for hidden addon channel, you can't send it
 end
 
 
+function ListChannels() 
+-- RemoveChatWindowChannel(windowId 1.., "channelName");
+--ChatFrame_RemoveChannel(DEFAULT_CHAT_FRAME, "Trade");
+
+end
+
 function Gepy_OnLoad()
 	this:RegisterEvent("PLAYER_LOGIN");
 	this:RegisterEvent("PLAYER_LEVEL_UP");
@@ -2401,10 +2477,23 @@ function Gepy_OnEvent(event)
 		GAutoCreateMacros()				
 		if MinimapZoomIn:Hide()~=nil then MinimapZoomIn:Hide(); end
 		if MinimapZoomOut:Hide()~=nil then MinimapZoomOut:Hide(); end
+		if (eCastingBar_LoadSetting~=nil) then eCastingBar_SETTINGS_INDEX="Alap"; eCastingBar_LoadSetting(); end		
 		grested()
 		GCheckSpells()
+		if MikScrollingBattleText then
+			MikScrollingBattleText:SelectProfile("Alap")
+			if MSBTProfiles.SelectProfile then MSBTProfiles.SelectProfile("Alap") end
+		end
 		if isHunter then GUpdateFeedMacro(0); end
+		if gspec() then gspec() end
 		--C_Timer.After(5, function() grested(); GCheckSpells(); GUpdateFeedMacro(0); end)
+		--[[		
+		for i=1,#CHAT_FRAMES do -- "guild' chat-tabra fókusz?
+			local e=_G["ChatFrame"..i.."Tab"];
+			if (e:IsVisible()) then 
+				if GetChatWindowInfo(i)=="Guild" or GetChatWindowInfo(i)=="guild" then FCF_Tab_OnClick(e,nil); end
+			end
+		end ]]--
 	end
 	if (event=="PLAYER_LEVEL_UP") then gPlayerLevel = arg1; GCheckSpells(); SpellsChecked = false; end;
 	if (event=="SPELLS_CHANGED") or (event=="SKILL_LINES_CHANGED") or (event=="PLAYER_TALENT_UPDATE") or (event=="TRAINER_CLOSED") then GCheckSpells(); Gspellcheck=0; end;
