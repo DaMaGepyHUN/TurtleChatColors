@@ -1,10 +1,13 @@
 Just some quick note about the addon:
-(https://github.com/DaMaGepyHUN/TurtleChatColors)
+https://github.com/DaMaGepyHUN/TurtleChatColors
 (!) To install to the Interface/AddOns, RENAME folder to:  TurtleChatColors
 
 http://damagepy.byethost3.com/TurtleChatColors1.png
 http://damagepy.byethost3.com/TurtleChatColors2.png
 http://damagepy.byethost3.com/TurtleChatColors3.png
+
+(Old pics, from when the Still Alive guild existed)
+Fixed for the new system messages (drown burn etc)
 
 What it does:
 - Makes guildchat shorter replacing [Guild] with [G], [Party] with [P] etc...
