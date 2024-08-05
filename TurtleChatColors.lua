@@ -81,14 +81,14 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 			or strsub(message,1,7)=="[Party]" or strsub(message,1,4)=="[P] " 
 			or strsub(message,1,6)=="[Raid]" or strsub(message,1,4)=="[R] "
 			or strsub(message,1,7)=="|r[G]|r" or strsub(message,1,7)=="|r[P]|r" or strsub(message,1,7)=="|r[R]|r" -- pfUI
-			or string.find(message,"[HC]") 
+			or string.find(message,"HC") 
 			then isGPRchat = true; end
 		end
 		
 		local omessage = nil;
 		if isGPRchat then
 			--if string.find(message,"%[G%]") then gkiir(string.gsub(string.gsub(message,"G","g"),"|","!")) end	-- DEBUG
-			if strsub(message,1,2)=="[G" or string.find(message,"[HC]") then -- F / rip
+			if strsub(message,1,2)=="[G" or string.find(message,"HC") then -- F / rip
 				if string.upper(strsub(message,-2))==" F" then message=strsub(message,1,-2)..CLRED.."F"; 
 				elseif string.upper(strsub(message,-4))==" RIP" then message=strsub(message,1,-4)..CLRED..strsub(message,-3);
 				elseif string.upper(strsub(message,-5))==" F :(" then message=strsub(message,1,-5)..CLRED.."F :(";
@@ -140,7 +140,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
         elseif strsub(message,1,9)=="A tragedy" then 
 			gReadRoster();
 			if not (string.find(message," natural") or string.find(message," burned") or string.find(message," drowned") or string.find(message,"in PvP")) then -- MOB death
-			-- A tragedy has occurred. Hardcore character XXX (level NN) has fallen to YY1 YY2 (level 37) in ZZZ. May this sacrifice not be forgotten. --
+			-- A tragedy has occurred. Hardcore/Inferno character XXX (level NN) has fallen to YY1 YY2 (level 37) in ZZZ. May this sacrifice not be forgotten. --
 				hLevel=1;
 				_,a = string.find(message," character ");
 				b,f = string.find(message," %(level ");
@@ -151,9 +151,8 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 				b,c = string.find(message," %(level ",f);
 				d,e = string.find(message,"%) in ");
 				h,_ = string.find(message,". May");
-				if f and g then
-					hLevel = tonumber(strsub(message,f+1,g-1));
-				end
+				if f and g then	hLevel = tonumber(strsub(message,f+1,g-1));	end
+				if hLevel==60 or hLevel=="60" then h,_ = string.find(message,". They"); end
 				if a and b and c and d then
 					hKiller = strsub(message,a+1,b-1);
 					hKillerLvl = tonumber(strsub(message,c+1,d-1));
@@ -427,7 +426,7 @@ end
 -- Chat HOOKS
 function tccChatHooks()
 	local gframe
-	if not pfUI.version then -- no pfUI
+	if (not pfUI) then -- no pfUI
 		for indexx = 1, NUM_CHAT_WINDOWS do
 			if _G then gframe = _G["ChatFrame"..indexx] elseif getglobal("ChatFrame"..indexx) then gframe = getglobal("ChatFrame"..indexx) else gframe=nil end
 			if gframe then
