@@ -520,7 +520,7 @@ function TurtleChatColors_ClassData(arg2, class, level )
 	if not class then  -- only name --> return with classcolor, level
 		for name, color in TurtleChatColors_Names do
 			if name == arg2 then 
-				if pfUI.version then if pfUI.chat.classcolor then if pfUI.chat.classcolor~=1 then color=CGUILD; end end end
+				if pfUI then if pfUI.chat.classcolor then if pfUI.chat.classcolor~=1 then color=CGUILD; end end end
 				return color, TurtleChatColors_Level[arg2]; 
 			end
 		end
