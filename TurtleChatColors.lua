@@ -369,8 +369,9 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 			hItem = strsub(message,b+1);
 			--_,hClass = GetGuildMemberInfo(hName);
 			color,level = TurtleChatColors_ClassData(string.upper(hName));
-			message = color..string.upper(hName).."|r"..CYELLOW.." NEED|r: "..hItem;
-			message = hItem..CYELLOW.." NEED|r: "..color..string.upper(hName).."|r!";
+			--message = color..string.upper(hName).."|r"..CYELLOW.." NEED|r: "..hItem;
+			--message = hItem..CYELLOW.." NEED|r: "..color..string.upper(hName).."|r!";
+			message = CYELLOW.." NEED|r:"..hItem..": "..color..string.upper(hName).."|r!";
 		--elseif strsub(message,1,4)=="You " and strsub(message,5,11)=="create:" then message = CWHITE.."YOU|r"..strsub(message,4);
 		end
 		if omessage then message=message.."\n"..CYELLOW..omessage; end
