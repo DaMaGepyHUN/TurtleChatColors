@@ -350,7 +350,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 				if level then hColor = TurtleChatColors_GetClassColor( string.upper(hClass) ) else hColor=CLGRAY; hClass=""; hZone=""; end
 				message = "   "..CDGREEN..CharChain("*",6)..hColor..hNameLink..CDGREEN..CharChain("*",6)..CYELLOW.." has laughed in the face of death in the "..CLRED.."Hardcore challenge"..CYELLOW..", and has begun the "..CRED.."INFERNO Challenge"..CYELLOW.."!";
 				if level and gspecial then 
-					if GetGuildMemberInfo(hName)~=nil and hName~=UnitName("player") then SendChatMessage("CONGRATULATIONS "..hColor..hNameLink.."|r!","GUILD"); end
+					if GetGuildMemberInfo(hName)~=nil and hName~=UnitName("player") then SendChatMessage("CONGRATULATIONS "..hColor..hNameLink.."|r on 60!","GUILD"); end
 				end
 			end 
         elseif strsub(message,1,7)=="XP gain" then 
@@ -483,10 +483,12 @@ end
 function GetGuildMemberInfo(gname)
 	local numGuild = GetNumGuildMembers();
 	for i = 1, numGuild do
-		local name,_,_,level,class,zone,_,onote = GetGuildRosterInfo(i);
+		local name,_,_,level,class,zone,nnote,onote = GetGuildRosterInfo(i);
 		if( class and name and zone) then 
 			if name == gname then 
-				if onote=="" then onote=nil end
+				if onote=="" then 
+					if nnote~="" then onote=nnote else onote=nil end
+				end
 				return level,class,zone,onote
 			end
 		end
@@ -532,7 +534,7 @@ function TurtleChatColors_ClassData(arg2, class, level )
 	if not class then  -- only name --> return with classcolor, level
 		for name, color in TurtleChatColors_Names do
 			if name == arg2 then 
-				if pfUI then if pfUI.chat.classcolor then if pfUI.chat.classcolor~=1 then color=CGUILD; end end end
+				if pfUI and pfUI.chat then if pfUI.chat.classcolor then if pfUI.chat.classcolor~=1 then color=CGUILD; end end end
 				return color, TurtleChatColors_Level[arg2]; 
 			end
 		end
