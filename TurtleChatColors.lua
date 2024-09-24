@@ -182,7 +182,10 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 					if gripmsg then message = message..grip; end
 					if hNote then hNote="("..CGRAY..hNote.."|r) "; else hNote="" end 
 					--if gspecial and hName~=UnitName("player") then SendChatMessage("We lost "..CLGRAY..hLevel.."|r "..hColor..hNameLink.."|r "..hNote.."@ "..hZone..", "..CLRED.."F :(","GUILD"); end
-					if gspecial and hName~=UnitName("player") then SendChatMessage("We lost "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r "..hNote..": "..CLLRED..hKiller.."|r "..CLRED..hKillerLvl.."|r @ "..hZone..", "..CLRED.."F :(","GUILD"); end					
+					if gspecial and hName~=UnitName("player") then 
+						SendChatMessage("We lost "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r "..hNote..": "..CLLRED..hKiller.."|r "..CLRED..hKillerLvl.."|r @ "..hZone..", F :(","GUILD"); 
+						SendChatMessage("Rest In Peace brave "..hClass.."... :(","WHISPER",nil,hName); 
+					end
 				else -- not in guild
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..":  "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLORANGE.."<< ";
 					message = message..CLLRED..hKiller..CDGRAY.." ("..CLRED..hKillerLvl..CDGRAY..") "..CLORANGE.."@ |cFFAA9999"..hZone
@@ -229,7 +232,10 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 					message = message.."   "..CharChain(" ",math.floor((HCstars+1)*1.3))..CLLRED..hKiller..CGRAY.." ("..CRED..hLevel..CGRAY..") "..CLORANGE.." @ ".."|cFFAA9999"..hZone
 					if gripmsg then message = message..grip; end
 					if hNote then hNote="("..CGRAY..hNote.."|r) "; else hNote="" end 
-					if gspecial and hName~=UnitName("player") then SendChatMessage("We lost "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r "..hNote.."in PvP @ "..hZone..", "..CLRED.."F :(","GUILD"); end
+					if gspecial and hName~=UnitName("player") then 
+						SendChatMessage("We lost "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r "..hNote.."in PvP @ "..hZone..", F :(","GUILD"); 
+						SendChatMessage("Rest In Peace brave "..hClass.."... :(","WHISPER",nil,hName); 
+					end
 				else -- not in guild
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..":  "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLORANGE.."in "..CLLRED.."PvP"..CLORANGE.." by ";
 					message = message..CLLRED..hKiller..CGRAY.." ("..CRED..hLevel..CGRAY..") "..CLORANGE.." @ ".."|cFFAA9999"..hZone
@@ -243,13 +249,16 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 				b,f = string.find(message," %(level ");
 				g,_ = string.find(message,"%) died");
 				_,e = string.find(message,"causes in ");
-				if not g then 
+				local hcause = CLORANGE.."natural causes";
+				if not e then 
 					g,_ = string.find(message,"%) has burned"); 
 					_,e = string.find(message,"to death in ");
+					hcause = CLRED.."burned"..CLORANGE.." to death";
 				end
-				if not g then 
+				if not e then 
 					g,_ = string.find(message,"%) has drowned"); 
 					_,e = string.find(message,"drowned in ");
+					hcause = CLBLUE.."drowned";
 				end
 				h,_ = string.find(message,". May");
 				if not h then h,_ = string.find(message,". They"); if not h then h="??"; omessage=message; end; end
@@ -268,11 +277,14 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 				if hLevel==nil then gkiir("ERROR! hLevel nil"); hLevel="?"; HCstars=1; else HCstars = math.floor(hLevel/10) end
 				if hLevel=="?" or hLevel<10 then gkiir(CYELLOW..message);
 				elseif level and GetGuildMemberInfo(hName)~=nil then -- a guildie
-					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death".."!"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..": "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLRED.."burned"..CLORANGE.." to death @ ".."|cFFAA9999"..hZone
+					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death".."!"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..": "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..hcause..CLORANGE.." @ ".."|cFFAA9999"..hZone
 					if gripmsg then message = message..grip; end
 					--if gspecial and hName~=UnitName("player") then SendChatMessage("F   ..."..hZone.." took a "..hClass..", RIP!","GUILD"); end
 					if hNote then hNote="("..CGRAY..hNote.."|r) "; else hNote="" end 
-					if gspecial and hName~=UnitName("player") then SendChatMessage("We lost "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r "..hNote.."@ "..hZone..", "..CLRED.."F :(","GUILD"); end
+					if gspecial and hName~=UnitName("player") then 
+						SendChatMessage("We lost "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r "..hNote.."@ "..hZone..", F :(","GUILD"); 
+						SendChatMessage("Rest In Peace brave "..hClass.."... :(","WHISPER",nil,hName); 
+					end
 				else -- not in guild
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..":  "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLRED.."burned"..CLORANGE.." to death @ ".."|cFFAA9999"..hZone
 					if gripmsg then message = message..grip; end
@@ -306,10 +318,11 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 					message = "   "..CDGREEN..CharChain("*",HCstars)..hColor..hNameLink..CDGREEN..CharChain("*",HCstars)..CYELLOW.." has reached level "..CDGREEN.."*"..CWHITE..hLevel..CDGREEN.."*"..CYELLOW.." in Hardcore"..CDGREEN.." @ |cFFAA9999"..hZone..CYELLOW.." !";
 					if gspecial and hName~=UnitName("player") then 
 						if hNote then hNote=CGRAY.." ("..hNote..")|r"; else hNote="" end 
-						if hLevel>49 then SendChatMessage("GRATS on "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r"..hNote..", keep on living, almost there!","GUILD"); 
-						elseif hLevel>39 then SendChatMessage("Grats on "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r"..hNote..", keep on living!","GUILD"); end 
+						if hLevel>=50 then SendChatMessage("GRATS on "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r"..hNote..", keep on living, almost there!","GUILD"); 
+						elseif hLevel>=20 then SendChatMessage("Grats on "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r"..hNote..", keep on living!","GUILD"); end 
 						--else SendChatMessage("Grats!","GUILD"); end
 						--SendChatMessage("GZ, "..(60-hLevel).." more to go!","GUILD"); end
+					--else gkiir("guildie");
 					end
 				else -- not in guild
 					message = "   "..CDGREEN..CharChain("*",HCstars)..hColor..hNameLink..CDGREEN..CharChain("*",HCstars)..CYELLOW.." has reached level "..CDGREEN.."*"..CWHITE..hLevel..CDGREEN.."*"..CYELLOW.." in Hardcore!"
