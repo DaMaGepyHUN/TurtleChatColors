@@ -245,20 +245,23 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 			elseif string.find(message,"natural ca") or string.find(message," burned to") or string.find(message," has drowned") then
 			-- A tragedy has occurred. Hardcore character XXX (level NN) died of natural causes in ZZ. May this sacrifice not be forgotten. --
 			-- 														   ) has burned to death in ZZ. May
+				--omessage = message;
+				local hcause = "";
 				_,a = string.find(message," character ");
 				b,f = string.find(message," %(level ");
 				g,_ = string.find(message,"%) died");
 				_,e = string.find(message,"causes in ");
-				local hcause = CLORANGE.."natural causes";
-				if not e then 
+				if e then hcause = CLORANGE.."natural causes"
+				else
 					g,_ = string.find(message,"%) has burned"); 
 					_,e = string.find(message,"to death in ");
-					hcause = CLRED.."burned"..CLORANGE.." to death";
-				end
-				if not e then 
-					g,_ = string.find(message,"%) has drowned"); 
-					_,e = string.find(message,"drowned in ");
-					hcause = CLBLUE.."drowned";
+					if g then hcause = CLRED.."burned"..CLORANGE.." to death"
+					else
+						g,_ = string.find(message,"%) has drowned"); 
+						_,e = string.find(message,"drowned in ");
+						if g then hcause = CLBLUE.."drowned"
+						end
+					end
 				end
 				h,_ = string.find(message,". May");
 				if not h then h,_ = string.find(message,". They"); if not h then h="??"; omessage=message; end; end
@@ -286,7 +289,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 						SendChatMessage("Rest In Peace brave "..hClass.."... :(","WHISPER",nil,hName); 
 					end
 				else -- not in guild
-					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..":  "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLRED.."burned"..CLORANGE.." to death @ ".."|cFFAA9999"..hZone
+					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..":  "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..hcause..CLORANGE.." @ ".."|cFFAA9999"..hZone
 					if gripmsg then message = message..grip; end
 					--if gspecial and hName~=UnitName("player") and hLevel>=20 then SendChatMessage("F   ...(was not in the guild)","GUILD"); end
 				end
@@ -319,7 +322,8 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 					if gspecial and hName~=UnitName("player") then 
 						if hNote then hNote=CGRAY.." ("..hNote..")|r"; else hNote="" end 
 						if hLevel>=50 then SendChatMessage("GRATS on "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r"..hNote..", keep on living, almost there!","GUILD"); 
-						elseif hLevel>=20 then SendChatMessage("Grats on "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r"..hNote..", keep on living!","GUILD"); end 
+						elseif hLevel>=40 then SendChatMessage("Grats on "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r"..hNote..", keep on living!","GUILD");
+						elseif hLevel>=20 then SendChatMessage("Grats on "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r"..hNote.."!","GUILD"); end 
 						--else SendChatMessage("Grats!","GUILD"); end
 						--SendChatMessage("GZ, "..(60-hLevel).." more to go!","GUILD"); end
 					--else gkiir("guildie");
