@@ -1,13 +1,11 @@
 -- vanilla 1.12
--- vanilla 1.12
--- TurtleChatColors 1.3
-TurtleChatColors_ChatFrame_OnEvent = ChatFrame_OnEvent
 
 --- .hcmessages 60 		turns off all death message below 60
 --- alt+0177 = +/-
 --- Guild enclosing brackets in chat: 1 = [G][Name:#]: xxxxx        (or)       2 = [G]<Name:#> xxxxx
+TurtleChatColorsVer = 1.3
+local gspecial = false
 local tccGuildBrackets = 1
-
 local CLORANGE = "|cFFEEDD55"
 local CDYELLOW = "|cFFC9CC00"
 local CDUNG = "|cFFEEFFBB"
@@ -35,30 +33,12 @@ local CLBLUE = "|cFF40FFFF"
 local CEND = "|r"
 local CMYCOLOR = "|cFFFF8060"
 local CSTART = CBLUE.."-"..CYELLOW.."-"..CBLUE.."- ";
-local gspecial = false
+local TurtleChatColorsHooked = false
 local grip = CLRED.." RIP"..CRED.." :("
 local gripmsg = false
 local grelayer = false
-
-		local chatDUNG = {"STOCKADE","stockades","Stockades","stockade","Stockade"," elites"," elite "," Elites","Loch Modan",
-						" SM","Scarlet Monastery"," GY"," LIB"," CATH","REDRIDGE"," Redridge"," redridge"," wetland"," wetlands"," Wetlands"," Wetland","ELITE",
-						"Scholomance","scholomance","Stratholme","stratholme"," Strath", "LBRS","UBRS","BRD","ONYXIA","Onyxia","onyxia",
-						" ZulGurub"," Zul Gurub"," ZG","Brd","BWL","Blackwing Lair","Blackwing"," AQ ","AQ20","AQ40","NAXX","NAX"," MC ","MOLTEN CORE","Molten Core",
-						" brd"," scholo"," Scholo "," Strat "," strat"," UD ","DireMaul","Strat UD","diremaul"," ubrs","SCHOLO","Sunken Temple","sunken temple"," ST ",
-						" DM:"," DMe","DM east","DM west","DM north","tribute","zulgurub","DM E","GNOMEREGAN","SUNKEN","TEMPLE","Uldaman"," ZF","gnomeregan","ARM/CATH","MARAUDON","uldaman"," DM "," VC ",
-						"Maraudon","maraudon","ARENA"," arena","Dire Maul","Gnomeregan","ARMORY","Deadmines","deadmines"," STV"," BB ","LF tank","LF Tank",
-						" BFD"," RFD"," RFK"," RFC"," rfc"," WC"," bfd","Zul Farak","Zul'Farak","Armory"," ulda"," sm "," Cath"," RR "," .hc","loch modan","westfall",
-						"armory","Zul'Farrak"," cath","GRAVEYARD","Graveyard"," ARM"," Gnomer ","SFK","Arm/Cath","SM ","lib/arm"," Mara "," Princess",
-						"razorfen","Blackfathom"," zf ","cath "," Zf","ULDAMAN","shadowfang","Stockades","ZF ","BLACKFATHOM"," GS"," Mulgore","Mulgore "};
-		local chatGREEN = {" DMF"," dmf"," hogger"," Hogger"," DPS "," DPS"," dps"," Dps"," escort ","Tank "," tank "," HEALER "," HEAL "," heal ","Heal "," Heal ","/heals","/heal","/dps"," heals","healer ","heal "," healer","Healer",
-						"FULL RUN","Q run","XP FARM","XP runs","XP run"," quests","Elite Quests","Quests","RUNS","aoe runs","full run","farming","Farming"," full"," Full","AoE","AOE","aoe run",
-						"FARM","QUEST"," Quest ","QuestRun"," quest "," Aoe","exp run"," RUN","Questrun"," aoe"," runs"," Lava"," lava","last spot","Last Spot","LAST SPOT","Emp Run"," tents ",
-						"Middleman","middleman","emp run","exp farm"," exp "," q run","7d/emp","Last spot"," xp ","jailbreak","reputation"," GM's"," GM ","Gratz","__"};
-		local chatBLUE = {"WTS","wts","wtb","WTB","WTT","LFG","LFM","LF1M","LF2M","LF3M","LF4M","LF ","lfg ","lfm ","LFW","lf1m","__","__","__"};
-		local chatRED = {" hc "," hardcore","Hardcore "," Hardcore"," HC"," RIP"," F! "," F ","WTF","PVP","PvP"," pvp","HardcoreDeath","/db unseen","showtooltip"};
-		local chatUP = {"lfm ","lfg ","lf1m ","lf2m ","lf3m ","wtb ","wts "};
-
-if not hooks then hooks = {} end
+local TurtleChatColors_Names = {};
+local TurtleChatColors_Level = {};
 
 function gkiir(kirtxt) if kirtxt then DEFAULT_CHAT_FRAME:AddMessage(CSTART..CMYCOLOR..kirtxt..CEND); end end
 
@@ -67,80 +47,16 @@ function CharChain(scc,scn)
 end;
 
 
--- CHAT_MSG_GUILD	CHAT_MSG_SYSTEM	
-local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special characters (must escape with %):   ( ) . % + - * ? [ ^ $
+function TurtleChangeSystem(message)	-- special characters (must escape with %):   ( ) . % + - * ? [ ^ $
 	if message then	
 		local a,b,c,d = 0,0,0,0
 		local HCstars=1
 		local color, level,   hName,hNameLink, hLevel, hClass, hColor,   hKiller, hKillerLvl,  hZone, hNote;
 		local omessage = nil;
 		
-		-- Check if its a normal Blizzard or pfUI Guild/Party/Raid chat
-		local isGPRchat = false
-
-		if strsub(message,1,1)=="[" or strsub(message,1,3)=="|r[" then
-			if strsub(message,1,7)=="[Guild]" or strsub(message,1,4)=="[G] "
-			or strsub(message,1,7)=="[Party]" or strsub(message,1,4)=="[P] " 
-			or strsub(message,1,6)=="[Raid]" or strsub(message,1,4)=="[R] "
-			or strsub(message,1,7)=="|r[G]|r" or strsub(message,1,7)=="|r[P]|r" or strsub(message,1,7)=="|r[R]|r" -- pfUI
-			or string.find(message,"HC") 
-			then isGPRchat = true; end
-		end
-		
 		if grelayer then omessage = message; end 
 		
-		if isGPRchat then
-			--if string.find(message,"%[G%]") then gkiir(string.gsub(string.gsub(message,"G","g"),"|","!")) end	-- DEBUG
-			if strsub(message,1,2)=="[G" or string.find(message,"HC") then -- F / rip
-				if string.upper(strsub(message,-2))==" F" then message=strsub(message,1,-2)..CLRED.."F"; 
-				elseif string.upper(strsub(message,-4))==" RIP" then message=strsub(message,1,-4)..CLRED..strsub(message,-3);
-				elseif string.upper(strsub(message,-5))==" F :(" then message=strsub(message,1,-5)..CLRED.."F :(";
-				end
-			end
-			local _, _, _, name, _, type = string.find(message, "(|Hplayer:.-|h%[)(%a+)(%])(.*:%s)"); -- |Hplayer:XXX|hXXX|h
-			if name and not string.find(name, "%s") then
-				color,level = TurtleChatColors_ClassData(string.upper(name));
-				if level then if level>0 then
-					local glevel = CGRAY..":|r"..CLGRAY..level.."|r" -- ":LvL"
-					a,b = string.find(message,"|Hplayer:"..name.."|h%[");
-					if a and b then
-						message = string.gsub(message,  "|Hplayer:"..name.."|h%["..name.."%]|h", 
-														"%["..color.."|Hplayer:"..name.."|h"..name.."|h|r"..glevel.."%]");
-					else
-						a,b = string.find(message,"|h%["..name.."%]|h|r:");
-						a,b = string.find(message,"%["..name.."%]");
-						if a and b then
-							message = string.gsub(message,  "|h%["..name.."%]|h|r:", 
-															"|h%["..name..""..glevel.."%]|h|r:");
-						else
-						a,b = string.find(message,"|h"..name.."|h|r>");
-							if a and b then
-								message = string.gsub(message,  "|h"..name.."|h|r>", 
-																"|h"..name.."|h|r"..glevel..">");
-							end
-						end
-					end
-					--message = string.gsub(message, "(|Hplayer:.-|h%[)([%w]+)(%])", "%1" .. color .. "%2|r"..glevel.."%3");
-				end end
-			end
-			message = string.gsub(message,"%[Guild%] ","%[G%]");
-			message = string.gsub(message,"%[Party%] ","%[P%]");
-			message = string.gsub(message,"%[Raid%] ","%[R%]");
-			if not tccGuildBrackets==1 then -- < .. >
-				message = string.gsub(message,"G%]%[","G%]<");
-				message = string.gsub(message,"G%] %[","G%]<");
-				message = string.gsub(message,"|r%]: ","|r> ");
-				message = string.gsub(message,"|r%] ","|r> ");
-			end
-			message = string.gsub(message,"|r%]: ","|r%]:  "); -- adds an extra space before the chatmessage
-
-			-- chat location/keyword highlights --
-			for mqff = 1,table.getn(chatUP) do message = string.gsub(message, chatUP[mqff], string.upper(chatUP[mqff])); end
-			for mqff = 1,table.getn(chatRED) do message = string.gsub(message, chatRED[mqff], CLLRED..chatRED[mqff].."|r"); end
-			for mqff = 1,table.getn(chatDUNG) do message = string.gsub(message, chatDUNG[mqff], CDUNG..chatDUNG[mqff].."|r"); end		
-			for mqff = 1,table.getn(chatGREEN) do message = string.gsub(message, chatGREEN[mqff], CROLE..chatGREEN[mqff].."|r"); end		
-			for mqff = 1,table.getn(chatBLUE) do message = string.gsub(message, chatBLUE[mqff], CWTS..chatBLUE[mqff].."|r"); end
-        elseif strsub(message,1,9)=="A tragedy" then 
+		if strsub(message,1,9)=="A tragedy" then 
 			gReadRoster();
 			if not (string.find(message," natural") or string.find(message," burned") or string.find(message," drowned") or string.find(message,"in PvP")) then -- MOB death
 			-- A tragedy has occurred. Hardcore/Inferno character XXX (level NN) has fallen to YY1 YY2 (level 37) in ZZZ. May this sacrifice not be forgotten. --
@@ -323,7 +239,7 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 						if hNote then hNote=CGRAY.." ("..hNote..")|r"; else hNote="" end 
 						if hLevel>=50 then SendChatMessage("GRATS on "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r"..hNote..", keep on living, almost there!","GUILD"); 
 						elseif hLevel>=40 then SendChatMessage("Grats on "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r"..hNote..", keep on living!","GUILD");
-						elseif hLevel>=20 then SendChatMessage("Grats on "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r"..hNote.."!","GUILD"); end 
+						elseif hLevel>=20 then SendChatMessage("Grats on "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r"..hNote.." !","GUILD"); end 
 						--else SendChatMessage("Grats!","GUILD"); end
 						--SendChatMessage("GZ, "..(60-hLevel).." more to go!","GUILD"); end
 					--else gkiir("guildie");
@@ -372,11 +288,13 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 			end 
         elseif strsub(message,1,7)=="XP gain" then 
 			_,a = string.find(message," gain is");
-			if a then
+			if a then				
 				if strsub(message,-3)=="OFF" then message = strsub(message,1,a)..": "..CLRED.."OFF" else message = strsub(message,1,a)..": "..CGREEN.."ON" end
+				message = CYELLOW..message
 			end
 			showrested(1) -- %
 		-- Loot: NEED roll
+		--[[
 		elseif string.find(message," has selected Need ") and string.find(message," for:") and gspecial then
 			gReadRoster()
 			-- XXX has selected Need for:  
@@ -389,11 +307,12 @@ local function gAddMessage(self, message, a1, a2, a3, a4, a5)	-- special charact
 			--message = hItem..CYELLOW.." NEED|r: "..color..string.upper(hName).."|r!";
 			message = CYELLOW.."NEED|r:"..hItem..": "..color..string.upper(hName).."|r!";
 		--elseif strsub(message,1,4)=="You " and strsub(message,5,11)=="create:" then message = CWHITE.."YOU|r"..strsub(message,4);
-		end
-		
-		if grelayer==true then message = omessage elseif omessage then message = message.."\n"..CYELLOW..omessage; end
-	end
-    return hooks[self](self, message, a1, a2, a3, a4, a5)
+		]]
+		else
+			message="";
+		end		
+	else message=""; end
+	return message;
 end
 
 
@@ -441,54 +360,6 @@ end
 
 
 
--- Chat HOOKS
-function tccChatHooks()
-	local gframe
-	if (not pfUI) then -- no pfUI
-		--gkiir("TurtleChatColors: Chat Hooked!")
-		for indexx = 1, NUM_CHAT_WINDOWS do
-			if _G then gframe = _G["ChatFrame"..indexx] elseif getglobal("ChatFrame"..indexx) then gframe = getglobal("ChatFrame"..indexx) else gframe=nil end
-			if gframe then
-				local combat = 0
-				for _, msg in pairs(gframe.messageTypeList) do
-					if strfind(msg, "SPELL", 1) or strfind(msg, "COMBAT", 1) then combat = combat + 1; end
-				end		
-				if combat < 6 then 
-					hooks[gframe] = gframe.AddMessage; 
-					gframe.AddMessage = gAddMessage; 
-				end
-			end
-		end
-	else -- pfUI
-		--gkiir("TurtleChatColors: Chat Hooked (pfUI)!")
-		for indexx=1,NUM_CHAT_WINDOWS do
-			local combat = 0
-			if _G then gframe = _G["ChatFrame"..indexx] elseif getglobal("ChatFrame"..indexx) then gframe = getglobal("ChatFrame"..indexx) else gframe=nil end
-			if gframe then
-				local combat = 0
-				for _, msg in pairs(gframe.messageTypeList) do
-					if strfind(msg, "SPELL", 1) or strfind(msg, "COMBAT", 1) then combat = combat + 1; end
-				end		
-				if combat < 6 then 
-					if not gframe.HookAddMessage then
-						gframe.HookAddMessage = gframe.AddMessage; 
-						gframe.AddMessage = gAddMessage; 
-					else
-						hooks[gframe] = gframe.AddMessage; 
-						gframe.AddMessage = gAddMessage; 					
-					end
-				end
-			end
-		end
-	end
-end
-
-TurtleChatColors_Names = {};
-TurtleChatColors_Level = {};
-
-
-
-
 function gReadRoster()
 	local numGuild = GetNumGuildMembers();
 	for i = 1, numGuild do
@@ -514,32 +385,56 @@ function GetGuildMemberInfo(gname)
 end
 
 
+
 function TurtleChatColors_OnLoad() 
 	this:RegisterEvent("GUILD_ROSTER_UPDATE");
 	this:RegisterEvent("VARIABLES_LOADED");
-	this:RegisterEvent("CHAT_MSG_SYSTEM"); -- for later: for parsing returned /who (SendWho) queries if can't find the player in the guildroster
-	this:RegisterEvent("CHAT_MSG_LOOT");
+	--this:RegisterEvent("CHAT_MSG_SYSTEM"); -- for later: for parsing returned /who (SendWho) queries if can't find the player in the guildroster
+	--this:RegisterEvent("CHAT_MSG_LOOT");
 	this:RegisterEvent("PLAYER_LOGIN");
 	this:RegisterEvent("PLAYER_ENTERING_WORLD");
 	--this:RegisterEvent("WHO_LIST_UPDATE");
 end
 
 function TurtleChatColors_OnEvent(event)
-	if (event == "PLAYER_ENTERING_WORLD") or (event == "PLAYER_LOGIN") then 
-		--if UnitName("player")=="Liljimmy" then grelayer=true; gspec() end
+	if ((event == "PLAYER_ENTERING_WORLD") or (event == "PLAYER_LOGIN")) and (TurtleChatColorsHooked==false) then 
+		TurtleChatColorsHooked = true
+		TurtleChatColors_OrigChatFrame_OnEvent = ChatFrame_OnEvent;
+		ChatFrame_OnEvent = TurtleChatColors_ChatFrame_OnEvent;
 	end
 	if (event == "VARIABLES_LOADED") then 
 		SetWhoToUI(0);
-		tccChatHooks();
 		GuildRoster(); 
 	end	
 	if (event == "GUILD_ROSTER_UPDATE") then gReadRoster(); end
-	if (event == "CHAT_MSG_LOOT") then 
-		local text=arg1
-		local playern=arg2		
-		--kiir("LOOT: "..CWHITE..arg1..CGRAY.." "..arg2);
-	end
 end
+
+
+function TurtleChatColors_ChatFrame_OnEvent(event)
+-- arg1 is the actual message
+-- arg2 is the player name
+	if (gspecial) and (event == "CHAT_MSG_LOOT") then -- XXX has selected Need for:  
+		local tmessage = arg1
+		if string.find(tmessage," has selected Need ") and string.find(tmessage," for:") and gspecial then	
+			gReadRoster()
+			a,b = string.find(tmessage," has selected Need for: ");
+			hName = strsub(tmessage,1,a-1);
+			hItem = strsub(tmessage,b+1);
+			color,level = TurtleChatColors_ClassData(string.upper(hName));
+			tmessage = CYELLOW.."NEED|r:"..hItem..": "..color..string.upper(hName).."|r!";
+			this:AddMessage(tmessage);
+			return				
+		end		
+	elseif (event == "CHAT_MSG_SYSTEM") then --kiir("SYS!: "..arg1)
+		local sysresult = TurtleChangeSystem(arg1)
+		if sysresult~="" then 
+			this:AddMessage(sysresult);
+			return
+		end
+	end
+	TurtleChatColors_OrigChatFrame_OnEvent(event);
+end
+
 
 function TurtleChatColors_ClassData(arg2, class, level )
 	if arg2 then arg2 = string.upper(arg2); end		-- NAME
