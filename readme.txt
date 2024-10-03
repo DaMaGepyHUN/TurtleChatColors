@@ -2,35 +2,25 @@ Just some quick note about the addon:
 https://github.com/DaMaGepyHUN/TurtleChatColors
 (!) To install to the Interface/AddOns, RENAME folder to:  TurtleChatColors
 
-http://damagepy.byethost3.com/TurtleChatColors1.png
-http://damagepy.byethost3.com/TurtleChatColors2.png
-http://damagepy.byethost3.com/TurtleChatColors3.png
-(Old pics, from when the Still Alive guild existed)
-Update: Fixed for the new system messages (drown burn etc) and shorter:
 http://damagepy.byethost3.com/TurtleChatColors4.png
 
 What it does:
-- Makes guildchat shorter replacing [Guild] with [G], [Party] with [P] etc...
-- Queries guild roster to color names by class and to show their level:
-  [G][Gepy:12]: ....  
-- Makes names clickable in system messages (death/levelup) and colors them by 
-  class if they are in the guild (if not then they will be silver-colored in
-  system messages and green in guildchat)
+- In system messages (death/levelup) makes names clickable (for whisper) and
+  colors them by class if they are in the guild (if not then they will be 
+  silver-colored in system messages and green in guildchat)
+- Death/LevelUp messages are compacted into one row, plus the higher the level
+  the more asterisk are shown to show the significance (* for every 10 lvl)
 - Slightly highlights certain keywords in chat: WTS LF2M, key locations like
-  Stockades, Dire Maul, Deadmines, GS, or words like Healer, Quest run, etc.
-- Repaces/reformats the Turtle system messages, coloring them, making names 
-  clickable + class-colored, showing more info about location (if in guild)
+  Stockades, Dire Maul, Deadmines, ubrs, GC, or words like Healer, 2dps, etc.
 - My auto-response in guildchat is a secret switch so the addon won't spam it
   automatcally for others. I made it so people without the addon can still
-  see the death location and class (which I always wanted to know)
-- no GUI, just "install" and it works. Should work with pfUI too, adding the 
-  level info to the guildchat. if Class-coloring is turned off in pfUI then
-  it won't color it.
+  see if a guildie died, or if .hcmessages are set too high to show
 
 I've added some other useful function which ppl can use in macros:
 
 To show current rested bonus percentage (from: not rested ... 100%):
 /run showrested()
+
 To delete all "Dim Torch" from bags with one click (for STV survival lvling):
 /run deletetorches()
 
