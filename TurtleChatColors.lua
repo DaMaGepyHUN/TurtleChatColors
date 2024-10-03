@@ -41,7 +41,7 @@ local TurtleChatColors_Names = {};
 local TurtleChatColors_Level = {};
 
 		local chatDUNG = {"STOCKADE","stockades","Stockades","stockade","Stockade"," elites"," elite "," Elite"," Elites","Loch Modan","DEADMINES"," CG"," GC","Gilneas City"," Gilneas","Crescent Grove"," Crescent",
-						" SM","Scarlet Monastery"," GY"," LIB"," CATH","REDRIDGE"," Redridge"," redridge"," wetland"," wetlands"," Wetlands"," Wetland","ELITE"," hfq","HFQ","gbase",
+						" SM","Scarlet Monastery"," GY"," LIB"," CATH","REDRIDGE"," Redridge"," redridge"," wetland"," wetlands"," Wetlands"," Wetland","ELITE"," hfq","HFQ","gbase","Guild Base",
 						"Scholomance","scholomance","Stratholme","stratholme"," Strath", "LBRS","lbrs","UBRS","BRD","ONYXIA","Onyxia","onyxia"," Ony"," ony",
 						" ZulGurub"," Zul Gurub"," ZG","Brd","BWL","Blackwing Lair","Blackwing"," AQ ","aq20","AQ20","AQ40","NAXX","NAX"," MC ","MOLTEN CORE","Molten Core","mailbox",
 						" brd"," scholo"," Scholo "," Strat "," strat"," UD ","DireMaul","Strat UD","diremaul"," ubrs","SCHOLO","Sunken Temple","sunken temple"," ST "," rend",
@@ -52,11 +52,12 @@ local TurtleChatColors_Level = {};
 						"razorfen","Blackfathom"," cath","cath "," Zf","ULDAMAN","shadowfang","Stockades","ZF ","BLACKFATHOM"," GS"," Mulgore","Mulgore "};
 		local chatGREEN = {"LF tank","LF Tank"," hogger"," Hogger"," DPS "," DPS"," dps"," Dps","1dps","2dps"," escort ","Tank "," tank ","Healz"," HEALER "," HEALER"," HEAL"," HEAL "," heal ","Heal "," Heals"," Heal ","/heals","/heal","/dps"," heals","healer ","heal "," healer","Healer"," tank"," TANK","/HEAL","/DPS",
 						"FULL RUN","Q run","XP FARM","XP runs","XP run"," quests","Elite Quests","Quests","RUNS","aoe runs","full run","farming","Farming","fullrun"," full"," Full","AoE","AOE","aoe run","need all",
-						"FARM","QUEST"," Quest ","QuestRun"," quest "," Aoe","exp run"," RUN","Questrun"," aoe"," runs"," Lava"," lava","last spot","Last Spot","LAST SPOT","Emp Run"," tents "," summon",
-						"Middleman","middleman","emp run","exp farm"," exp "," q run","7d/emp","Last spot"," xp ","jailbreak","reputation"," GM's"," GM ","Gratz","Enchanter","enchanter","Tailor","tailor","alchemist","__"};
+						"FARM","QUEST"," Quest ","QuestRun"," quest "," Aoe","exp run"," RUN","Questrun"," aoe"," runs"," Lava"," lava","last spot","Last Spot","LAST SPOT","Emp Run"," tents "," summon"," lotus"," eels"," petri",
+						"Middleman","middleman","emp run","exp farm"," exp "," q run","7d/emp","Last spot"," xp ","jailbreak","reputation"," GM's"," GM ","Gratz","Enchanter","enchanter","Tailor","tailor","alchemist",
+						"TANK ","HEAL ","__","__"};
 		local chatBLUE = {"WTS","wts","wtb","WTB","WTT","LFG","LFM","LF1M","LF2M","LF3M","LF4M","LF ","lfg ","lfm ","LFW","lf1m","grats!","Hard Chores"," inferno","__"};
-		local chatRED = {" hc "," hardcore","Hardcore "," Hardcore"," HC"," RIP"," F! "," F ","WTF","PVP","PvP"," pvp","showtooltip"," eu "," na "," EU "," NA ",":nohelf:","<AFK>"};
-		local chatUP = {"lfm ","lfg ","lf1m ","lf2m ","lf3m ","wtb ","wts "}; -- convert to uppercase before all
+		local chatRED = {" hc "," hardcore","Hardcore "," Hardcore","Inferno"," HC"," RIP"," F! "," F ","WTF","PVP","PvP"," pvp","showtooltip"," eu "," na "," EU "," NA ",":nohelf:","<AFK>"};
+		local chatUP = {"lfm ","lfg ","lf1m ","lf2m ","lf3m ","wtb ","wts "," lbrs"," ubrs"," bwl"}; -- convert to uppercase before all
 		
 		
 		
