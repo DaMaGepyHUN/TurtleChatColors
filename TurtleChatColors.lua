@@ -1,8 +1,8 @@
--- vanilla 1.12
-
+-- vanilla 1.12	+ TurtleWoW
 --- .hcmessages 60 		turns off all death message below 60
---- alt+0177 = +/-
---- Guild enclosing brackets in chat: 1 = [G][Name:#]: xxxxx        (or)       2 = [G]<Name:#> xxxxx
+--- alt+0177 = ±  (+-)
+--- damagepyhun@gmail.com
+
 TurtleChatColorsVer = 1.3
 local gspecial = false
 local tccGuildBrackets = 1
@@ -42,7 +42,7 @@ local TurtleChatColors_Level = {};
 
 		local chatDUNG = {"STOCKADE","stockades","Stockades","stockade","Stockade"," elites"," elite "," Elite"," Elites","Loch Modan","DEADMINES"," CG"," GC","Gilneas City"," Gilneas","Crescent Grove"," Crescent",
 						" SM","Scarlet Monastery"," GY"," LIB"," CATH","REDRIDGE"," Redridge"," redridge"," wetland"," wetlands"," Wetlands"," Wetland","ELITE"," hfq","HFQ","gbase","Guild Base",
-						"Scholomance","scholomance","Stratholme","stratholme"," Strath", "LBRS","lbrs","UBRS","BRD","ONYXIA","Onyxia","onyxia"," Ony"," ony",
+						"Scholomance","scholomance","Stratholme","stratholme"," Strath", "LBRS","lbrs","UBRS","BRD","BRM"," brm","ONYXIA","Onyxia","onyxia"," Ony"," ony",
 						" ZulGurub"," Zul Gurub"," ZG","Brd","BWL","Blackwing Lair","Blackwing"," AQ ","aq20","AQ20","AQ40","NAXX","NAX"," MC ","MOLTEN CORE","Molten Core","mailbox",
 						" brd"," scholo"," Scholo "," Strat "," strat"," UD ","DireMaul","Strat UD","diremaul"," ubrs","SCHOLO","Sunken Temple","sunken temple"," ST "," rend",
 						" DM"," DM:"," DMe","DM east","DM west","DM north","tribute","zulgurub","DM E","GNOMEREGAN","SUNKEN","TEMPLE","Uldaman"," ZF","gnomeregan","ARM/CATH","MARAUDON","uldaman"," DM "," VC ",
@@ -366,21 +366,6 @@ function TurtleChangeSystem (message)	-- special characters (must escape with %)
 				message = CYELLOW..message
 			end
 			showrested(1) -- %
-		-- Loot: NEED roll
-		--[[
-		elseif string.find(message," has selected Need ") and string.find(message," for:") and gspecial then
-			gReadRoster()
-			-- XXX has selected Need for:  
-			a,b = string.find(message," has selected Need for: ");
-			hName = strsub(message,1,a-1);
-			hItem = strsub(message,b+1);
-			--_,hClass = GetGuildMemberInfo(hName);
-			color,level = TurtleChatColors_ClassData(string.upper(hName));
-			--message = color..string.upper(hName).."|r"..CYELLOW.." NEED|r: "..hItem;
-			--message = hItem..CYELLOW.." NEED|r: "..color..string.upper(hName).."|r!";
-			message = CYELLOW.."NEED|r:"..hItem..": "..color..string.upper(hName).."|r!";
-		--elseif strsub(message,1,4)=="You " and strsub(message,5,11)=="create:" then message = CWHITE.."YOU|r"..strsub(message,4);
-		]]
 		else
 			message="";
 		end		
