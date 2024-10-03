@@ -8,7 +8,7 @@ local gspecial = false
 local tccGuildBrackets = 1
 local CLORANGE = "|cFFEEDD55"
 local CDYELLOW = "|cFFC9CC00"
-local CDUNG = "|cFFEEFFBB"
+local CDUNG = "|cFFEFFFCF"
 local CWTS = "|cFF66DDFF"
 local CROLE = "|cFFCCEE00"
 local CGUILD = "|cFF3CE13F"
@@ -40,6 +40,26 @@ local grelayer = false
 local TurtleChatColors_Names = {};
 local TurtleChatColors_Level = {};
 
+		local chatDUNG = {"STOCKADE","stockades","Stockades","stockade","Stockade"," elites"," elite "," Elite"," Elites","Loch Modan","DEADMINES"," CG"," GC"," Gilneas","Crescent Grove"," Crescent",
+						" SM","Scarlet Monastery"," GY"," LIB"," CATH","REDRIDGE"," Redridge"," redridge"," wetland"," wetlands"," Wetlands"," Wetland","ELITE"," hfq","HFQ","gbase",
+						"Scholomance","scholomance","Stratholme","stratholme"," Strath", "LBRS","UBRS","BRD","ONYXIA","Onyxia","onyxia",
+						" ZulGurub"," Zul Gurub"," ZG","Brd","BWL","Blackwing Lair","Blackwing"," AQ ","AQ20","AQ40","NAXX","NAX"," MC ","MOLTEN CORE","Molten Core","mailbox",
+						" brd"," scholo"," Scholo "," Strat "," strat"," UD ","DireMaul","Strat UD","diremaul"," ubrs","SCHOLO","Sunken Temple","sunken temple"," ST ",
+						" DM"," DM:"," DMe","DM east","DM west","DM north","tribute","zulgurub","DM E","GNOMEREGAN","SUNKEN","TEMPLE","Uldaman"," ZF","gnomeregan","ARM/CATH","MARAUDON","uldaman"," DM "," VC ",
+						"Maraudon","maraudon","ARENA"," arena","Dire Maul","Gnomeregan","ARMORY","Deadmines","deadmines"," STV"," BB "," DMF"," dmf",
+						"BFD","RFD","RFK","RFC"," rfc"," WC"," bfd","Zul Farak","Zul'Farak","Armory"," ulda"," sm "," Cath"," RR "," .hc","loch modan","westfall",
+						"armory","Zul'Farrak","GRAVEYARD"," zf ","Graveyard"," ARM"," Gnomer ","SFK","Arm/Cath","SM ","lib/arm"," Mara "," Princess"," Arathi",
+						"razorfen","Blackfathom"," cath","cath "," Zf","ULDAMAN","shadowfang","Stockades","ZF ","BLACKFATHOM"," GS"," Mulgore","Mulgore "};
+		local chatGREEN = {"LF tank","LF Tank"," hogger"," Hogger"," DPS "," DPS"," dps"," Dps","1dps","2dps"," escort ","Tank "," tank ","Healz"," HEALER "," HEALER"," HEAL"," HEAL "," heal ","Heal "," Heals"," Heal ","/heals","/heal","/dps"," heals","healer ","heal "," healer","Healer"," tank"," TANK","/HEAL","/DPS",
+						"FULL RUN","Q run","XP FARM","XP runs","XP run"," quests","Elite Quests","Quests","RUNS","aoe runs","full run","farming","Farming","fullrun"," full"," Full","AoE","AOE","aoe run","need all",
+						"FARM","QUEST"," Quest ","QuestRun"," quest "," Aoe","exp run"," RUN","Questrun"," aoe"," runs"," Lava"," lava","last spot","Last Spot","LAST SPOT","Emp Run"," tents "," summon",
+						"Middleman","middleman","emp run","exp farm"," exp "," q run","7d/emp","Last spot"," xp ","jailbreak","reputation"," GM's"," GM ","Gratz","Enchanter","enchanter","Tailor","tailor","alchemist","__"};
+		local chatBLUE = {"WTS","wts","wtb","WTB","WTT","LFG","LFM","LF1M","LF2M","LF3M","LF4M","LF ","lfg ","lfm ","LFW","lf1m","grats!","Hard Chores","__"};
+		local chatRED = {" hc "," hardcore","Hardcore "," Hardcore"," HC"," RIP"," F! "," F ","WTF","PVP","PvP"," pvp","HardcoreDeath","/db unseen","showtooltip"};
+		local chatUP = {"lfm ","lfg ","lf1m ","lf2m ","lf3m ","wtb ","wts "}; -- convert to uppercase before all
+		
+		
+		
 function gkiir(kirtxt) if kirtxt then DEFAULT_CHAT_FRAME:AddMessage(CSTART..CMYCOLOR..kirtxt..CEND); end end
 
 function CharChain(scc,scn)
@@ -47,9 +67,60 @@ function CharChain(scc,scn)
 end;
 
 
-function TurtleChangeSystem(message)	-- special characters (must escape with %):   ( ) . % + - * ? [ ^ $
+
+function TurtleChangeHCChat (message)
+	if string.upper(message)=="F :(" or string.upper(message)=="RIP" or string.upper(message)=="F" then message=CLRED..string.upper(message);
+	elseif string.upper(strsub(message,-2))==" F" then message=strsub(message,1,-2)..CLRED.."F"; 
+	elseif string.upper(strsub(message,-4))==" RIP" then message=strsub(message,1,-4)..CLRED..strsub(message,-3);
+	elseif string.upper(strsub(message,-5))==" F :(" then message=strsub(message,1,-5)..CLRED.."F :(";
+	elseif string.upper(message)=="GZ" or string.upper(message)=="GZ!" then message=CROLE..message;
+	end
+	-- chat location/keyword highlights --
+	for mqff = 1,table.getn(chatUP) do message = string.gsub(message, chatUP[mqff], string.upper(chatUP[mqff])); end
+	for mqff = 1,table.getn(chatRED) do message = string.gsub(message, chatRED[mqff], CLLRED..chatRED[mqff].."|r"); end
+	for mqff = 1,table.getn(chatDUNG) do message = string.gsub(message, chatDUNG[mqff], CDUNG..chatDUNG[mqff].."|r"); end		
+	for mqff = 1,table.getn(chatGREEN) do message = string.gsub(message, chatGREEN[mqff], CROLE..chatGREEN[mqff].."|r"); end		
+	for mqff = 1,table.getn(chatBLUE) do message = string.gsub(message, chatBLUE[mqff], CWTS..chatBLUE[mqff].."|r"); end
+	--return "|cFFE6C980[HC] "..message
+	message = string.gsub(message, "%+%-", "\194\177");
+	message = string.gsub(message, "%-%+", "\194\177");
+	return message
+end
+
+
+
+function TurtleChangeGuildChat (message)
+	if string.upper(message)=="F" then message=CLRED..message;
+	elseif string.upper(strsub(message,-2))==" F" then message=strsub(message,1,-2)..CLRED.."F";
+	elseif string.upper(strsub(message,-4))==" RIP" then message=strsub(message,1,-4)..CLRED..strsub(message,-3);
+	elseif string.upper(strsub(message,-5))==" F :(" then message=strsub(message,1,-5)..CLRED.."F :(";
+	end
+	--if string.find(message,"%[") then local a,b = string.find(message,"%["); gkiir(a.." / "..b) end
+	--if string.find(message,"]:") then gkiir("2") end
+	if string.find(message,"%[") and string.find(message,"%]:") then
+		local a,b = string.find(message,"%[")
+		local c,d = string.find(message,"%]:")
+		local hName = strsub(message,b+1,c-1);
+		gReadRoster();
+		local level,hClass,hZone,hNote = GetGuildMemberInfo(hName)
+		local hColor=CLGRAY;
+		if level then 
+			if not hClass then hClass=""; end
+			hColor = TurtleChatColors_GetClassColor(string.upper(hClass));
+		end
+		message = "["..hColor..hName.."|r]: "..strsub(message,d+2);
+	end
+	for mqff = 1,table.getn(chatDUNG) do message = string.gsub(message, chatDUNG[mqff], CDUNG..chatDUNG[mqff].."|r"); end		
+	message = string.gsub(message, "%+%-", "\194\177");
+	message = string.gsub(message, "%-%+", "\194\177");
+	return message
+end
+
+
+
+function TurtleChangeSystem (message)	-- special characters (must escape with %):   ( ) . % + - * ? [ ^ $
 	if message then	
-		local a,b,c,d = 0,0,0,0
+		local a,b,c,d,e,f,g,h
 		local HCstars=1
 		local color, level,   hName,hNameLink, hLevel, hClass, hColor,   hKiller, hKillerLvl,  hZone, hNote;
 		local omessage = nil;
@@ -283,7 +354,7 @@ function TurtleChangeSystem(message)	-- special characters (must escape with %):
 				if level then hColor = TurtleChatColors_GetClassColor( string.upper(hClass) ) else hColor=CLGRAY; hClass=""; hZone=""; end
 				message = "   "..CDGREEN..CharChain("*",6)..hColor..hNameLink..CDGREEN..CharChain("*",6)..CYELLOW.." has laughed in the face of death in the "..CLRED.."Hardcore challenge"..CYELLOW..", and has begun the "..CRED.."INFERNO Challenge"..CYELLOW.."!";
 				if level and gspecial then 
-					if GetGuildMemberInfo(hName)~=nil and hName~=UnitName("player") then SendChatMessage("CONGRATULATIONS "..hColor..hNameLink.."|r on 60!","GUILD"); end
+					if GetGuildMemberInfo(hName)~=nil and hName~=UnitName("player") then SendChatMessage("CONGRATULATIONS "..hColor..hNameLink.."|r on "..CWHITE.."60|r!","GUILD"); end
 				end
 			end 
         elseif strsub(message,1,7)=="XP gain" then 
@@ -371,7 +442,7 @@ end
 function GetGuildMemberInfo(gname)
 	local numGuild = GetNumGuildMembers();
 	for i = 1, numGuild do
-		local name,_,_,level,class,zone,nnote,onote = GetGuildRosterInfo(i);
+		local name,_,_,level,class,zone,nnote,onote,online = GetGuildRosterInfo(i);
 		if( class and name and zone) then 
 			if name == gname then 
 				if onote=="" then 
@@ -431,7 +502,22 @@ function TurtleChatColors_ChatFrame_OnEvent(event)
 			this:AddMessage(sysresult);
 			return
 		end
+	elseif (event == "CHAT_MSG_CHANNEL") then --text, playerName, languageName, channelName, playerName2, specialFlags, zoneChannelID, channelIndex, channelBaseName, languageID, lineID, guid, bnSenderID, isMobile, isSubtitle, hideSenderInLetterbox, supressRaidIcons
+		--kiir(arg4.." / "..arg9) -- channelName channelBaseName
+		--[[
+		if sysresult~="" then 
+			this:AddMessage(sysresult);
+			return
+		end
+		]]
+	elseif (event == "CHAT_MSG_HARDCORE") then --text, playerName, languageName, channelName, playerName2, specialFlags, zoneChannelID, channelIndex, channelBaseName, languageID, lineID, guid, bnSenderID, isMobile, isSubtitle, hideSenderInLetterbox, supressRaidIcons
+		arg1 = TurtleChangeHCChat(arg1)
+		--this:AddMessage(arg1); return
+	elseif (event == "CHAT_MSG_GUILD") then --text, playerName, languageName, channelName, playerName2, specialFlags, zoneChannelID, channelIndex, channelBaseName, languageID, lineID, guid, bnSenderID, isMobile, isSubtitle, hideSenderInLetterbox, supressRaidIcons
+		arg1 = TurtleChangeGuildChat(arg1)
+		--this:AddMessage(TurtleChangeGuildChat(arg1)); return
 	end
+	
 	TurtleChatColors_OrigChatFrame_OnEvent(event);
 end
 
