@@ -25,6 +25,7 @@ local CRED = "|cFFFF0000"
 local CLRED = "|cFFFF8080"
 local CLLRED = "|cFFFFA8A8"
 local CLGREEN = "|cFF80FF80"
+local CLLGREEN = "|cFFDDFF88"
 local CLGRAY = "|cFFC0C0C0"
 local CBGRAY = "|cFFC0E0E0"
 local CGRAY  = "|cFF888888"
@@ -42,7 +43,7 @@ local TurtleChatColors_Level = {};
 
 		local chatDUNG = {"STOCKADE","stockades","Stockades","stockade","Stockade"," elites"," elite "," Elite"," Elites","Loch Modan","DEADMINES"," CG"," GC","Gilneas City"," Gilneas","Crescent Grove"," Crescent",
 						" SM","Scarlet Monastery"," GY"," LIB"," CATH","REDRIDGE"," Redridge"," redridge"," wetland"," wetlands"," Wetlands"," Wetland","ELITE"," hfq","HFQ","gbase","Guild Base",
-						"Scholomance","scholomance","Stratholme","stratholme"," Strath", "LBRS","lbrs","UBRS","BRD","BRM"," brm","ONYXIA","Onyxia","onyxia"," Ony"," ony",
+						"Scholomance","scholomance","Stratholme","stratholme"," Strath", "LBRS","lbrs","UBRS","BRD","BRM"," brm","ONYXIA","Onyxia","onyxia"," Ony"," ony"," kara ","karazhan"," Karazhan"," Kara ",
 						" ZulGurub"," Zul Gurub"," ZG","Brd","BWL","Blackwing Lair","Blackwing"," AQ ","aq20","AQ20","AQ40","NAXX","NAX"," MC ","MOLTEN CORE","Molten Core","mailbox",
 						" brd"," scholo"," Scholo "," Strat "," strat"," UD ","DireMaul","Strat UD","diremaul"," ubrs","SCHOLO","Sunken Temple","sunken temple"," ST "," rend",
 						" DM"," DM:"," DMe","DM east","DM west","DM north","tribute","zulgurub","DM E","GNOMEREGAN","SUNKEN","TEMPLE","Uldaman"," ZF","gnomeregan","ARM/CATH","MARAUDON","uldaman"," DM "," VC ",
@@ -57,7 +58,7 @@ local TurtleChatColors_Level = {};
 						"TANK ","HEAL ","__","__"};
 		local chatBLUE = {"WTS","wts","wtb","WTB","WTT","LFG","LFM","LF1M","LF2M","LF3M","LF4M","LF ","lfg ","lfm ","LFW","lf1m","grats!","Hard Chores"," inferno","__"};
 		local chatRED = {" hc "," hardcore","Hardcore "," Hardcore","Inferno"," HC"," RIP"," F! "," F ","WTF","PVP","PvP"," pvp","showtooltip"," eu "," na "," EU "," NA ",":nohelf:","<AFK>"};
-		local chatUP = {"lfm ","lfg ","lf1m ","lf2m ","lf3m ","wtb ","wts "," lbrs"," ubrs"," bwl"}; -- convert to uppercase before all
+		local chatUP = {"lfm ","lfg ","lf1m ","lf2m ","lf3m ","wtb ","wts "," lbrs"," ubrs"," bwl"," brd"}; -- convert to uppercase before all
 		
 		
 		
@@ -104,7 +105,7 @@ function TurtleChangeGuildChat (message)
 		local hName = strsub(message,b+1,c-1);
 		gReadRoster();
 		local level,hClass,hZone,hNote = GetGuildMemberInfo(hName)
-		local hColor=CLGRAY;
+		local hColor=CLLGREEN;
 		if level then 
 			if not hClass then hClass=""; end
 			hColor = TurtleChatColors_GetClassColor(string.upper(hClass));
