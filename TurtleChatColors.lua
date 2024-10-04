@@ -56,10 +56,10 @@ local TurtleChatColors_Level = {};
 						"FARM","QUEST"," Quest ","QuestRun"," quest "," Aoe","exp run"," RUN","Questrun"," aoe"," runs"," Lava"," lava","last spot","Last Spot","LAST SPOT","Emp Run"," tents "," summon"," lotus"," eels"," petri",
 						"Middleman","middleman","emp run","exp farm"," exp "," q run","7d/emp","Last spot"," xp ","jailbreak","reputation"," GM's"," GM ","Gratz","Enchanter","enchanter","Tailor","tailor","alchemist",
 						"TANK ","HEAL ","__","__"};
-		local chatBLUE = {"LFG","LFM","LF1M","LF2M","LF3M","LF4M","LF ","lfg ","lfm ","LFW","lf1m","grats!","Hard Chores"," inferno","__"};
+		local chatBLUE = {"LFG","LFM","LF1M","LF2M","LF3M","LF4M","LF ","lfg ","lfm ","LFW","lf1m","Congrats!","grats!","Hard Chores"," inferno","__"};
 		local chatLGREEN = {"WTS","wts","wtb","WTB","WTT"}
 		local chatRED = {" hc "," hardcore","Hardcore "," Hardcore","Inferno"," HC"," RIP"," F! "," F ","WTF","PVP","PvP"," pvp","showtooltip"," eu "," na "," EU "," NA ","%:nohelf%:","<AFK>"};
-		local chatUP = {"lfm ","lfg ","lf1m ","lf2m ","lf3m ","wtb ","wts "," lbrs"," ubrs"," bwl"," brd"}; -- convert to uppercase before all
+		local chatUP = {"lfm ","lfg","lf1m","lf2m","lf3m","wtb","wts","lbrs","ubrs","bwl","brd"}; -- convert to uppercase before all
 		
 local acc1alts = {"Damagepy","Gepygnum","Gepybankhc","Frostgepy","Catmedic","Gungnumgepy","Gepy","Hotmedic","__","__"}
 local acc2alts = {"Coldgepy","Gnumage","Gepymage","Dragontamer","Gungepy","Magepy","Hungepy","Chillgepy","Minigepy","__"}
@@ -125,7 +125,6 @@ function TurtleChangeGuildChat (message)
 	elseif string.upper(strsub(message,-5))==" F :(" then message=strsub(message,1,-5)..CLRED.."F :(";
 	end
 	if strsub(message,1,1)=="+" then message=CDUNG.."+|r"..strsub(message,2); end
-	if strsub(message,1,3)=="123" then message=CROLE.."123|r"..strsub(message,2); end
 	if string.find(message,"%[") and string.find(message,"%]:") then
 		local a,b = string.find(message,"%[")
 		local c,d = string.find(message,"%]:")
