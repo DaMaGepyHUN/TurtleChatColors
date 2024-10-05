@@ -46,7 +46,7 @@ local TurtleChatColors_Level = {};
 						"Scholomance","scholomance","Stratholme","stratholme"," Strath", "LBRS","lbrs","UBRS","BRD","BRM"," brm","ONYXIA","Onyxia","onyxia"," Ony"," ony"," kara ","karazhan"," Karazhan"," Kara ",
 						" ZulGurub"," Zul Gurub"," ZG","Brd","BWL","Blackwing Lair","Blackwing"," AQ ","aq20","AQ20","AQ40","NAXX","NAX"," MC ","MOLTEN CORE","Molten Core","mailbox",
 						" brd"," scholo"," Scholo "," Strat "," strat"," UD ","DireMaul","Strat UD","diremaul"," ubrs","SCHOLO","Sunken Temple","sunken temple"," ST "," rend",
-						" DM"," DM:"," DMe","DM east","DM west","DM north","tribute","zulgurub","DM E","GNOMEREGAN","SUNKEN","TEMPLE","Uldaman"," ZF","gnomeregan","ARM/CATH","MARAUDON","uldaman"," DM "," VC ",
+						" DMW"," DM"," DM:"," DMe","DM east","DM west","DM north","tribute","zulgurub","DM E","GNOMEREGAN","SUNKEN","TEMPLE","Uldaman"," ZF","gnomeregan","ARM/CATH","MARAUDON","uldaman"," DM "," VC ",
 						"Maraudon","maraudon","ARENA"," arena","Dire Maul","Gnomeregan","Zul Farrak","ARMORY","Deadmines","deadmines"," STV"," BB "," DMF"," dmf","WPL",
 						"BFD","RFD","RFK","RFC"," rfc"," WC"," bfd","Zul Farak","Zul'Farak","Armory"," ulda"," sm "," Cath"," RR "," .hc","loch modan","westfall",
 						"armory","Zul'Farrak","GRAVEYARD"," zf ","Graveyard"," ARM"," Gnomer ","SFK","Arm/Cath","SM ","lib/arm"," Mara "," Princess"," Arathi",
@@ -59,7 +59,7 @@ local TurtleChatColors_Level = {};
 		local chatBLUE = {"LFG","LFM","LF1M","LF2M","LF3M","LF4M","LF ","lfg ","lfm ","LFW","lf1m","Congrats!","grats!","Hard Chores"," inferno","__"};
 		local chatLGREEN = {"WTS","wts","wtb","WTB","WTT"}
 		local chatRED = {" hc "," hardcore","Hardcore "," Hardcore","Inferno"," HC"," RIP"," F! "," F ","WTF","PVP","PvP"," pvp","showtooltip"," eu "," na "," EU "," NA ","%:nohelf%:","<AFK>"};
-		local chatUP = {"lfm ","lfg","lf1m","lf2m","lf3m","wtb","wts","lbrs","ubrs","bwl","brd"}; -- convert to uppercase before all
+		local chatUP = {"lfm ","lfg","lf1m","lf2m","lf3m","wtb","wts","lbrs","ubrs","bwl","brd","dmw","wpl"}; -- convert to uppercase before all
 		
 local acc1alts = {"Damagepy","Gepygnum","Gepybankhc","Frostgepy","Catmedic","Gungnumgepy","Gepy","Hotmedic","__","__"}
 local acc2alts = {"Coldgepy","Gnumage","Gepymage","Dragontamer","Gungepy","Magepy","Hungepy","Chillgepy","Minigepy","__"}
@@ -137,7 +137,7 @@ function TurtleChangeGuildChat (message)
 		e = string.find(gname,"/"); if e then gname=strsub(gname,1,e-1) end
 		gname = string.upper(strsub(gname,1,1))..string.lower(strsub(gname,2)) -- first character uppercase, rest lowercase
 		local level,hClass = GetGuildMemberInfo(gname)
-		local hColor = CLLGREEN;
+		local hColor = CLGRAY;
 		if level then 
 			if not hClass then hClass=""; end
 			hColor = TurtleChatColors_GetClassColor(string.upper(hClass));
@@ -206,7 +206,7 @@ function TurtleChangeSystem (message)	-- special characters (must escape with %)
 					if hNote then hNote="("..CGRAY..hNote.."|r) "; else hNote="" end 
 					if gspecial and hName~=UnitName("player") and CheckIfGAnn() then 
 						SendChatMessage("We lost "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r "..hNote..": "..CLLRED..hKiller.."|r "..CLRED..hKillerLvl.."|r @ "..hZone..", F :(","GUILD"); 
-						SendChatMessage("Rest In Peace brave "..hClass.."... :(","WHISPER",nil,hName); 
+						SendChatMessage("Rest In Peace brave "..hClass.."... we hope you go agane :(","WHISPER",nil,hName); 
 					end
 				else -- not in guild
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..":  "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLORANGE.."<< ";
@@ -337,9 +337,8 @@ function TurtleChangeSystem (message)	-- special characters (must escape with %)
 					message = "   "..CDGREEN..CharChain("*",HCstars)..hColor..hNameLink..CDGREEN..CharChain("*",HCstars)..CYELLOW.." has reached level "..CDGREEN.."*"..CWHITE..hLevel..CDGREEN.."*"..CYELLOW.." in Hardcore"..CDGREEN.." @ |cFFAA9999"..hZone..CYELLOW.." !";
 					if gspecial and hName~=UnitName("player") and CheckIfGAnn() then 
 						if hNote then hNote=CGRAY.." ("..hNote..")|r"; else hNote="" end 
-						if hLevel>=50 then SendChatMessage("GRATS on "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r"..hNote..", keep on living, almost there!","GUILD"); 
-						elseif hLevel>=40 then SendChatMessage("Grats on "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r"..hNote..", keep on living!","GUILD");
-						elseif hLevel>=20 then SendChatMessage("Grats on "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r"..hNote.." !","GUILD"); end 
+						if hLevel>=50 then SendChatMessage("GRATS on "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r"..hNote..", almost there!","GUILD"); 
+						elseif hLevel>=20 then SendChatMessage("Grats on "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r"..hNote.."!","GUILD"); end 
 						--else SendChatMessage("Grats!","GUILD"); end
 						--SendChatMessage("GZ, "..(60-hLevel).." more to go!","GUILD"); end
 					--else gkiir("guildie");
@@ -456,13 +455,18 @@ function GetGuildMemberInfo(gname)
 	local numGuild = GetNumGuildMembers();
 	for i = 1, numGuild do
 		local name,_,_,level,class,zone,nnote,onote,online = GetGuildRosterInfo(i); -- online: nil / 1
-		if( class and name and zone) then 
+		if (class and name and zone) then 
 			if name == gname then 
 				if onote=="" then 
 					if nnote~="" then onote=nnote else onote=nil end
 				end
 				return level,class,zone,onote,online
 			end
+		elseif level and name==gname then
+				if onote=="" then 
+					if nnote~="" then onote=nnote else onote=nil end
+				end
+				return level,class,zone,onote,online		
 		end
 	end
 	return nil
