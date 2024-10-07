@@ -46,7 +46,7 @@ local TurtleChatColors_Level = {};
 						"Scholomance","scholomance","Stratholme","stratholme"," Strath", "LBRS","lbrs","UBRS","BRD","BRM"," brm","ONYXIA","Onyxia","onyxia"," Ony"," ony"," kara ","karazhan"," Karazhan"," Kara ",
 						" ZulGurub"," Zul Gurub"," ZG","Brd","BWL","Blackwing Lair","Blackwing"," AQ ","aq20","AQ20","AQ40","NAXX","NAX"," MC ","MOLTEN CORE","Molten Core","mailbox",
 						" brd"," scholo"," Scholo "," Strat "," strat"," UD ","DireMaul","Strat UD","diremaul"," ubrs","SCHOLO","Sunken Temple","sunken temple"," ST "," rend",
-						" DMW"," DM"," DM:"," DMe","DM east","DM west","DM north","tribute","zulgurub","DM E","GNOMEREGAN","SUNKEN","TEMPLE","Uldaman"," ZF","gnomeregan","ARM/CATH","MARAUDON","uldaman"," DM "," VC ",
+						"DMW","DME","DMN"," DM:"," DMe","DM east","DM west","DM north","tribute","zulgurub","GNOMEREGAN","SUNKEN","TEMPLE","Uldaman"," ZF","gnomeregan","ARM/CATH","MARAUDON","uldaman"," DM "," VC ",
 						"Maraudon","maraudon","ARENA"," arena","Dire Maul","Gnomeregan","Zul Farrak","ARMORY","Deadmines","deadmines"," STV"," BB "," DMF"," dmf","WPL",
 						"BFD","RFD","RFK","RFC"," rfc"," WC"," bfd","Zul Farak","Zul'Farak","Armory"," ulda"," sm "," Cath"," RR "," .hc","loch modan","westfall",
 						"armory","Zul'Farrak","GRAVEYARD"," zf ","Graveyard"," ARM"," Gnomer ","SFK","Arm/Cath","SM ","lib/arm"," Mara "," Princess"," Arathi",
@@ -58,7 +58,7 @@ local TurtleChatColors_Level = {};
 						"TANK ","HEAL ","__","__"};
 		local chatBLUE = {"LFG","LFM","LF1M","LF2M","LF3M","LF4M","LF ","lfg ","lfm ","LFW","lf1m","Congrats!","grats!","Hard Chores"," inferno","__"};
 		local chatLGREEN = {"WTS","wts","wtb","WTB","WTT"}
-		local chatRED = {" hc "," hardcore","Hardcore "," Hardcore","Inferno"," HC"," RIP"," F! "," F ","WTF","PVP","PvP"," pvp","showtooltip"," eu "," na "," EU "," NA ","%:nohelf%:","<AFK>"};
+		local chatRED = {" hc "," hardcore","Hardcore "," Hardcore","Inferno"," HC"," RIP"," F! "," F ","WTF","PVP","PvP"," pvp","showtooltip"," eu "," na "," EU "," NA ","nohelf","<AFK>"};
 		local chatUP = {"lfm ","lfg","lf1m","lf2m","lf3m","wtb","wts","lbrs","ubrs","bwl","brd","dmw","wpl"}; -- convert to uppercase before all
 		
 local acc1alts = {"Damagepy","Gepygnum","Gepybankhc","Frostgepy","Catmedic","Gungnumgepy","Gepy","Hotmedic","__","__"}
@@ -107,8 +107,8 @@ function CheckIfGAnn() -- My personal announcement... if I'm online on both acc,
 			if acc2alts[acchk]==myname then curacc=2; end; 
 			local _,_,_,_,online = GetGuildMemberInfo(acc2alts[acchk]);	if online then acc2 = acchk; end
 		end
-		--[[
 		if acc1 and acc2 and curacc==2 then gann=false else gann=true end
+		--[[
 		if acc1 then gkiir("Acc1: "..acc1alts[acc1]) end
 		if acc2 then gkiir("Acc2: "..acc2alts[acc2]) end
 		gkiir("I am on acc "..curacc)
@@ -148,6 +148,7 @@ function TurtleChangeGuildChat (message)
 	for mqff = 1,table.getn(chatDUNG) do message = string.gsub(message, chatDUNG[mqff], CDUNG..chatDUNG[mqff].."|r"); end		
 	for mqff = 1,table.getn(chatGREEN) do message = string.gsub(message, chatGREEN[mqff], CROLE..chatGREEN[mqff].."|r"); end		
 	for mqff = 1,table.getn(chatLGREEN) do message = string.gsub(message, chatLGREEN[mqff], CLLGREEN..chatLGREEN[mqff].."|r"); end		
+	for mqff = 1,table.getn(chatRED) do message = string.gsub(message, chatRED[mqff], CLLRED..chatRED[mqff].."|r"); end
 	message = string.gsub(message, "%+%-", "\194\177");
 	message = string.gsub(message, "%-%+", "\194\177");
 	return message
