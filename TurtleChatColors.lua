@@ -3,7 +3,7 @@
 --- alt+0177 = ±  (+-)
 --- damagepyhun@gmail.com
 
-TurtleChatColorsVer = 1.3
+TurtleChatColorsVer = 1.31
 local gspecial = false
 local tccGuildBrackets = 1
 local CLORANGE = "|cFFEEDD55"
@@ -217,7 +217,7 @@ function TurtleChangeSystem (message)	-- special characters (must escape with %)
 					message = message..CLLRED..hKiller..CDGRAY.." ("..CLRED..hKillerLvl..CDGRAY..") "..CLORANGE.."@ |cFFAA9999"..hZone
 					if gripmsg then message = message..grip; end
 					local rtarget="GUILD"; rtarget="hardcore";					
-					if hName~=UnitName("player") then 
+					if gspecial and hName~=UnitName("player") then 
 						if string.find(hKiller,"Tunnel Rat") then SendChatMessage("Tunnel rats rule!",rtarget);	end 
 					end
 				end
@@ -628,3 +628,6 @@ function TurtleChatColors_GetClassColor( class )
 	end
 	return classcolor;
 end
+
+
+-- IsQuestFlaggedCompleted(QID)
