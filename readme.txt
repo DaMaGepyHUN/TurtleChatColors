@@ -15,6 +15,8 @@ What it does:
 - My auto-response in guildchat is a secret switch so the addon won't spam it
   automatcally for others. I made it so people without the addon can still
   see if a guildie died, or if .hcmessages are set too high to show
+- /gs <text> - search guild for a name (if online on an alt)
+  It also searches notes so can check ppl for profs, for example: /gs alch
 
 I've added some other useful function which ppl can use in macros:
 
