@@ -1,6 +1,6 @@
--- vanilla 1.12	+ TurtleWoW
+ï»¿-- vanilla 1.12	+ TurtleWoW
 --- .hcmessages 60 		turns off all death message below 60
---- alt+0177 = ±  (+-)
+--- alt+0177 = ï¿½  (+-)
 --- damagepyhun@gmail.com
 
 TurtleChatColorsVer = 1.31
@@ -40,6 +40,7 @@ local gripmsg = false
 local grelayer = false
 local TurtleChatColors_Names = {};
 local TurtleChatColors_Level = {};
+local GSnum = 0
 
 		local chatDUNG = {"STOCKADE","stockades","Stockades","stockade","Stockade"," elites"," elite "," Elite"," Elites","Loch Modan","DEADMINES"," CG"," GC","Gilneas City"," Gilneas","Crescent Grove"," Crescent",
 						" SM","Scarlet Monastery"," GY"," LIB"," CATH","REDRIDGE"," Redridge"," redridge"," wetland"," wetlands"," Wetlands"," Wetland","ELITE"," hfq","HFQ","gbase","Guild Base","gbank","guildbank",
@@ -62,9 +63,11 @@ local TurtleChatColors_Level = {};
 		local chatUP = {"lfm ","lfg","lf1m","lf2m","lf3m","wtb","wts","lbrs","ubrs","bwl","brd","dmw","wpl"}; -- convert to uppercase before all
 		
 local acc1alts = {"Damagepy","Gepygnum","Gepybankhc","Frostgepy","Catmedic","Gungnumgepy","Gepy","Hotmedic","Gepybank","__"}
-local acc2alts = {"Coldgepy","Gnumage","Gepymage","Dragontamer","Gungepy","Magepy","Hungepy","Chillgepy","Minigepy","__"}
+local acc2alts = {"Coldgepy","Gnumage","Gepymage","Dragontamer","Gungepy","Magepy","Hungepy","Chillgepy","Minigepy","Gepygepy","__"}
+local ketoalts = {"___","Bowenjoyer","Bucklepusher","Greenmarine","Hcengbanksix","Hcmedic","Hcmetal","Hcportals","Hctextiles","Ketotemic","Ketotemstan","Proxywar","Wandpusher","Wandzugger","___","___","___","___","___","___","___","___","___"}
 		
 function gkiir(kirtxt) if kirtxt then DEFAULT_CHAT_FRAME:AddMessage(CSTART..CMYCOLOR..kirtxt..CEND); end end
+function DCFmsg(dcftxt) if dcftxt then DEFAULT_CHAT_FRAME:AddMessage(dcftxt); end end
 
 function CharChain(scc,scn)
 	local sctxt=""; if scc and scn then for i=1,scn do sctxt=sctxt..scc end end return sctxt
@@ -201,7 +204,7 @@ function TurtleChangeSystem (message)	-- special characters (must escape with %)
 						if not hZone or hZone=="" then hZone = strsub(message,e+1,h-1); end	
 					end			
 					if not hClass then hClass=""; end
-					hColor = TurtleChatColors_GetClassColor(string.upper(hClass) );					
+					hColor = TurtleChatColors_GetClassColor(string.upper(hClass))
 				else hColor=CLGRAY; hClass=""; hNote=nil; end
 				if hZone==nil then hZone=hZoneCut end
 				if hZone==nil then hZone="??" end
@@ -427,7 +430,7 @@ function TurtleChangeSystem (message)	-- special characters (must escape with %)
 			message = CYELLOW..message;
 		end	
 	end
-	if gspecial and omessage and wasokk==false and omessage~="" then DEFAULT_CHAT_FRAME:AddMessage("!"..CYELLOW..omessage); end
+	if gspecial and omessage and wasokk==false and omessage~="" then DCFmsg("!"..CYELLOW..omessage); end
 	return message;
 end
 
@@ -441,9 +444,9 @@ function showrested(sr)
 	if -1==(r or -1) then t=CLRED.."You are not rested." 
 	else t="|cFF9999FFRested: "..CWHITE..(math.floor((r*1000)/(m*1.5))/10)..CGRAY.."%";end;
 	if sr then t=t.."            "..CDGRAY.."macro:  "..CLGRAY.."/run showrested()" end
-	DEFAULT_CHAT_FRAME:AddMessage(CSTART..t..CEND);
+	DCFmsg(CSTART..t..CEND);
 	if sr then
-		if UnitLevel("player")<5 then DEFAULT_CHAT_FRAME:AddMessage(CLRED.."You can't chat until level "..CYELLOW.."5"..CLRED.." !"..CEND); end
+		if UnitLevel("player")<5 then DCFmsg(CLRED.."You can't chat until level "..CYELLOW.."5"..CLRED.." !"..CEND); end
 	end
 end
 
@@ -458,7 +461,6 @@ function deletetorches() -- Deletes all Torch from the inventory when lvling sur
             for slot=GetContainerNumSlots(bag),1,-1 do
 				if (GetContainerItemLink(bag,slot)) then
 			        if (string.find(GetContainerItemLink(bag,slot), "Dim Torch")) then
-						--gkiir(bag.." / "..slot)
 						PickupContainerItem(bag,slot); DeleteCursorItem()
 					end
 			    end				
@@ -471,7 +473,7 @@ function gspec(gsp) -- shows auto F / GZ message with class/location info in gui
 	local gspold=gspecial
 	if gsp==nil or gsp then gspecial=true else gspecial=false end
 	local gsptxt=CLRED.."OFF"; if gspecial then gsptxt=CGREEN.."ON" end
-	if gspold~=gspecial then DEFAULT_CHAT_FRAME:AddMessage(CWHITE.."TurtleChatColors"..CYELLOW.." announcements are: "..gsptxt..CEND); end
+	if gspold~=gspecial then DCFmsg(CWHITE.."TurtleChatColors"..CYELLOW.." announcements are: "..gsptxt..CEND); end
 end 
 
 
@@ -502,6 +504,109 @@ function GetGuildMemberInfo(gname)
 	return nil
 end
 
+function searchguild(arg) -- Search text in names and notes
+	GSnum = 0
+	if arg and arg~="" then
+		gReadRoster()
+		arg = string.lower(arg)
+		local numGuild = GetNumGuildMembers();
+		if numGuild>0 then
+			if arg=="gepy" or arg=="cat" or arg=="catmedic" then DCFmsg(CYELLOW.."Searching for the alts of:  "..CWHITE.."CatMedic / Gepy"..CGRAY.." ...")
+			elseif arg=="keto" then DCFmsg(CYELLOW.."Searching for the alts of:  "..CWHITE.."KETO"..CGRAY.." ...")
+			else DCFmsg(CYELLOW.."Searching for:  "..CWHITE..string.upper(arg)..CGRAY.." ...") end
+			for i = 1, numGuild do
+				local name,_,_,level,class,zone,nnote,onote,online = GetGuildRosterInfo(i); -- online: nil / 1
+				if (class and name and not online) then 
+					if arg=="keto" then
+						for acchk = 1,table.getn(ketoalts) do 
+							if ketoalts[acchk]==name then GShowGNInfo(name) end
+						end	
+					elseif arg=="gepy" or arg=="cat" or arg=="catmedic" then
+						for acchk = 1,table.getn(acc1alts) do 
+							if acc1alts[acchk]==name then GShowGNInfo(name) end
+						end								
+						for acchk = 1,table.getn(acc2alts) do 
+							if acc2alts[acchk]==name then GShowGNInfo(name) end
+						end								
+					elseif string.find(string.lower(name),arg) then GShowGNInfo(name)
+					elseif nnote~="" and string.find(string.lower(nnote),arg) then GShowGNInfo(name)
+					elseif onote~="" and string.find(string.lower(onote),arg) then GShowGNInfo(name)
+					end
+				end
+			end	
+			for i = 1, numGuild do
+				local name,_,_,level,class,zone,nnote,onote,online = GetGuildRosterInfo(i); -- online: nil / 1
+				if (class and name and online) then 
+					if arg=="keto" then
+						local found = 0
+						for acchk = 1,table.getn(ketoalts) do if ketoalts[acchk]==name then found=acchk; end end
+						if found > 0 then GShowGNInfo(name) 
+						elseif nnote~="" and string.find(string.lower(nnote),arg) then 
+							GShowGNInfo(name); 
+							DCFmsg(CYELLOW.."New name, add to list!:  "..CWHITE..string.upper(name))
+						end
+					elseif arg=="gepy" or arg=="cat" or arg=="catmedic" then
+						for acchk = 1,table.getn(acc1alts) do 
+							if acc1alts[acchk]==name then GShowGNInfo(name) end
+						end								
+						for acchk = 1,table.getn(acc2alts) do 
+							if acc2alts[acchk]==name then GShowGNInfo(name) end
+						end								
+					elseif string.find(string.lower(name),arg) then GShowGNInfo(name)
+					elseif nnote~="" and string.find(string.lower(nnote),arg) then GShowGNInfo(name)
+					elseif onote~="" and string.find(string.lower(onote),arg) then GShowGNInfo(name)
+					end
+				end
+			end	
+			if GSnum>0 then DCFmsg(CWHITE..GSnum..CGRAY.." member(s) listed, you can click on a "..CLGRAY.."NAME"..CGRAY.." to whisper!")
+			else gkiir(CRED.."No players found!") end
+		else gkiir(CRED.."You are not in a GUILD!")
+		end
+	else gkiir(CLRED.."As parameter, you must specify a TEXT to find!:  /gs alch")
+	end
+end
+
+
+function GShowGNInfo(hName)
+	if hName then
+		local hLevel,hClass,hZone,hNote,online,oNote = GetGuildMemberInfo(hName) -- online: nil / 1
+		if level then
+			GSnum = GSnum + 1
+			local hColor = TurtleChatColors_GetClassColor(string.upper(hClass))
+			local hNameLink = "|Hplayer:"..hName.."|h"..string.upper(hName).."|h"
+			local note = ""
+			if hNote and oNote then note = CGRAY.." ("..hNote.."|r"..CLGRAY.." / "..CGRAY..oNote..")|r"
+			elseif hNote then note = CGRAY.." ("..hNote..")|r"
+			elseif oNote then note = CGRAY.." ("..oNote..")|r" 
+			end 
+			if online then online=CGRAY.." ("..CWHITE.."Online"..CGRAY..")" else online = CGRAY.." (Offline)" end
+			local message="   "..CBGRAY..hLevel.."|r "..hColor..hNameLink.."|r"..note..CLORANGE.." @ "..CGREEN..hZone..online;
+			DCFmsg(message)
+		end
+	end
+end
+
+function TCC_SlashCommandHandler(arg)
+	gkiir("/tcc:  '"..arg.."'")
+	if arg and arg~="" then
+		local _,_,command = string.find(arg,"(%l+)")		
+		local param = command
+		if (command) then
+			if command=="gs" or command=="sg" then gkiir("GS!") end
+			gkiir("command = "..command)
+		end
+	else
+		gkiir("TurtleChatColors /tcc commands:")
+		gkiir("dt - Deletes all 'Dim Torch' from your bags")
+		gkiir("gs <or> sg - Search guildmembers and notes for a text (not case sensitive)")
+		gkiir("                   Its the same as for example: /gsearch alch")
+	end
+end
+
+
+function GSRC_SlashCommandHandler(argu)
+	searchguild(argu) -- Search text in names and notes
+end
 
 
 function TurtleChatColors_OnLoad() 
@@ -511,7 +616,18 @@ function TurtleChatColors_OnLoad()
 	--this:RegisterEvent("CHAT_MSG_LOOT");
 	this:RegisterEvent("PLAYER_LOGIN");
 	this:RegisterEvent("PLAYER_ENTERING_WORLD");
-	--this:RegisterEvent("WHO_LIST_UPDATE");
+	--this:RegisterEvent("WHO_LIST_UPDATE");	
+	SlashCmdList["TCC"] = TCC_SlashCommandHandler; -- "TCC" --> SLASH_TCCn
+	SLASH_TCC1 = "/tcc"
+	SLASH_TCC2 = "/turtlechatcolors"
+	SlashCmdList["GSRC"] = GSRC_SlashCommandHandler; -- "GSRC" --> SLASH_GSRCn
+	SLASH_GSRC1 = "/gsearch"
+	SLASH_GSRC2 = "/searchguild"
+	SLASH_GSRC3 = "/guildsearch"
+	SLASH_GSRC4 = "/gsrc"
+	SLASH_GSRC5 = "/gsrch"
+	SLASH_GSRC6 = "/searchg"
+	SLASH_GSRC7 = "/gs"
 end
 
 function TurtleChatColors_OnEvent(event)
@@ -625,7 +741,7 @@ CB_CLASS_DRUID = "DRUIDE";
 CB_CLASS_SHAMAN = "SCHAMANE";
 CB_CLASS_PALADIN = "PALADIN";
 CB_CLASS_ROGUE = "SCHURKE";
-CB_CLASS_HUNTER = "JÄGER";
+CB_CLASS_HUNTER = "Jï¿½GER";
 CB_CLASS_WARRIOR = "KRIEGER";
 end
 

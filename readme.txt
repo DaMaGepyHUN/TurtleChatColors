@@ -7,9 +7,9 @@ http://damagepy.byethost3.com/TurtleChatColors4.png
 What it does:
 - In system messages (death/levelup) makes names clickable (for whisper) and
   colors them by class if they are in the guild (if not then they will be 
-  silver-colored in system messages and green in guildchat)
+  silver-colored or green in system messages
 - Death/LevelUp messages are compacted into one row, plus the higher the level
-  the more asterisk are shown to show the significance (* for every 10 lvl)
+  the more asterisks are shown to show the significance (a * for every 10 lvl)
 - Slightly highlights certain keywords in chat: WTS LF2M, key locations like
   Stockades, Dire Maul, Deadmines, ubrs, GC, or words like Healer, 2dps, etc.
 - My auto-response in guildchat is a secret switch so the addon won't spam it
