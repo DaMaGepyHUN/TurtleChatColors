@@ -64,6 +64,7 @@ local GSnum = 0
 		
 local acc1alts = {"Damagepy","Gepygnum","Gepybankhc","Frostgepy","Catmedic","Gungnumgepy","Gepy","Hotmedic","Gepybank","__"}
 local acc2alts = {"Coldgepy","Gnumage","Gepymage","Dragontamer","Gungepy","Magepy","Hungepy","Chillgepy","Minigepy","Gepygepy","__"}
+local acc3alts = {"Holymedic","Gepygepy","__"}
 local ketoalts = {"___","Bowenjoyer","Bucklepusher","Greenmarine","Hcengbanksix","Hcmedic","Hcmetal","Hcportals","Hctextiles","Ketotemic","Ketotemstan","Proxywar","Wandpusher","Wandzugger","___","___","___","___","___","___","___","___","___"}
 		
 function gkiir(kirtxt) if kirtxt then DEFAULT_CHAT_FRAME:AddMessage(CSTART..CMYCOLOR..kirtxt..CEND); end end
@@ -100,7 +101,7 @@ function CheckIfGAnn() -- My personal announcement... if I'm online on both acc,
 	if gspecial then
 		local myname = UnitName("player")
 		local curacc = 0
-		local acc1,acc2 = false,false;
+		local acc1,acc2,acc3 = false,false,false;
 		gann = true		
 		for acchk = 1,table.getn(acc1alts) do 
 			if acc1alts[acchk]==myname then curacc=1; end
@@ -110,7 +111,13 @@ function CheckIfGAnn() -- My personal announcement... if I'm online on both acc,
 			if acc2alts[acchk]==myname then curacc=2; end; 
 			local _,_,_,_,online = GetGuildMemberInfo(acc2alts[acchk]);	if online then acc2 = acchk; end
 		end
-		if acc1 and acc2 and curacc==2 then gann=false else gann=true end
+		for acchk = 1,table.getn(acc3alts) do 
+			if acc3alts[acchk]==myname then curacc=3; end; 
+			local _,_,_,_,online = GetGuildMemberInfo(acc3alts[acchk]);	if online then acc3 = acchk; end
+		end
+		if curacc==1 then gann=true else gann=false end
+		if curacc==2 and (acc1==false) then gann=true else gann=false end
+		if curacc==3 and (acc1==false and acc2==false) then gann=true else gann=false end
 		--[[
 		if acc1 then gkiir("Acc1: "..acc1alts[acc1]) end
 		if acc2 then gkiir("Acc2: "..acc2alts[acc2]) end
@@ -207,7 +214,7 @@ function TurtleChangeSystem (message)	-- special characters (must escape with %)
 					hColor = TurtleChatColors_GetClassColor(string.upper(hClass))
 				else hColor=CLGRAY; hClass=""; hNote=nil; end
 				if hZone==nil then hZone=hZoneCut end
-				if hZone==nil then hZone="??" end
+				if hZone==nil then hZone="??" elseif string.find(hZone,"\\'") then hZone = string.gsub(hZone, "\\'", "'") end
 				if hKillerLvl==nil then gkiir("ERROR! hKillerLvl nil"); hKillerLvl="?" end
 				if hLevel==nil then gkiir("ERROR! hLevel nil"); hLevel="?"; HCstars=1; else HCstars = math.floor(hLevel/10) end
 				if hKillerLvl=="?" or hLevel=="?" or hLevel<10 then gkiir(CYELLOW..message);
@@ -261,7 +268,7 @@ function TurtleChangeSystem (message)	-- special characters (must escape with %)
 					hColor = TurtleChatColors_GetClassColor( string.upper(hClass) );					
 				else hColor=CLGRAY; hClass=""; hNote=nil; end
 				if hLevel==nil then gkiir("ERROR! hLevel nil"); hLevel="?"; HCstars=1; else HCstars = math.floor(hLevel/10) end
-				if hZone==nil then hZone="??" end
+				if hZone==nil then hZone="??" elseif string.find(hZone,"\\'") then hZone = string.gsub(hZone, "\\'", "'") end
 				if hLevel=="?" or hLevel<10 then gkiir(CYELLOW..message);
 				elseif level and GetGuildMemberInfo(hName)~=nil then -- a guildie
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death".."!"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..": "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..CLORANGE.."was killed in "..CLLRED.."PvP"..CLORANGE.." by:\n";
@@ -315,7 +322,7 @@ function TurtleChangeSystem (message)	-- special characters (must escape with %)
 					hColor = TurtleChatColors_GetClassColor( string.upper(hClass) );					
 				else hColor=CLGRAY; hClass=""; hNote=nil; end
 				if hLevel==nil then gkiir("ERROR! hLevel nil"); hLevel="?"; HCstars=1; else HCstars = math.floor(hLevel/10) end
-				if hZone==nil then hZone="??" end
+				if hZone==nil then hZone="??" elseif string.find(hZone,"\\'") then hZone = string.gsub(hZone, "\\'", "'") end
 				if hLevel=="?" or hLevel<10 then gkiir(CYELLOW..message);
 				elseif level and GetGuildMemberInfo(hName)~=nil then -- a guildie
 					message = "   "..CRED..CharChain("*",HCstars)..CYELLOW.."*"..CLRED.."HC Death".."!"..CYELLOW.."*"..CRED..CharChain("*",HCstars)..": "..hColor..hNameLink..CGRAY.." ("..CWHITE..hLevel..CGRAY..") "..hcause..CLORANGE.." @ ".."|cFFAA9999"..hZone
@@ -528,6 +535,9 @@ function searchguild(arg) -- Search text in names and notes
 						for acchk = 1,table.getn(acc2alts) do 
 							if acc2alts[acchk]==name then GShowGNInfo(name) end
 						end								
+						for acchk = 1,table.getn(acc3alts) do 
+							if acc3alts[acchk]==name then GShowGNInfo(name) end
+						end								
 					elseif string.find(string.lower(name),arg) then GShowGNInfo(name)
 					elseif nnote~="" and string.find(string.lower(nnote),arg) then GShowGNInfo(name)
 					elseif onote~="" and string.find(string.lower(onote),arg) then GShowGNInfo(name)
@@ -551,6 +561,9 @@ function searchguild(arg) -- Search text in names and notes
 						end								
 						for acchk = 1,table.getn(acc2alts) do 
 							if acc2alts[acchk]==name then GShowGNInfo(name) end
+						end								
+						for acchk = 1,table.getn(acc3alts) do 
+							if acc3alts[acchk]==name then GShowGNInfo(name) end
 						end								
 					elseif string.find(string.lower(name),arg) then GShowGNInfo(name)
 					elseif nnote~="" and string.find(string.lower(nnote),arg) then GShowGNInfo(name)
