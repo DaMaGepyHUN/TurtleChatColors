@@ -41,60 +41,154 @@ local grelayer = false
 local TurtleChatColors_Names = {};
 local TurtleChatColors_Level = {};
 local GSnum = 0
+local CSV = ""
 
-		local chatDUNG = {"STOCKADE","stockades","Stockades","stockade","Stockade"," elites"," elite "," Elite"," Elites","Loch Modan","DEADMINES"," CG"," GC","Gilneas City"," Gilneas","Crescent Grove"," Crescent",
-						" SM","Scarlet Monastery"," GY"," LIB"," CATH","REDRIDGE"," Redridge"," redridge"," wetland"," wetlands"," Wetlands"," Wetland","ELITE"," hfq","HFQ","gbase","Guild Base","gbank","guildbank",
-						"Scholomance","scholomance","Stratholme","stratholme"," Strath", "LBRS","lbrs","UBRS","BRD","BRM"," brm","ONYXIA","Onyxia","onyxia"," Ony"," ony"," kara ","karazhan"," Karazhan"," Kara ",
-						" ZulGurub"," Zul Gurub"," ZG","Brd","BWL","Blackwing Lair","Blackwing"," AQ ","aq20","AQ20","AQ40","NAXX","NAX"," MC ","MOLTEN CORE","Molten Core","mailbox",
-						" brd"," scholo"," Scholo "," Strat "," strat"," UD ","DireMaul","Strat UD","diremaul"," ubrs","SCHOLO","Sunken Temple","sunken temple"," ST "," rend",
-						"DMW","DME","DMN"," DM:"," DMe","DM east","DM west","DM north","tribute","zulgurub","GNOMEREGAN","SUNKEN","TEMPLE","Uldaman"," ZF","gnomeregan","ARM/CATH","MARAUDON","uldaman"," DM "," VC ",
-						"Maraudon","maraudon","ARENA"," arena","Dire Maul","Gnomeregan","Zul Farrak","ARMORY","Deadmines","deadmines"," STV"," BB "," DMF"," dmf","WPL",
-						"BFD","RFD","RFK","RFC"," rfc"," WC"," bfd","Zul Farak","Zul'Farak","Armory"," ulda"," sm "," Cath"," RR "," .hc","loch modan","westfall",
-						"armory","Zul'Farrak","GRAVEYARD"," zf ","Graveyard"," ARM"," Gnomer ","SFK","Arm/Cath","SM ","lib/arm"," Mara "," Princess"," Arathi",
-						"razorfen","Blackfathom"," cath","cath "," Zf","ULDAMAN","shadowfang","Stockades","ZF ","BLACKFATHOM"," GS"," Mulgore","Mulgore "};
-		local chatGREEN = {"LF tank","LF Tank"," hogger"," Hogger"," DPS "," DPS"," dps"," Dps","1dps","2dps"," escort ","Tank "," tank ","Healz"," HEALER "," HEALER"," HEAL"," HEAL "," heal ","Heal "," Heals"," Heal ","/heals","/heal","/dps"," heals","healer ","heal "," healer","Healer"," tank"," TANK","/HEAL","/DPS",
-						"FULL RUN","Q run","XP FARM","XP runs","XP run"," quests","Elite Quests","Quests","RUNS","aoe runs","full run","farming","Farming","fullrun"," full"," Full","AoE","AOE","aoe run","need all",
-						"FARM","QUEST"," Quest ","QuestRun"," quest "," Aoe","exp run"," RUN","Questrun"," aoe"," runs"," Lava"," lava","last spot","Last Spot","LAST SPOT","Emp Run"," tents "," summon"," lotus"," eels"," petri",
-						"Middleman","middleman","emp run","exp farm"," exp "," q run","7d/emp","Last spot"," xp ","jailbreak","reputation"," GM's"," GM ","Gratz","Enchanter","enchanter","Tailor","tailor","alchemist",
-						"TANK ","HEAL ","__","__"};
-		local chatBLUE = {"LFG","LFM","LF1M","LF2M","LF3M","LF4M","LF ","lfg ","lfm ","LFW","lf1m","Congrats!","grats!","Hard Chores"," inferno","__"};
-		local chatLGREEN = {"WTS","wts","wtb","WTB","WTT"}
-		local chatRED = {" hc "," hardcore","Hardcore "," Hardcore","Inferno"," HC"," RIP"," F! "," F ","WTF","PVP","PvP"," pvp","showtooltip"," eu "," na "," EU "," NA ","nohelf","<AFK>","mailbox"};
-		local chatUP = {"lfm ","lfg","lf1m","lf2m","lf3m","wtb","wts","lbrs","ubrs","bwl","brd","dmw","wpl"}; -- convert to uppercase before all
-		
+
+
+CSV = "zul gurub=ZulGurub,loch modan=LochModan,crescent grove=CrescentGrove,gilneas city=GilneasCity,scarlet monastery=ScarletMonastery,guild base=GuildBase,guild bank=GuildBank,zul gurub=ZulGurub"
+CSV=CSV..",blackwing lair=BlackwingLair,wailing cavern=WailingCavern,molten core=MoltenCore,dire maul=DireMaul,dm east=DM:east,dm north=DM:north,dm west=DM:west,sunken temple=SunkenTemple"
+CSV=CSV..",zul farrak=Zul'Farrak,zul farak=Zul'Farrak,brd princess=BRD:princess,black morass=BlackMorass,blackfathom deep=BlackfathomDeep,razorfen downs=RazorfenDowns,razorfen kraul=RazorfenKraul"
+CSV=CSV..",ragefire chasm=RagefireChasm,shadowfang keep=ShadowfangKeep,maraudon princess=Maraudon:princess,mara princess=Mara:princess,full run=Full-run,q run=Quest-run,quest run=Quest-run"
+CSV=CSV..",xp farm=XP-farm,xp run=XP-run,exp run=XP-run,elite quest=Elite-quest,aoe run=AoE-run,last spot=last-spot,emp run=Emp-run,emperor run=Emperor-run,jail break=JailBreak,main tank=MainTank"
+CSV=CSV..",turtle wow=TurtleWoW,alterac valley=AlteracValley,warsong gulch=WarsongGulch,need mt=Need:MT,need ot=Need:OT,project epoch=project:Epoch,project ascension=project:Ascension"
+CSV=CSV..",arcanite transmute=Arcanite-Transmute,pvp=PvP,pve=PvE,wpvp=wPvP,turtle mount=turtle-mount,darkmoon faire=DarkmoonFaire,strat undead=Strat:UD,sm arm=SM:Arm,hateforge quarry=HateforgeQuarry"
+local cPos,chReplace1,chReplace2 = nil,{},{};  for part in string.gmatch(CSV, "([^,]+)") do cPos=strfind(part,"="); if cPos then table.insert(chReplace1,strsub(part,1,cPos-1)); table.insert(chReplace2,strsub(part,cPos+1)); end end
+
+CSV = "lf,lfm,lfg,lf1m,lf2m,lf3m,lf4m,wtb,wts,wtt,brd,lbrs,ubrs,bwl,zg,zf,dmw,dme,dmn,epl,wpl,stv,sm,hfq,aq,aq20,aq40,mc,dmf"
+local chatUP = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chatUP, part) end end-- convert to uppercase before all
+
+CSV = "ES,BB,BM,FARM,QUEST,ARM,AH";
+local chLocBig   = {};  for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chLocBig, part) end end
+
+CSV = "elites,elite,lochmodan,redridge,wetlands,wetland,gbase,guildbase,gbank,guildbank,dmf,stv,wpl,blackmorass,morass,westfall,arathi,mulgore,hogger,sw,stormwind,ironforge,darnassus,darna,uc,tb"
+CSV=CSV..",deadmines,deathmines,deathmine,deadmine,dm,vc,wailingcaverns,wailingcavern,wc,stockades,stockade,crescentgrove,cg,gnomeregan,gnomer,ragefirechasm,rfc"
+CSV=CSV..",blackfathomdeeps,blackfathomdeep,blackfathom,bfd,razorfendowns,razorfen,rfd,razorfenkraul,rfk,rr,shadowfangkeep,sfk"
+CSV=CSV..",scarletmonastery,sm,graveyard,graveyards,gy,library,lib,cathedral,cath,armory,sm:arms,sm:arm,gilneascity,gilneas,gc,sunkentemple,st,uldaman,ulda,zul'farrak,zulfarrak,zulfarak,zf,maraudon,mara,maraudon:princess,mara:princess"
+CSV=CSV..",hfq,hateforgequarry,hateforge,scholomance,scholo,stratholme,strath,strat,ud,strat:ud,live,brm,brd,arena,jed,brd:princess,lbrs,ubrs,rend,diremaul,dm,dme,dm:e,dmn,dm:n,dmw,dm:w,dm:,dm:east,dm:north,dm:west,tribute,trib"
+CSV=CSV..",karazhan,kara,kara10,kara20,kara40,zulgurub,zg,onyxia,ony"
+CSV=CSV..",moltencore,mc,blackwinglair,bwl,ahn'qiraj,ahnqiraj,aq,aq20,aq40,naxxramas,naxramas,naxx,nax"
+local chLocation = {};  for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chLocation, part) end end
+
+CSV = "tank,dps,mt,ot,offtank,maintank,1heal,1tank,1dps,2dps,3dps,escort,healer,healers,heal,healz,heals,fullrun,full-run,last-spot,questrun,quest-run,xp-farm,xp-run,quest-runs,xp-runs"
+CSV=CSV..",elite-quest,elite-quests,aoe-runs,aoe-run,aoe,emp-run,emperor,summon,summons,tents,lotus,eels,petri,middleman,middle-man,7d,emp,xp,jailbreak,reputation,repu,gm,gm's,need:all"
+CSV=CSV..",congrats,gratz,grats,grat,enchanter,ench,tailor,alch,alchemist,crafter,questline,lockboxes,lockbox,need:mt,need:ot,transmute,fountain,turtle-mount,arcanite-transmute,jc,jewelcrafter"
+CSV=CSV..",seller,pug"
+local chGreen = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chGreen, part) end end
+
+CSV = "lava,hc,hardcore,hardcores,inferno,immortal,rip,f,wtf,pvp,wpvp,showtooltip,nohelf,:nohelf,afk,dnd,oom,<AFK>,mailbox,pm,pst,w,retail,dkp,dkps,addons,addon"
+CSV=CSV..",bg,battleground,battlegrounds,alteracvalley,av,wsg,ab,warsonggulch,warsong,ascension,epoch,twink,twinks,battlemasters,battlemaster,horde"
+local chRed = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chRed, part) end end
+
+CSV = "lf,lfg,lfm,lf1,lf2,lf3,lf4,lf1m,lf2m,lf3m,lf4m,lf5m,lfw,eu,na,group,que,queue,attune,attunement,attu,opening,alliance,selling"
+local chBlue = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chBlue, part) end end
+
+CSV = "wts,wtb,wtt,twow,guild,tent,tents,pve"
+local chLGreen = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chLGreen, part) end end
+
+
+
+
 local acc1alts = {"Damagepy","Gepygnum","Gepybankhc","Frostgepy","Catmedic","Gungnumgepy","Gepy","Hotmedic","Gepybank","__"}
 local acc2alts = {"Coldgepy","Gnumage","Gepymage","Dragontamer","Gungepy","Magepy","Hungepy","Chillgepy","Minigepy","Gepygepy","__"}
-local acc3alts = {"Holymedic","Gepygepy","__"}
+local acc3alts = {"Holymedic","Gepygepy","Treemedic","__"}
 local ketoalts = {"___","Bowenjoyer","Bucklepusher","Greenmarine","Hcengbanksix","Hcmedic","Hcmetal","Hcportals","Hctextiles","Ketotemic","Ketotemstan","Proxywar","Wandpusher","Wandzugger","___","___","___","___","___","___","___","___","___"}
 		
 function gkiir(kirtxt) if kirtxt then DEFAULT_CHAT_FRAME:AddMessage(CSTART..CMYCOLOR..kirtxt..CEND); end end
 function DCFmsg(dcftxt) if dcftxt then DEFAULT_CHAT_FRAME:AddMessage(dcftxt); end end
-
-function CharChain(scc,scn)
-	local sctxt=""; if scc and scn then for i=1,scn do sctxt=sctxt..scc end end return sctxt
-end;
+function CharChain(scc,scn)	local sctxt=""; if scc and scn then for i=1,scn do sctxt=sctxt..scc end end return sctxt end
 
 
 
-function TurtleChangeHCChat (message)
-	if string.upper(message)=="F :(" or string.upper(message)=="RIP" or string.upper(message)=="F" then message=CLRED..string.upper(message);
-	elseif string.upper(strsub(message,-2))==" F" then message=strsub(message,1,-2)..CLRED.."F"; 
-	elseif string.upper(strsub(message,-4))==" RIP" then message=strsub(message,1,-4)..CLRED..strsub(message,-3);
-	elseif string.upper(strsub(message,-5))==" F :(" then message=strsub(message,1,-5)..CLRED.."F :(";
-	elseif string.upper(message)=="GZ" or string.upper(message)=="GZ!" then message=CROLE..message;
+
+
+function TCCHighlightStrs (message)
+  if (message ~= "") and (message ~= nil) then
+	if string.upper(strsub(message,-2))==":(" then message=strsub(message,1,-2)..CLRED..":("
+	elseif string.upper(message)=="GZ" or string.upper(message)=="GZ!" then message=CROLE..message
 	end
-	-- chat location/keyword highlights --
-	for mqff = 1,table.getn(chatUP) do message = string.gsub(message, chatUP[mqff], string.upper(chatUP[mqff])); end
-	for mqff = 1,table.getn(chatGREEN) do message = string.gsub(message, chatGREEN[mqff], CROLE..chatGREEN[mqff].."|r"); end		
-	for mqff = 1,table.getn(chatLGREEN) do message = string.gsub(message, chatLGREEN[mqff], CLGREEN..chatLGREEN[mqff].."|r"); end		
-	for mqff = 1,table.getn(chatRED) do message = string.gsub(message, chatRED[mqff], CLLRED..chatRED[mqff].."|r"); end
-	for mqff = 1,table.getn(chatDUNG) do message = string.gsub(message, chatDUNG[mqff], CDUNG..chatDUNG[mqff].."|r"); end		
-	for mqff = 1,table.getn(chatBLUE) do message = string.gsub(message, chatBLUE[mqff], CWTS..chatBLUE[mqff].."|r"); end
-	--return "|cFFE6C980[HC] "..message
+	
+	-- Replaces in original string, before word-splitting
+	local s,e
+	local lmessage = strlower(message)
+	for tcf = 1,table.getn(chReplace1) do 
+		s,e = strfind(lmessage, chReplace1[tcf])
+		if s and e then 
+			message = strsub(message,1,s-1)..chReplace2[tcf]..strsub(message,e+1);
+			s,e = strfind(strlower(message), chReplace1[tcf]) -- again (2x)
+			if s and e then message = strsub(message,1,s-1)..chReplace2[tcf]..strsub(message,e+1); end
+		end
+	end
+	
+	-- SPLIT: stxt[] / wtxt[]
+	local num = 0  -- number of words
+	local seps = " .,?!;/()+=@&#*"
+	local stxt, wtxt = {},{}
+	local sep,word,chr = "","",""				
+	if (message ~= "") and (message ~= nil) then
+		for i = 1, strlen(message) do
+			chr = strsub(message,i,i)
+			if IsIn(seps,chr) then	-- separator
+				if strlen(word)>0 then
+					wtxt[num] = word
+					num = num+1
+					word = ""
+					sep = ""
+				end
+				sep = sep..chr
+			else					-- WORD
+				if strlen(sep)>0 or i==1 then 
+					if i==1 then num = num+1 end
+					stxt[num] = sep
+					sep = ""
+					word = ""
+				end
+				word = word..chr
+			end
+		end
+		if strlen(sep)>0 then stxt[num] = sep; num=num-1 
+		elseif strlen(word)>0 then wtxt[num] = word; stxt[num+1]="" end
+	end	
+	
+	-- PARSING word-by-word
+	for wrd = 1,num do 
+		seps = strlower(wtxt[wrd])
+		-- UPPERCASE some word 
+		for tcf = 1,table.getn(chatUP) do   if seps==chatUP[tcf] then wtxt[wrd]=strupper(wtxt[wrd]); end end
+		-- only highlight if exactly the same --> CDUNG color
+		for tcf = 1,table.getn(chLocBig) do   if wtxt[wrd] == chLocBig[tcf] then wtxt[wrd] = CDUNG..wtxt[wrd].."|r"; seps=""; end end
+		-- chLocation --> CDUNG color
+		for tcf = 1,table.getn(chLocation) do   if seps == chLocation[tcf] then wtxt[wrd] = CDUNG..wtxt[wrd].."|r";	end end
+		-- chGreen --> CROLE color
+		for tcf = 1,table.getn(chGreen) do   if seps == chGreen[tcf] then wtxt[wrd] = CROLE..wtxt[wrd].."|r"; end end
+		-- chRed --> CLLRED color
+		for tcf = 1,table.getn(chRed) do   if seps == chRed[tcf] then wtxt[wrd] = CLLRED..wtxt[wrd].."|r"; end end
+		-- chBlue --> CWTS color
+		for tcf = 1,table.getn(chBlue) do   if seps == chBlue[tcf] then wtxt[wrd] = CWTS..wtxt[wrd].."|r"; end end
+		-- chLGreen --> CLGREEN color
+		for tcf = 1,table.getn(chLGreen) do   if seps == chLGreen[tcf] then wtxt[wrd] = CLGREEN..wtxt[wrd].."|r"; end end
+	end
+
+	-- Merge everything back together
+	message = ""; for i = 1,num do message = message..stxt[i]..wtxt[i] end message = message..stxt[num+1]		
 	message = string.gsub(message, "%+%-", "\194\177");
 	message = string.gsub(message, "%-%+", "\194\177");
-	return message
+	message = string.gsub(message, ":%(", CLRED..":%(|r");
+  end 
+  return message
 end
+
+
+function IsIn (iitxt, iichr) -- string contains the char?
+	if strlen(iichr)>0 and strlen(iitxt)>0 then	
+		for iif = 1,strlen(iitxt) do 
+			if strsub(iitxt,iif,iif)==strsub(iichr,1,1) then return true end 
+		end
+	end	
+	return false
+end
+
+
+
 
 function CheckIfGAnn() -- My personal announcement... if I'm online on both acc, then only one of them will announce to the guild
 	local gann = false
@@ -157,13 +251,15 @@ function TurtleChangeGuildChat (message)
 		if (a and c and a<3 and b<c) then message = "["..hColor..hName.."|r]"..strsub(message,d+1);
 									 else message = "@"..hColor..hName.."|r"..strsub(message,h); end
 	end
+	message = TCCHighlightStrs(message)
+	--[[
 	for mqff = 1,table.getn(chatUP) do message = string.gsub(message, chatUP[mqff], string.upper(chatUP[mqff])); end
 	for mqff = 1,table.getn(chatDUNG) do message = string.gsub(message, chatDUNG[mqff], CDUNG..chatDUNG[mqff].."|r"); end		
 	for mqff = 1,table.getn(chatGREEN) do message = string.gsub(message, chatGREEN[mqff], CROLE..chatGREEN[mqff].."|r"); end		
 	for mqff = 1,table.getn(chatLGREEN) do message = string.gsub(message, chatLGREEN[mqff], CLLGREEN..chatLGREEN[mqff].."|r"); end		
 	for mqff = 1,table.getn(chatRED) do message = string.gsub(message, chatRED[mqff], CLLRED..chatRED[mqff].."|r"); end
 	message = string.gsub(message, "%+%-", "\194\177");
-	message = string.gsub(message, "%-%+", "\194\177");
+	message = string.gsub(message, "%-%+", "\194\177"); ]]
 	return message
 end
 
@@ -678,6 +774,12 @@ function TurtleChatColors_ChatFrame_OnEvent(event)
 		else this:AddMessage(sysresult); return
 		end
 	elseif (event == "CHAT_MSG_CHANNEL") then --text, playerName, languageName, channelName, playerName2, specialFlags, zoneChannelID, channelIndex, channelBaseName, languageID, lineID, guid, bnSenderID, isMobile, isSubtitle, hideSenderInLetterbox, supressRaidIcons
+		--kiir("ChannelName:  '"..arg9.."'");
+		if arg9=="World" then arg1 = TCCHighlightStrs(arg1)
+		elseif strsub(arg9,1,5)=="Trade"   then arg1 = TCCHighlightStrs(arg1)
+		elseif strsub(arg9,1,7)=="General" then arg1 = TCCHighlightStrs(arg1)
+		elseif strsub(arg9,1,7)=="Looking" then arg1 = TCCHighlightStrs(arg1)
+		end
 		--kiir(arg4.." / "..arg9) -- channelName channelBaseName
 		--[[
 		if sysresult~="" then 
@@ -686,7 +788,7 @@ function TurtleChatColors_ChatFrame_OnEvent(event)
 		end
 		]]
 	elseif (event == "CHAT_MSG_HARDCORE") then --text, playerName, languageName, channelName, playerName2, specialFlags, zoneChannelID, channelIndex, channelBaseName, languageID, lineID, guid, bnSenderID, isMobile, isSubtitle, hideSenderInLetterbox, supressRaidIcons
-		arg1 = TurtleChangeHCChat(arg1)
+		arg1 = TCCHighlightStrs(arg1)
 		--this:AddMessage(arg1); return
 	elseif (event == "CHAT_MSG_GUILD") then --text, playerName, languageName, channelName, playerName2, specialFlags, zoneChannelID, channelIndex, channelBaseName, languageID, lineID, guid, bnSenderID, isMobile, isSubtitle, hideSenderInLetterbox, supressRaidIcons
 		arg1 = TurtleChangeGuildChat(arg1)
