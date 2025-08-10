@@ -85,7 +85,7 @@ CSV=CSV..",spam,spamming,reported,ignore,ignoring,bot,bots,lunatic,warmode,gank,
 local chRed = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chRed, part) end end
 local CLIGHTRED = "|cFFFFA0A0" -- LRed
 
-CSV = "lf,lfg,lfm,lf1,lf2,lf3,lf4,lf1m,lf2m,lf3m,lf4m,lf5m,lfw,eu,na,en,group,que,queue,opening,alliance,selling,vanillawow,port,portal,fp,flightpath,flightpaths,bigwigs,bigwig,trainer,trainers,discord
+CSV = "lf,lfg,lfm,lf1,lf2,lf3,lf4,lf1m,lf2m,lf3m,lf4m,lf5m,lfw,eu,na,en,group,que,queue,opening,alliance,selling,vanillawow,port,portal,fp,flightpath,flightpaths,bigwigs,bigwig,trainer,trainers,discord"
 CSV=CSV..",summon,summons,sum,summ"
 local chBlue = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chBlue, part) end end
 local CLFMBLUE = "|cFF66DDFF" -- Blue
