@@ -8,9 +8,6 @@ local gspecial = false
 local tccGuildBrackets = 1
 local CLORANGE = "|cFFEEDD55"
 local CDYELLOW = "|cFFC9CC00"
-local CDUNG = "|cFFEFFFCF"
-local CWTS = "|cFF66DDFF"
-local CROLE = "|cFFC8F800"
 local CGUILD = "|cFF3CE13F"
 local CYELLOW = "|cFFFFFF00"
 local CGREEN = "|cFF00FF00"
@@ -48,10 +45,13 @@ local CSV = ""
 CSV = "zul gurub=ZulGurub,loch modan=LochModan,crescent grove=CrescentGrove,gilneas city=GilneasCity,scarlet monastery=ScarletMonastery,guild base=GuildBase,guild bank=GuildBank,zul gurub=ZulGurub"
 CSV=CSV..",blackwing lair=BlackwingLair,wailing cavern=WailingCavern,molten core=MoltenCore,dire maul=DireMaul,dm east=DM:east,dm north=DM:north,dm west=DM:west,sunken temple=SunkenTemple"
 CSV=CSV..",zul farrak=Zul'Farrak,zul farak=Zul'Farrak,brd princess=BRD:princess,black morass=BlackMorass,blackfathom deep=BlackfathomDeep,razorfen downs=RazorfenDowns,razorfen kraul=RazorfenKraul"
-CSV=CSV..",ragefire chasm=RagefireChasm,shadowfang keep=ShadowfangKeep,maraudon princess=Maraudon:princess,mara princess=Mara:princess,full run=Full-run,q run=Quest-run,quest run=Quest-run"
-CSV=CSV..",xp farm=XP-farm,xp run=XP-run,exp run=XP-run,elite quest=Elite-quest,aoe run=AoE-run,last spot=last-spot,emp run=Emp-run,emperor run=Emperor-run,jail break=JailBreak,main tank=MainTank"
-CSV=CSV..",turtle wow=TurtleWoW,alterac valley=AlteracValley,warsong gulch=WarsongGulch,need mt=Need:MT,need ot=Need:OT,project epoch=project:Epoch,project ascension=project:Ascension"
+CSV=CSV..",ragefire chasm=RagefireChasm,shadowfang keep=ShadowfangKeep,maraudon princess=Maraudon:princess,mara princess=Mara:princess,full run=Full-run,q run=Quest-run,quest run=Quest-run,arm cath=Cath-Arms"
+CSV=CSV..",xp farm=XP-farm,xp run=XP-run,exp run=XP-run,elite quest=Elite-quest,aoe run=AoE-run,aoe farming=AoE-farming,aoe farm=AoE-farm,last spot=last-spot,emp run=Emp-run,emperor run=Emperor-run,jail break=JailBreak"
+CSV=CSV..",main tank=MainTank,turtle wow=TurtleWoW,alterac valley=AlteracValley,warsong gulch=WarsongGulch,need mt=Need:MT,need ot=Need:OT,project epoch=project:Epoch,project ascension=project:Ascension"
 CSV=CSV..",arcanite transmute=Arcanite-Transmute,pvp=PvP,pve=PvE,wpvp=wPvP,turtle mount=turtle-mount,darkmoon faire=DarkmoonFaire,strat undead=Strat:UD,sm arm=SM:Arm,hateforge quarry=HateforgeQuarry"
+CSV=CSV..",vanilla wow=VanillaWoW,ranged dps=ranged-DPS,melee dps=melee-DPS,dmwest=DM:West,dmeast=DM:East,dmnorth=DM:North,cath/arms=Cath-Arms,arathi basin=ArathiBasin,first aid=FirstAid,war mode=WarMode"
+CSV=CSV..",feral druid=FeralDruid,resto druid=RestoDruid,combat log=CombatLog,arms sm=SM:Arm,booty bay=BootyBay,lava run=lava-run,kara 10=Kara10,flight path=FlightPath,sw gates=SW:gates,aq 40=AQ40"
+CSV=CSV..",princess run=princess-run,maraudon princess run=Maraudon:Princess-run,leveling guild=leveling-Guild,escort quest=escort-quest"
 local cPos,chReplace1,chReplace2 = nil,{},{};  for part in string.gmatch(CSV, "([^,]+)") do cPos=strfind(part,"="); if cPos then table.insert(chReplace1,strsub(part,1,cPos-1)); table.insert(chReplace2,strsub(part,cPos+1)); end end
 
 CSV = "lf,lfm,lfg,lf1m,lf2m,lf3m,lf4m,wtb,wts,wtt,brd,lbrs,ubrs,bwl,zg,zf,dmw,dme,dmn,epl,wpl,stv,sm,hfq,aq,aq20,aq40,mc,dmf"
@@ -60,30 +60,39 @@ local chatUP = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then
 CSV = "ES,BB,BM,FARM,QUEST,ARM,AH";
 local chLocBig   = {};  for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chLocBig, part) end end
 
-CSV = "elites,elite,lochmodan,redridge,wetlands,wetland,gbase,guildbase,gbank,guildbank,dmf,stv,wpl,blackmorass,morass,westfall,arathi,mulgore,hogger,sw,stormwind,ironforge,darnassus,darna,uc,tb"
-CSV=CSV..",deadmines,deathmines,deathmine,deadmine,dm,vc,wailingcaverns,wailingcavern,wc,stockades,stockade,crescentgrove,cg,gnomeregan,gnomer,ragefirechasm,rfc"
-CSV=CSV..",blackfathomdeeps,blackfathomdeep,blackfathom,bfd,razorfendowns,razorfen,rfd,razorfenkraul,rfk,rr,shadowfangkeep,sfk"
-CSV=CSV..",scarletmonastery,sm,graveyard,graveyards,gy,library,lib,cathedral,cath,armory,sm:arms,sm:arm,gilneascity,gilneas,gc,sunkentemple,st,uldaman,ulda,zul'farrak,zulfarrak,zulfarak,zf,maraudon,mara,maraudon:princess,mara:princess"
+CSV = "elites,elite,lochmodan,redridge,wetlands,wetland,gbase,guildbase,gbank,guildbank,dmf,stv,wpl,blackmorass,morass,westfall,arathi,mulgore,hogger"
+CSV=CSV..",sw,stormwind,ironforge,darnassus,darna,darn,undercity,uc,thunderbluff,tb,orgrimmar,orgri,org,ogri,sw:gates"
+CSV=CSV..",silithus,duskwood,westfall,bootybay,ratchet,everlook,gadgetzan,desolace,elwynn,ashenvale,darkshore"
+CSV=CSV..",deadmines,deathmines,deathmine,deadmine,dm,vc,wailingcaverns,wailingcavern,wc,stockades,stockade,crescentgrove,cg,gnomeregan,gnomer,ragefirechasm,rfc,sm:armory"
+CSV=CSV..",blackfathomdeeps,blackfathomdeep,blackfathom,bfd,razorfendowns,razorfen,rfd,razorfenkraul,rfk,rr,shadowfangkeep,sfk,swv,stranglethorn,princess-runs,maraudon:princess-runs"
+CSV=CSV..",scarletmonastery,sm,graveyard,graveyards,gy,library,lib,cathedral,cath,armory,cath-arms,sm:arms,sm:arm,gilneascity,gilneas,gc,sunkentemple,st,uldaman,ulda,zul'farrak,zulfarrak,zulfarak,zf,maraudon,mara,maraudon:princess,mara:princess"
 CSV=CSV..",hfq,hateforgequarry,hateforge,scholomance,scholo,stratholme,strath,strat,ud,strat:ud,live,brm,brd,arena,jed,brd:princess,lbrs,ubrs,rend,diremaul,dm,dme,dm:e,dmn,dm:n,dmw,dm:w,dm:,dm:east,dm:north,dm:west,tribute,trib"
-CSV=CSV..",karazhan,kara,kara10,kara20,kara40,zulgurub,zg,onyxia,ony"
+CSV=CSV..",karazhan,kara,kara10,kara20,kara40,zulgurub,zg,onyxia,ony,nefarian,nefa,hyjal"
 CSV=CSV..",moltencore,mc,blackwinglair,bwl,ahn'qiraj,ahnqiraj,aq,aq20,aq40,naxxramas,naxramas,naxx,nax"
 local chLocation = {};  for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chLocation, part) end end
+local CLOCATION = "|cFFEAFFA3" -- LGreen
 
-CSV = "tank,dps,mt,ot,offtank,maintank,1heal,1tank,1dps,2dps,3dps,escort,healer,healers,heal,healz,heals,fullrun,full-run,last-spot,questrun,quest-run,xp-farm,xp-run,quest-runs,xp-runs"
-CSV=CSV..",elite-quest,elite-quests,aoe-runs,aoe-run,aoe,emp-run,emperor,summon,summons,tents,lotus,eels,petri,middleman,middle-man,7d,emp,xp,jailbreak,reputation,repu,gm,gm's,need:all"
-CSV=CSV..",congrats,gratz,grats,grat,enchanter,ench,tailor,alch,alchemist,crafter,questline,lockboxes,lockbox,need:mt,need:ot,transmute,fountain,turtle-mount,arcanite-transmute,jc,jewelcrafter"
-CSV=CSV..",seller,pug"
+CSV = "tank,tanks,dps,mt,ot,offtank,maintank,1heal,1tank,1dps,2dps,3dps,escort,healer,healers,heal,healz,heals,fullrun,full-run,last-spot,questrun,quest-run,xp-farm,xp-run,quest-runs,xp-runs"
+CSV=CSV..",elite-quest,elite-quests,aoe-runs,aoe-run,aoe,aoe-farm,aoe-farming,emp-run,emperor,lotus,eels,petri,middleman,middle-man,7d,emp,xp,jailbreak,reputation,repu,gm,gm's,need:all,caster,congrats,gratz,grats,grat"
+CSV=CSV..",enchanter,ench,tailor,alch,alchemist,crafter,questline,lockboxes,lockbox,need:mt,need:ot,transmute,fountain,turtle-mount,arcanite-transmute,jc,jewelcrafter,escort-quest"
+CSV=CSV..",seller,pug,ranged-dps,melee-dps,turtlewow"
 local chGreen = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chGreen, part) end end
+local CROLEGREEN = "|cFFC0F001" -- YellowyGreen
 
-CSV = "lava,hc,hardcore,hardcores,inferno,immortal,rip,f,wtf,pvp,wpvp,showtooltip,nohelf,:nohelf,afk,dnd,oom,<AFK>,mailbox,pm,pst,w,retail,dkp,dkps,addons,addon"
-CSV=CSV..",bg,battleground,battlegrounds,alteracvalley,av,wsg,ab,warsonggulch,warsong,ascension,epoch,twink,twinks,battlemasters,battlemaster,horde"
+CSV = "lava,lava-run,lava-runs,hc,hcs,hardcore,hardcores,inferno,immortal,rip,f,wtf,pvp,wpvp,showtooltip,nohelf,:nohelf,afk,dnd,oom,<AFK>,mailbox,pm,pst,w,retail,dkp,dkps,addons,addon,cooking,firstaid"
+CSV=CSV..",bg,battleground,battlegrounds,alteracvalley,av,wsg,ab,arathibasin,warsonggulch,warsong,ascension,epoch,twink,twinks,battlemasters,battlemaster,horde,combatlog,stitches,oops,nvm"
+CSV=CSV..",spam,spamming,reported,ignore,ignoring,bot,bots,lunatic,warmode,gank,ganker,gankers,ganking,lag,lags,lagging,disconnect,disconnecting,disconnects,cod,nerfed,bugged"
 local chRed = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chRed, part) end end
+local CLIGHTRED = "|cFFFFA0A0" -- LRed
 
-CSV = "lf,lfg,lfm,lf1,lf2,lf3,lf4,lf1m,lf2m,lf3m,lf4m,lf5m,lfw,eu,na,group,que,queue,attune,attunement,attu,opening,alliance,selling"
+CSV = "lf,lfg,lfm,lf1,lf2,lf3,lf4,lf1m,lf2m,lf3m,lf4m,lf5m,lfw,eu,na,en,group,que,queue,opening,alliance,selling,vanillawow,port,portal,fp,flightpath,flightpaths,bigwigs,bigwig,trainer,trainers,discord
+CSV=CSV..",summon,summons,sum,summ"
 local chBlue = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chBlue, part) end end
+local CLFMBLUE = "|cFF66DDFF" -- Blue
 
-CSV = "wts,wtb,wtt,twow,guild,tent,tents,pve"
+CSV = "wts,wtb,wtt,twow,guild,leveling-guild,tent,tents,pve,macro,macros,google,wiki,attune,attunement,attu,SR,ambershire,nordanaar,vendor,vendors,bijou,bijous,raiding,raiders,gardening,rmt"
 local chLGreen = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chLGreen, part) end end
+local CWTSGREEN = "|cFF80FF80" -- Green
 
 
 
@@ -104,7 +113,7 @@ function CharChain(scc,scn)	local sctxt=""; if scc and scn then for i=1,scn do s
 function TCCHighlightStrs (message)
   if (message ~= "") and (message ~= nil) then
 	if string.upper(strsub(message,-2))==":(" then message=strsub(message,1,-2)..CLRED..":("
-	elseif string.upper(message)=="GZ" or string.upper(message)=="GZ!" then message=CROLE..message
+	elseif string.upper(message)=="GZ" or string.upper(message)=="GZ!" then message=CWTSGREEN..message
 	end
 	
 	-- Replaces in original string, before word-splitting
@@ -154,19 +163,31 @@ function TCCHighlightStrs (message)
 		seps = strlower(wtxt[wrd])
 		-- UPPERCASE some word 
 		for tcf = 1,table.getn(chatUP) do   if seps==chatUP[tcf] then wtxt[wrd]=strupper(wtxt[wrd]); end end
-		-- only highlight if exactly the same --> CDUNG color
-		for tcf = 1,table.getn(chLocBig) do   if wtxt[wrd] == chLocBig[tcf] then wtxt[wrd] = CDUNG..wtxt[wrd].."|r"; seps=""; end end
-		-- chLocation --> CDUNG color
-		for tcf = 1,table.getn(chLocation) do   if seps == chLocation[tcf] then wtxt[wrd] = CDUNG..wtxt[wrd].."|r";	end end
-		-- chGreen --> CROLE color
-		for tcf = 1,table.getn(chGreen) do   if seps == chGreen[tcf] then wtxt[wrd] = CROLE..wtxt[wrd].."|r"; end end
-		-- chRed --> CLLRED color
-		for tcf = 1,table.getn(chRed) do   if seps == chRed[tcf] then wtxt[wrd] = CLLRED..wtxt[wrd].."|r"; end end
-		-- chBlue --> CWTS color
-		for tcf = 1,table.getn(chBlue) do   if seps == chBlue[tcf] then wtxt[wrd] = CWTS..wtxt[wrd].."|r"; end end
-		-- chLGreen --> CLGREEN color
-		for tcf = 1,table.getn(chLGreen) do   if seps == chLGreen[tcf] then wtxt[wrd] = CLGREEN..wtxt[wrd].."|r"; end end
+		-- only highlight if exactly the same --> CLOCATION color
+		for tcf = 1,table.getn(chLocBig) do   if wtxt[wrd] == chLocBig[tcf] then wtxt[wrd] = CLOCATION..wtxt[wrd].."|r"; seps=""; end end
+		-- chLocation --> CLOCATION color
+		for tcf = 1,table.getn(chLocation) do   if seps == chLocation[tcf] then wtxt[wrd] = CLOCATION..wtxt[wrd].."|r";	end end
+		-- chGreen --> CROLEGREEN color
+		for tcf = 1,table.getn(chGreen) do   if seps == chGreen[tcf] then wtxt[wrd] = CROLEGREEN..wtxt[wrd].."|r"; end end
+		-- chRed --> CLIGHTRED color
+		for tcf = 1,table.getn(chRed) do   if seps == chRed[tcf] then wtxt[wrd] = CLIGHTRED..wtxt[wrd].."|r"; end end
+		-- chBlue --> CLFMBLUE color
+		for tcf = 1,table.getn(chBlue) do   if seps == chBlue[tcf] then wtxt[wrd] = CLFMBLUE..wtxt[wrd].."|r"; end end
+		-- chLGreen --> CWTSGREEN color
+		for tcf = 1,table.getn(chLGreen) do   if seps == chLGreen[tcf] then wtxt[wrd] = CWTSGREEN..wtxt[wrd].."|r"; end end
+		-- Classes
+		if seps=="mage" or seps=="mages" or seps=="frostmage" or seps=="frostmages" then wtxt[wrd] = "|cff69ccf0"..wtxt[wrd].."|r"; end
+		if seps=="warlock" or seps=="warlocks" then wtxt[wrd] = "|cff9482c9"..wtxt[wrd].."|r"; end
+		if seps=="priest" or seps=="priests" or seps=="holypriests" then wtxt[wrd] = "|cffffffff"..wtxt[wrd].."|r"; end
+		if seps=="druid" or seps=="druids" or seps=="restodruid" or seps=="feraldruid" or seps=="boomkin" or seps=="boomkins" or seps=="moonkins" or seps=="moonkin" then wtxt[wrd] = "|cffff7d0a"..wtxt[wrd].."|r"; end
+		if seps=="shaman" or seps=="shamans" then wtxt[wrd] = "|cff0070de"..wtxt[wrd].."|r"; end
+		if seps=="paladin" or seps=="paladins" or seps=="retri" or seps=="retpal" or seps=="retpala" then wtxt[wrd] = "|cfff58cba"..wtxt[wrd].."|r"; end
+		if seps=="rogue" or seps=="rogues" or seps=="rouge" then wtxt[wrd] = "|cfffff569"..wtxt[wrd].."|r"; end
+		if seps=="hunter" or seps=="hunters" or seps=="huntard" or seps=="hunt" then wtxt[wrd] = "|cffabd473"..wtxt[wrd].."|r"; end
+		if seps=="warrior" or seps=="warriors" then wtxt[wrd] = "|cffc79c6e"..wtxt[wrd].."|r"; end
 	end
+	if wtxt[1] then
+		if strsub(strlower(wtxt[1]),1,3)=="wts" or strsub(strlower(wtxt[1]),1,3)=="wtb" then wtxt[1] = CWTSGREEN..strupper(strsub(wtxt[1],1,3)).."|r"..strsub(wtxt[1],4); end end
 
 	-- Merge everything back together
 	message = ""; for i = 1,num do message = message..stxt[i]..wtxt[i] end message = message..stxt[num+1]		
@@ -252,14 +273,6 @@ function TurtleChangeGuildChat (message)
 									 else message = "@"..hColor..hName.."|r"..strsub(message,h); end
 	end
 	message = TCCHighlightStrs(message)
-	--[[
-	for mqff = 1,table.getn(chatUP) do message = string.gsub(message, chatUP[mqff], string.upper(chatUP[mqff])); end
-	for mqff = 1,table.getn(chatDUNG) do message = string.gsub(message, chatDUNG[mqff], CDUNG..chatDUNG[mqff].."|r"); end		
-	for mqff = 1,table.getn(chatGREEN) do message = string.gsub(message, chatGREEN[mqff], CROLE..chatGREEN[mqff].."|r"); end		
-	for mqff = 1,table.getn(chatLGREEN) do message = string.gsub(message, chatLGREEN[mqff], CLLGREEN..chatLGREEN[mqff].."|r"); end		
-	for mqff = 1,table.getn(chatRED) do message = string.gsub(message, chatRED[mqff], CLLRED..chatRED[mqff].."|r"); end
-	message = string.gsub(message, "%+%-", "\194\177");
-	message = string.gsub(message, "%-%+", "\194\177"); ]]
 	return message
 end
 

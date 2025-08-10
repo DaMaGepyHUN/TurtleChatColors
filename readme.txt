@@ -10,13 +10,16 @@ What it does:
   silver-colored or green in system messages
 - Death/LevelUp messages are compacted into one row, plus the higher the level
   the more asterisks are shown to show the significance (a * for every 10 lvl)
-- Slightly highlights certain keywords in chat: WTS LF2M, key locations like
+- Highlights certain keywords in chat: WTS LF2M, key locations like
   Stockades, Dire Maul, Deadmines, ubrs, GC, or words like Healer, 2dps, etc.
 - My auto-response in guildchat is a secret switch so the addon won't spam it
   automatcally for others. I made it so people without the addon can still
   see if a guildie died, or if .hcmessages are set too high to show
 - /gs <text> - search guild for a name (if online on an alt)
   It also searches notes so can check ppl for profs, for example: /gs alch
+- it Highlights in Trade, General and World chat. I havent added any GUI or 
+  command to set the channels or to change the colors, if you don't like the
+  appearance then just disable/delete the addon.
 
 I've added some other useful function which ppl can use in macros:
 

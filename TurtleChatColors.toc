@@ -2,5 +2,5 @@
 ## Title: Turtle ChatColors |cFF00FF00-Gepy-
 ## Notes: Improved |cFF80FF80guildchat|r and |cFFFFFF00system|r messages|cFFC0C0C0: reformatted, colored, extra infos, keyword highlights |cFF00FF00(by DaMaGepy)
 ## Author: DaMaGepy
-## Version: 1.5
+## Version: 1.6
 TurtleChatColors.xml
