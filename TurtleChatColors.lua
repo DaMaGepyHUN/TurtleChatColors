@@ -42,7 +42,7 @@ local CSV = ""
 
 
 
-CSV = "zul gurub=ZulGurub,loch modan=LochModan,crescent grove=CrescentGrove,gilneas city=GilneasCity,scarlet monastery=ScarletMonastery,guild base=GuildBase,guild bank=GuildBank,zul gurub=ZulGurub"
+CSV = "zulgurub=Zul'Gurub,loch modan=LochModan,crescent grove=CrescentGrove,gilneas city=GilneasCity,scarlet monastery=ScarletMonastery,guild base=GuildBase,guild bank=GuildBank,zul gurub=Zul'Gurub"
 CSV=CSV..",blackwing lair=BlackwingLair,wailing cavern=WailingCavern,molten core=MoltenCore,dire maul=DireMaul,dm east=DM:east,dm north=DM:north,dm west=DM:west,sunken temple=SunkenTemple"
 CSV=CSV..",zul farrak=Zul'Farrak,zul farak=Zul'Farrak,brd princess=BRD:princess,black morass=BlackMorass,blackfathom deep=BlackfathomDeep,razorfen downs=RazorfenDowns,razorfen kraul=RazorfenKraul"
 CSV=CSV..",ragefire chasm=RagefireChasm,shadowfang keep=ShadowfangKeep,maraudon princess=Maraudon:princess,mara princess=Mara:princess,full run=Full-run,q run=Quest-run,quest run=Quest-run,arm cath=Cath-Arms"
@@ -51,46 +51,48 @@ CSV=CSV..",main tank=MainTank,turtle wow=TurtleWoW,alterac valley=AlteracValley,
 CSV=CSV..",arcanite transmute=Arcanite-Transmute,pvp=PvP,pve=PvE,wpvp=wPvP,turtle mount=turtle-mount,darkmoon faire=DarkmoonFaire,strat undead=Strat:UD,sm arm=SM:Arm,hateforge quarry=HateforgeQuarry"
 CSV=CSV..",vanilla wow=VanillaWoW,ranged dps=ranged-DPS,melee dps=melee-DPS,dmwest=DM:West,dmeast=DM:East,dmnorth=DM:North,cath/arms=Cath-Arms,arathi basin=ArathiBasin,first aid=FirstAid,war mode=WarMode"
 CSV=CSV..",feral druid=FeralDruid,resto druid=RestoDruid,combat log=CombatLog,arms sm=SM:Arm,booty bay=BootyBay,lava run=lava-run,kara 10=Kara10,flight path=FlightPath,sw gates=SW:gates,aq 40=AQ40"
-CSV=CSV..",princess run=princess-run,maraudon princess run=Maraudon:Princess-run,leveling guild=leveling-Guild,escort quest=escort-quest"
+CSV=CSV..",princess run=princess-run,maraudon princess run=Maraudon:Princess-run,leveling guild=leveling-Guild,escort quest=escort-quest,guild leader=GuildLeader,guild invite=Guild-invite"
+CSV=CSV..",emerald sanctum=EmeraldSanctum,guild charter=Guild-charter,raid times=raid-times"
 local cPos,chReplace1,chReplace2 = nil,{},{};  for part in string.gmatch(CSV, "([^,]+)") do cPos=strfind(part,"="); if cPos then table.insert(chReplace1,strsub(part,1,cPos-1)); table.insert(chReplace2,strsub(part,cPos+1)); end end
 
-CSV = "lf,lfm,lfg,lf1m,lf2m,lf3m,lf4m,wtb,wts,wtt,brd,lbrs,ubrs,bwl,zg,zf,dmw,dme,dmn,epl,wpl,stv,sm,hfq,aq,aq20,aq40,mc,dmf"
+CSV = "lf,lfm,lfg,lf1m,lf2m,lf3m,lf4m,wtb,wts,wtt,brd,lbrs,ubrs,bwl,zg,zf,dmw,dme,dmn,epl,wpl,stv,sm,hfq,aq,aq20,aq40,mc,dmf,dps"
 local chatUP = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chatUP, part) end end-- convert to uppercase before all
 
-CSV = "ES,BB,BM,FARM,QUEST,ARM,AH";
+CSV = "ES,BB,BM,FARM,QUEST,ARM,AH,IF";
 local chLocBig   = {};  for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chLocBig, part) end end
 
 CSV = "elites,elite,lochmodan,redridge,wetlands,wetland,gbase,guildbase,gbank,guildbank,dmf,stv,wpl,blackmorass,morass,westfall,arathi,mulgore,hogger"
 CSV=CSV..",sw,stormwind,ironforge,darnassus,darna,darn,undercity,uc,thunderbluff,tb,orgrimmar,orgri,org,ogri,sw:gates"
-CSV=CSV..",silithus,duskwood,westfall,bootybay,ratchet,everlook,gadgetzan,desolace,elwynn,ashenvale,darkshore"
+CSV=CSV..",silithus,duskwood,westfall,bootybay,ratchet,everlook,gadgetzan,desolace,elwynn,ashenvale,darkshore,darkshire,lakeshire,tanaris,un'goro"
 CSV=CSV..",deadmines,deathmines,deathmine,deadmine,dm,vc,wailingcaverns,wailingcavern,wc,stockades,stockade,crescentgrove,cg,gnomeregan,gnomer,ragefirechasm,rfc,sm:armory"
-CSV=CSV..",blackfathomdeeps,blackfathomdeep,blackfathom,bfd,razorfendowns,razorfen,rfd,razorfenkraul,rfk,rr,shadowfangkeep,sfk,swv,stranglethorn,princess-runs,maraudon:princess-runs"
+CSV=CSV..",blackfathomdeeps,blackfathomdeep,blackfathom,bfd,razorfendowns,razorfen,rfd,razorfenkraul,rfk,rr,shadowfangkeep,sfk,swv,stranglethorn,princess-runs,maraudon:princess-runs,atal'hakkar,atal'hakar"
 CSV=CSV..",scarletmonastery,sm,graveyard,graveyards,gy,library,lib,cathedral,cath,armory,cath-arms,sm:arms,sm:arm,gilneascity,gilneas,gc,sunkentemple,st,uldaman,ulda,zul'farrak,zulfarrak,zulfarak,zf,maraudon,mara,maraudon:princess,mara:princess"
 CSV=CSV..",hfq,hateforgequarry,hateforge,scholomance,scholo,stratholme,strath,strat,ud,strat:ud,live,brm,brd,arena,jed,brd:princess,lbrs,ubrs,rend,diremaul,dm,dme,dm:e,dmn,dm:n,dmw,dm:w,dm:,dm:east,dm:north,dm:west,tribute,trib"
-CSV=CSV..",karazhan,kara,kara10,kara20,kara40,zulgurub,zg,onyxia,ony,nefarian,nefa,hyjal"
+CSV=CSV..",karazhan,kara,kara10,kara20,kara40,zulgurub,zul'gurub,zg,onyxia,ony,nefarian,nefa,hyjal,emeraldsanctum"
 CSV=CSV..",moltencore,mc,blackwinglair,bwl,ahn'qiraj,ahnqiraj,aq,aq20,aq40,naxxramas,naxramas,naxx,nax"
 local chLocation = {};  for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chLocation, part) end end
 local CLOCATION = "|cFFEAFFA3" -- LGreen
 
-CSV = "tank,tanks,dps,mt,ot,offtank,maintank,1heal,1tank,1dps,2dps,3dps,escort,healer,healers,heal,healz,heals,fullrun,full-run,last-spot,questrun,quest-run,xp-farm,xp-run,quest-runs,xp-runs"
+CSV = "tank,tanks,dps,mt,ot,offtank,maintank,1heal,1tank,1dps,2dps,3dps,escort,healer,healers,heal,healz,heals,fullrun,full-run,last-spot,questrun,quest-run,xp-farm,xp-run,quest-runs,xp-runs,wanted:"
 CSV=CSV..",elite-quest,elite-quests,aoe-runs,aoe-run,aoe,aoe-farm,aoe-farming,emp-run,emperor,lotus,eels,petri,middleman,middle-man,7d,emp,xp,jailbreak,reputation,repu,gm,gm's,need:all,caster,congrats,gratz,grats,grat"
-CSV=CSV..",enchanter,ench,tailor,alch,alchemist,crafter,questline,lockboxes,lockbox,need:mt,need:ot,transmute,fountain,turtle-mount,arcanite-transmute,jc,jewelcrafter,escort-quest"
-CSV=CSV..",seller,pug,ranged-dps,melee-dps,turtlewow"
+CSV=CSV..",enchanter,enchanting,enchants,ench,tailor,alch,alchemist,crafter,questline,lockboxes,lockbox,need:mt,need:ot,transmute,fountain,turtle-mount,arcanite-transmute,jc,jewelcrafter,escort-quest,engineer,leatherworker,lw"
+CSV=CSV..",seller,pug,ranged-dps,melee-dps"
 local chGreen = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chGreen, part) end end
 local CROLEGREEN = "|cFFC0F001" -- YellowyGreen
 
 CSV = "lava,lava-run,lava-runs,hc,hcs,hardcore,hardcores,inferno,immortal,rip,f,wtf,pvp,wpvp,showtooltip,nohelf,:nohelf,afk,dnd,oom,<AFK>,mailbox,pm,pst,w,retail,dkp,dkps,addons,addon,cooking,firstaid"
-CSV=CSV..",bg,battleground,battlegrounds,alteracvalley,av,wsg,ab,arathibasin,warsonggulch,warsong,ascension,epoch,twink,twinks,battlemasters,battlemaster,horde,combatlog,stitches,oops,nvm"
+CSV=CSV..",bg,battleground,battlegrounds,alteracvalley,av,wsg,ab,arathibasin,warsonggulch,warsong,twink,twinks,battlemasters,battlemaster,horde,combatlog,stitches,oops,nvm"
 CSV=CSV..",spam,spamming,reported,ignore,ignoring,bot,bots,lunatic,warmode,gank,ganker,gankers,ganking,lag,lags,lagging,disconnect,disconnecting,disconnects,cod,nerfed,bugged"
 local chRed = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chRed, part) end end
-local CLIGHTRED = "|cFFFFA0A0" -- LRed
+local CLIGHTRED = "|cFFFF9999" -- LRed
 
-CSV = "lf,lfg,lfm,lf1,lf2,lf3,lf4,lf1m,lf2m,lf3m,lf4m,lf5m,lfw,eu,na,en,group,que,queue,opening,alliance,selling,vanillawow,port,portal,fp,flightpath,flightpaths,bigwigs,bigwig,trainer,trainers,discord"
-CSV=CSV..",summon,summons,sum,summ"
+CSV = "lf,lfg,lfm,lf1,lf2,lf3,lf4,lf1m,lf2m,lf3m,lf4m,lf5m,lfw,eu,na,en,group,que,queue,opening,alliance,selling,vanillawow,port,portal,fp,flightpath,flightpaths,bigwigs,bigwig,trainer,trainers,discord,ascension,epoch"
+CSV=CSV..",summon,summons,sum,summ,summoning,recruiting"
 local chBlue = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chBlue, part) end end
 local CLFMBLUE = "|cFF66DDFF" -- Blue
 
-CSV = "wts,wtb,wtt,twow,guild,leveling-guild,tent,tents,pve,macro,macros,google,wiki,attune,attunement,attu,SR,ambershire,nordanaar,vendor,vendors,bijou,bijous,raiding,raiders,gardening,rmt"
+CSV = "wts,wtb,wtt,twow,guild,guildleader,leveling-guild,tent,tents,pve,macro,macros,google,wiki,attune,attunement,attu,SR,ambershire,nordanaar,vendor,vendors,bijou,bijous,raiding,raiders,gardening,rmt,turtlewow"
+CSV=CSV..",guild-charter,raid-times"
 local chLGreen = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chLGreen, part) end end
 local CWTSGREEN = "|cFF80FF80" -- Green
 
@@ -194,6 +196,7 @@ function TCCHighlightStrs (message)
 	message = string.gsub(message, "%+%-", "\194\177");
 	message = string.gsub(message, "%-%+", "\194\177");
 	message = string.gsub(message, ":%(", CLRED..":%(|r");
+	message = string.gsub(message, "<AFK>", CLRED.."<AFK>|r");
   end 
   return message
 end
