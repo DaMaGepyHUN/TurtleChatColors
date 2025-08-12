@@ -52,49 +52,49 @@ CSV=CSV..",arcanite transmute=Arcanite-Transmute,pvp=PvP,pve=PvE,wpvp=wPvP,turtl
 CSV=CSV..",vanilla wow=VanillaWoW,ranged dps=ranged-DPS,melee dps=melee-DPS,dmwest=DM:West,dmeast=DM:East,dmnorth=DM:North,cath/arms=Cath-Arms,arathi basin=ArathiBasin,first aid=FirstAid,war mode=WarMode"
 CSV=CSV..",feral druid=FeralDruid,resto druid=RestoDruid,combat log=CombatLog,arms sm=SM:Arm,booty bay=BootyBay,lava run=lava-run,kara 10=Kara10,flight path=FlightPath,sw gates=SW:gates,aq 40=AQ40"
 CSV=CSV..",princess run=princess-run,maraudon princess run=Maraudon:Princess-run,leveling guild=leveling-Guild,escort quest=escort-quest,guild leader=GuildLeader,guild invite=Guild-invite"
-CSV=CSV..",emerald sanctum=EmeraldSanctum,guild charter=Guild-charter,raid times=raid-times"
+CSV=CSV..",emerald sanctum=EmeraldSanctum,guild charter=Guild-charter,raid times=raid-times,honorable kill=HonorableKill,burning crusade=BurningCrusade"
 local cPos,chReplace1,chReplace2 = nil,{},{};  for part in string.gmatch(CSV, "([^,]+)") do cPos=strfind(part,"="); if cPos then table.insert(chReplace1,strsub(part,1,cPos-1)); table.insert(chReplace2,strsub(part,cPos+1)); end end
 
-CSV = "lf,lfm,lfg,lf1m,lf2m,lf3m,lf4m,wtb,wts,wtt,brd,lbrs,ubrs,bwl,zg,zf,dmw,dme,dmn,epl,wpl,stv,sm,hfq,aq,aq20,aq40,mc,dmf,dps"
+CSV = "lf,lfm,lfg,lf1m,lf2m,lf3m,lf4m,wtb,buying,wts,selling,wtt,brd,lbrs,ubrs,bwl,zg,zf,dmw,dme,dmn,epl,wpl,stv,sm,hfq,aq,aq20,aq40,mc,dmf,dps"
 local chatUP = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chatUP, part) end end-- convert to uppercase before all
 
 CSV = "ES,BB,BM,FARM,QUEST,ARM,AH,IF";
 local chLocBig   = {};  for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chLocBig, part) end end
 
 CSV = "elites,elite,lochmodan,redridge,wetlands,wetland,gbase,guildbase,gbank,guildbank,dmf,stv,wpl,blackmorass,morass,westfall,arathi,mulgore,hogger"
-CSV=CSV..",sw,stormwind,ironforge,darnassus,darna,darn,undercity,uc,thunderbluff,tb,orgrimmar,orgri,org,ogri,sw:gates"
+CSV=CSV..",sw,stormwind,ironforge,darnassus,darna,darn,undercity,uc,thunderbluff,tb,orgrimmar,orgri,org,ogri,sw:gates,goldshire"
 CSV=CSV..",silithus,duskwood,westfall,bootybay,ratchet,everlook,gadgetzan,desolace,elwynn,ashenvale,darkshore,darkshire,lakeshire,tanaris,un'goro"
 CSV=CSV..",deadmines,deathmines,deathmine,deadmine,dm,vc,wailingcaverns,wailingcavern,wc,stockades,stockade,crescentgrove,cg,gnomeregan,gnomer,ragefirechasm,rfc,sm:armory"
 CSV=CSV..",blackfathomdeeps,blackfathomdeep,blackfathom,bfd,razorfendowns,razorfen,rfd,razorfenkraul,rfk,rr,shadowfangkeep,sfk,swv,stranglethorn,princess-runs,maraudon:princess-runs,atal'hakkar,atal'hakar"
 CSV=CSV..",scarletmonastery,sm,graveyard,graveyards,gy,library,lib,cathedral,cath,armory,cath-arms,sm:arms,sm:arm,gilneascity,gilneas,gc,sunkentemple,st,uldaman,ulda,zul'farrak,zulfarrak,zulfarak,zf,maraudon,mara,maraudon:princess,mara:princess"
-CSV=CSV..",hfq,hateforgequarry,hateforge,scholomance,scholo,stratholme,strath,strat,ud,strat:ud,live,brm,brd,arena,jed,brd:princess,lbrs,ubrs,rend,diremaul,dm,dme,dm:e,dmn,dm:n,dmw,dm:w,dm:,dm:east,dm:north,dm:west,tribute,trib"
+CSV=CSV..",hfq,hateforgequarry,hateforge,scholomance,scholo,stratholme,strath,strat,ud,strat:ud,live,brm,brd,arena,brd:princess,lbrs,ubrs,rend,diremaul,dm,dme,dm:e,dmn,dm:n,dmw,dm:w,dm:,dm:east,dm:north,dm:west,tribute,trib,direm"
 CSV=CSV..",karazhan,kara,kara10,kara20,kara40,zulgurub,zul'gurub,zg,onyxia,ony,nefarian,nefa,hyjal,emeraldsanctum"
 CSV=CSV..",moltencore,mc,blackwinglair,bwl,ahn'qiraj,ahnqiraj,aq,aq20,aq40,naxxramas,naxramas,naxx,nax"
 local chLocation = {};  for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chLocation, part) end end
-local CLOCATION = "|cFFEAFFA3" -- LGreen
+local CLOCATION = "|cFFEEFFAA" -- LGreen
 
 CSV = "tank,tanks,dps,mt,ot,offtank,maintank,1heal,1tank,1dps,2dps,3dps,escort,healer,healers,heal,healz,heals,fullrun,full-run,last-spot,questrun,quest-run,xp-farm,xp-run,quest-runs,xp-runs,wanted:"
-CSV=CSV..",elite-quest,elite-quests,aoe-runs,aoe-run,aoe,aoe-farm,aoe-farming,emp-run,emperor,lotus,eels,petri,middleman,middle-man,7d,emp,xp,jailbreak,reputation,repu,gm,gm's,need:all,caster,congrats,gratz,grats,grat"
-CSV=CSV..",enchanter,enchanting,enchants,ench,tailor,alch,alchemist,crafter,questline,lockboxes,lockbox,need:mt,need:ot,transmute,fountain,turtle-mount,arcanite-transmute,jc,jewelcrafter,escort-quest,engineer,leatherworker,lw"
+CSV=CSV..",elite-quest,elite-quests,aoe-runs,aoe-run,aoe,aoe-farm,aoe-farming,emp-run,emperor,lotus,eels,petri,middleman,middle-man,7d,emp,xp,experience,jailbreak,reputation,repu,gm,gm's,need:all,caster,congrats,gratz,grats,grat"
+CSV=CSV..",enchanter,enchanting,enchants,ench,tailor,alch,alchemist,crafter,questline,lockboxes,lockbox,need:mt,need:ot,transmute,fountain,turtle-mount,arcanite-transmute,jc,jewelcrafter,jcer,escort-quest,engineer,engi,leatherworker,lw"
 CSV=CSV..",seller,pug,ranged-dps,melee-dps"
 local chGreen = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chGreen, part) end end
-local CROLEGREEN = "|cFFC0F001" -- YellowyGreen
+local CROLEGREEN = "|cFFBBEE00" -- YellowyGreen
 
 CSV = "lava,lava-run,lava-runs,hc,hcs,hardcore,hardcores,inferno,immortal,rip,f,wtf,pvp,wpvp,showtooltip,nohelf,:nohelf,afk,dnd,oom,<AFK>,mailbox,pm,pst,w,retail,dkp,dkps,addons,addon,cooking,firstaid"
-CSV=CSV..",bg,battleground,battlegrounds,alteracvalley,av,wsg,ab,arathibasin,warsonggulch,warsong,twink,twinks,battlemasters,battlemaster,horde,combatlog,stitches,oops,nvm"
+CSV=CSV..",bg,battleground,battlegrounds,alteracvalley,av,wsg,ab,arathibasin,warsonggulch,warsong,twink,twinks,battlemasters,battlemaster,horde,combatlog,stitches,oops,nvm,hk,honorablekill,rppvp"
 CSV=CSV..",spam,spamming,reported,ignore,ignoring,bot,bots,lunatic,warmode,gank,ganker,gankers,ganking,lag,lags,lagging,disconnect,disconnecting,disconnects,cod,nerfed,bugged"
 local chRed = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chRed, part) end end
 local CLIGHTRED = "|cFFFF9999" -- LRed
 
-CSV = "lf,lfg,lfm,lf1,lf2,lf3,lf4,lf1m,lf2m,lf3m,lf4m,lf5m,lfw,eu,na,en,group,que,queue,opening,alliance,selling,vanillawow,port,portal,fp,flightpath,flightpaths,bigwigs,bigwig,trainer,trainers,discord,ascension,epoch"
-CSV=CSV..",summon,summons,sum,summ,summoning,recruiting"
+CSV = "lf,lfg,lfm,lf1,lf2,lf3,lf4,lf1m,lf2m,lf3m,lf4m,lf5m,lf6m,lf7m,lf8m,lf9m,lfw,eu,na,en,group,que,queue,opening,alliance,selling,vanillawow,port,portal,bigwigs,bigwig,trainer,trainers,discord,ascension,epoch"
+CSV=CSV..",summon,summons,sum,summ,summoning,recruiting,attune,attunement,attu,jed"
 local chBlue = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chBlue, part) end end
 local CLFMBLUE = "|cFF66DDFF" -- Blue
 
-CSV = "wts,wtb,wtt,twow,guild,guildleader,leveling-guild,tent,tents,pve,macro,macros,google,wiki,attune,attunement,attu,SR,ambershire,nordanaar,vendor,vendors,bijou,bijous,raiding,raiders,gardening,rmt,turtlewow"
-CSV=CSV..",guild-charter,raid-times"
+CSV = "wts,wtb,wtt,turtlewow,twow,guild,guildleader,leveling-guild,tent,tents,pve,macro,macros,google,wiki,SR,ambershire,nordanaar,vendor,vendors,bijou,bijous,raiding,raiders,gardening,rmt"
+CSV=CSV..",guild-charter,raid-times,fp,flightpath,flightpaths,rp,roleplay,roleplaying,roleplayer,rppve,tbc,wotlk,pandaria,draenor,cataclysm,burningcrusade,bc"
 local chLGreen = {}; for part in string.gmatch(CSV, "([^,]+)") do if part~="" then table.insert(chLGreen, part) end end
-local CWTSGREEN = "|cFF80FF80" -- Green
+local CWTSGREEN = "|cFF77FF77" -- Green
 
 
 
@@ -178,15 +178,15 @@ function TCCHighlightStrs (message)
 		-- chLGreen --> CWTSGREEN color
 		for tcf = 1,table.getn(chLGreen) do   if seps == chLGreen[tcf] then wtxt[wrd] = CWTSGREEN..wtxt[wrd].."|r"; end end
 		-- Classes
-		if seps=="mage" or seps=="mages" or seps=="frostmage" or seps=="frostmages" then wtxt[wrd] = "|cff69ccf0"..wtxt[wrd].."|r"; end
-		if seps=="warlock" or seps=="warlocks" then wtxt[wrd] = "|cff9482c9"..wtxt[wrd].."|r"; end
+		if seps=="mage" or seps=="mages" or seps=="frostmage" or seps=="frostmages"  or seps=="firemage" or seps=="firemages" then wtxt[wrd] = "|cff69ccf0"..wtxt[wrd].."|r"; end
+		if seps=="warlock" or seps=="warlocks" or seps=="locks" then wtxt[wrd] = "|cff9482c9"..wtxt[wrd].."|r"; end
 		if seps=="priest" or seps=="priests" or seps=="holypriests" then wtxt[wrd] = "|cffffffff"..wtxt[wrd].."|r"; end
-		if seps=="druid" or seps=="druids" or seps=="restodruid" or seps=="feraldruid" or seps=="boomkin" or seps=="boomkins" or seps=="moonkins" or seps=="moonkin" then wtxt[wrd] = "|cffff7d0a"..wtxt[wrd].."|r"; end
+		if seps=="druid" or seps=="druids" or seps=="restodruid" or seps=="feraldruid" or seps=="drood" or seps=="boomkin" or seps=="boomkins" or seps=="moonkins" or seps=="moonkin" then wtxt[wrd] = "|cffff7d0a"..wtxt[wrd].."|r"; end
 		if seps=="shaman" or seps=="shamans" then wtxt[wrd] = "|cff0070de"..wtxt[wrd].."|r"; end
-		if seps=="paladin" or seps=="paladins" or seps=="retri" or seps=="retpal" or seps=="retpala" then wtxt[wrd] = "|cfff58cba"..wtxt[wrd].."|r"; end
+		if seps=="paladin" or seps=="paladins" or seps=="retri" or seps=="retpal" or seps=="retpala" or seps=="pala" then wtxt[wrd] = "|cfff58cba"..wtxt[wrd].."|r"; end
 		if seps=="rogue" or seps=="rogues" or seps=="rouge" then wtxt[wrd] = "|cfffff569"..wtxt[wrd].."|r"; end
 		if seps=="hunter" or seps=="hunters" or seps=="huntard" or seps=="hunt" then wtxt[wrd] = "|cffabd473"..wtxt[wrd].."|r"; end
-		if seps=="warrior" or seps=="warriors" then wtxt[wrd] = "|cffc79c6e"..wtxt[wrd].."|r"; end
+		if seps=="warrior" or seps=="warriors"  or seps=="warrs" then wtxt[wrd] = "|cffc79c6e"..wtxt[wrd].."|r"; end
 	end
 	if wtxt[1] then
 		if strsub(strlower(wtxt[1]),1,3)=="wts" or strsub(strlower(wtxt[1]),1,3)=="wtb" then wtxt[1] = CWTSGREEN..strupper(strsub(wtxt[1],1,3)).."|r"..strsub(wtxt[1],4); end end
@@ -252,7 +252,7 @@ function TurtleChangeGuildChat (message)
 	elseif string.upper(strsub(message,-4))==" RIP" then message=strsub(message,1,-4)..CLRED..strsub(message,-3);
 	elseif string.upper(strsub(message,-5))==" F :(" then message=strsub(message,1,-5)..CLRED.."F :(";
 	end
-	if strsub(message,1,1)=="+" then message=CDUNG.."+|r"..strsub(message,2); end
+	if strsub(message,1,1)=="+" then message=CLOCATION.."+|r"..strsub(message,2); end
 	local a,b = string.find(message,"%[")
 	local c,d = string.find(message,"%]")
 	local e,f = string.find(message,"@")
